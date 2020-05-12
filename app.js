@@ -62,16 +62,11 @@ app.post("/request", function(req, res){
     specialNote: req.body.postSpecialNote
   });
 
-  if (request.deliveryDate < request.shippingDate) {
-    window.alert("Delivery date must be equal or later than shipping date.");
-    res.redirect("/request");
-  } else {
-    request.save(function(err) {
-      if (!err) {
-          res.redirect("/");
-      };
-    });
-  }
+  request.save(function(err) {
+    if (!err) {
+        res.redirect("/");
+    };
+  });
 });
 
 

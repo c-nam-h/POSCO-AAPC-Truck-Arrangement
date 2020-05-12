@@ -3,42 +3,47 @@
 
     <button class="btn btn-primary" type="submit" name="delete" style="float: right; margin-top: 20px;">Update</button>
     <button class="btn btn-primary" type="submit" name="delete" style="float: right; margin: 20px;">Delete</button>
-    <h1><a href="#">May 7, 2020</a></h1>
 
-    <table class="table table-hover table-responsibe text-center">
-      <thead>
-        <tr>
-          <th class="text-center">Select<br><input type="checkbox" onClick="toggle(this)"></th>
-          <th class="text-center">Customer</th>
-          <th class="text-center">Shipping From</th>
-          <th class="text-center">Delivery To</th>
-          <th class="text-center">Shipping Date</th>
-          <th class="text-center">Delivery Date</th>
-          <th class="text-center">Weight(Kg)</th>
-          <th class="text-center">Weight(Lb)</th>
-          <th class="text-center">BOL No</th>
-          <th class="text-center">Truck Type</th>
-          <th class="text-center">Special Note</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% requests.forEach(function(request) { %>
-          <tr>
-              <th class="text-center"><input type="checkbox" name="row"></th>
-              <td><%= request.customer %></td>
-              <td><%= request.from %></td>
-              <td><%= request.to %></td>
-              <td><%= request.shippingDate %></td>
-              <td><%= request.deliveryDate %></td>
-              <td><%= request.weightKg %></td>
-              <td><%= request.weightLb %></td>
-              <td><%= request.bolNo %></td>
-              <td><%= request.truckType %></td>
-              <td><%= request.specialNote %></td>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
+    <h1><a role="button" data-toggle="collapse" href="#collapse1" aria-expanded="false" aria-controls="collapse1">May 7, 2020</a></h1>
+
+    <div class="collapse" id="collapse1">
+        <table class="table table-hover table-responsibe text-center">
+          <thead>
+            <tr>
+              <th class="text-center">Select<br><input type="checkbox" onClick="toggle(this)"></th>
+              <th class="text-center">Customer</th>
+              <th class="text-center">Shipping From</th>
+              <th class="text-center">Delivery To</th>
+              <th class="text-center">Shipping Date</th>
+              <th class="text-center">Delivery Date</th>
+              <th class="text-center">Weight(Kg)</th>
+              <th class="text-center">Weight(Lb)</th>
+              <th class="text-center">BOL No</th>
+              <th class="text-center">Truck Type</th>
+              <th class="text-center">Special Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% requests.forEach(function(request) { %>
+              <tr>
+                  <th class="text-center"><input type="checkbox" name="row"></th>
+                  <td><%= request.customer %></td>
+                  <td><%= request.from %></td>
+                  <td><%= request.to %></td>
+                  <td><%= request.shippingDate %></td>
+                  <td><%= request.deliveryDate %></td>
+                  <td><%= request.weightKg %></td>
+                  <td><%= request.weightLb %></td>
+                  <td><%= request.bolNo %></td>
+                  <td><%= request.truckType %></td>
+                  <td><%= request.specialNote %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+    </div>
+
+
 
 
 
