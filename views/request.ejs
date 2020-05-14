@@ -1,5 +1,13 @@
 
 <%- include("partials/header"); -%>
+
+    <% if (err) { %>
+      <div class="alert alert-warning alert-dismissible" role="alert">
+        <button class="close" data-dismiss="alert" aria-label="Close" type="button"><span aria-hidden="true">&times;</span></button>
+        <strong>Warning!</strong> <%= err %>
+      </div>
+    <% } %>
+
     <h1>Request For Trucks</h1>
     <p>Please enter your shipping information below</p>
     <br/>
@@ -67,4 +75,5 @@
       <button class="btn btn-primary" type="submit" name="button">Submit</button>
 
     </form>
+
 <%- include("partials/footer"); -%>

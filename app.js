@@ -44,29 +44,36 @@ app.get("/", function(req, res){
 
 
 app.get("/request", function(req, res){
-  res.render("request");
+  res.render("request", {
+    err: null
+  });
 });
 
-//shipping vs delivery data validation
+//date validation - if delivery date is earlier than shipping date, then a user will be asked to revise those dates
 app.post("/request", function(req, res){
-  const request = new Request({
-    customer: req.body.postCustomer,
-    from: req.body.postFrom,
-    to: req.body.postTo,
-    shippingDate: req.body.postShippingDate,
-    deliveryDate: req.body.postDeliveryDate,
-    weightKg: req.body.postWeightKg,
-    weightLb: Math.round(req.body.postWeightKg * 2.204623, 0),
-    bolNo: req.body.postBOLNo,
-    truckType: req.body.truckOptions,
-    specialNote: req.body.postSpecialNote
-  });
-
-  request.save(function(err) {
-    if (!err) {
-        res.redirect("/");
-    };
-  });
+  if (req.body.postDeliveryDate < req.body.postShippingDate) {
+    res.render("request", {
+      err: "A delivery date cannot be earlier than a delivery date. Please check again."
+    })
+  } else {
+    const request = new Request({
+      customer: req.body.postCustomer,
+      from: req.body.postFrom,
+      to: req.body.postTo,
+      shippingDate: req.body.postShippingDate,
+      deliveryDate: req.body.postDeliveryDate,
+      weightKg: req.body.postWeightKg,
+      weightLb: Math.round(req.body.postWeightKg * 2.204623, 0),
+      bolNo: req.body.postBOLNo,
+      truckType: req.body.truckOptions,
+      specialNote: req.body.postSpecialNote
+    });
+    request.save(function(err) {
+      if (!err) {
+          res.redirect("/");
+      };
+    });
+  };
 });
 
 
