@@ -30,8 +30,27 @@ const requestSchema = new mongoose.Schema({
   specialNote: String
 });
 
-
 const Request = mongoose.model("Request", requestSchema);
+
+
+const freightSchema = new mongoose.Schema({
+  carrier: String,
+  freight: {
+    type: Number,
+    get: getPrice,
+    set: setPrice
+  }
+});
+
+function getPrice (n) {
+  return (n / 100).toFixed(2);
+};
+
+function setPrice (n) {
+  return n * 100;
+}
+
+const Freight = mongoose.model("Freight", freightSchema);
 
 
 app.get("/", function(req, res){
@@ -77,8 +96,16 @@ app.post("/request", function(req, res){
 });
 
 
-app.get("/contact", function(req, res){
-  res.render("contact", {contactContent: contactContent});
+app.post("/delete", function(req, res) {
+  console.log(req.body.checkbox);
+  const checkboxId = req.body.checkbox;
+
+  Request.deleteOne({_id: checkboxId}, function(err) {
+    if (err) {
+      return handleError(err);
+    }
+  });
+  res.redirect("/");
 });
 
 

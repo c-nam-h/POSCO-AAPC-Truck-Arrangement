@@ -1,13 +1,13 @@
 
 <%- include("partials/header"); -%>
 
-    <button class="btn btn-primary" type="submit" name="delete" style="float: right; margin-top: 20px;">Update</button>
-    <button class="btn btn-primary" type="submit" name="delete" style="float: right; margin: 20px;">Delete</button>
+    <form id="modify-form" action="/delete" method="post">
+      <button class="btn btn-modify" type="submit" name="modify">DELETE</button>
+    </form>
 
     <h1><a role="button" data-toggle="collapse" href="#collapse1" aria-expanded="false" aria-controls="collapse1">May 7, 2020</a></h1>
 
-    <div class="collapse" id="collapse1">
-        <table class="table table-hover table-responsibe text-center">
+        <table class="table table-hover text-center">
           <thead>
             <tr>
               <th class="text-center">Select<br><input type="checkbox" onClick="toggle(this)"></th>
@@ -36,9 +36,10 @@
               <% } %>
             <% }; %>
 
+            <!-- show each item in the request information -->
             <% requests.sort(compare_date).forEach(function(request) { %>
               <tr>
-                  <th class="text-center"><input type="checkbox" name="row"></th>
+                  <th class="text-center"><input type="checkbox" name="checkbox" value="<%=request._id%>" form="modify-form"><%=request._id%></th>
                   <td><%= request.customer %></td>
                   <td><%= request.from %></td>
                   <td><%= request.to %></td>
@@ -53,8 +54,6 @@
             <% }) %>
           </tbody>
         </table>
-    </div>
-
 
 
 
