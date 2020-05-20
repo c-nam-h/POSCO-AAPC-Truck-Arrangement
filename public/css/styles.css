@@ -49,8 +49,11 @@ h1 {
 }
 
 .btn-modify {
+  position: relative;
   display: block;
   letter-spacing: 5px;
   float: right;
-  margin-top: 20px;
+  margin-top: 10px;
+  background-color: white;
+  padding: 10px 15px;
 }

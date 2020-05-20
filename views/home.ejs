@@ -1,8 +1,8 @@
 
 <%- include("partials/header"); -%>
 
-    <form id="modify-form" action="/delete" method="post">
-      <button class="btn btn-modify" type="submit" name="modify">DELETE</button>
+    <form id="delete-form" action="/delete" method="post">
+      <button class="btn btn-modify" type="submit" name="button" value="delete">DELETE</button>
     </form>
 
     <h1><a role="button" data-toggle="collapse" href="#collapse1" aria-expanded="false" aria-controls="collapse1">May 7, 2020</a></h1>
@@ -39,7 +39,7 @@
             <!-- show each item in the request information -->
             <% requests.sort(compare_date).forEach(function(request) { %>
               <tr>
-                  <th class="text-center"><input type="checkbox" name="checkbox" value="<%=request._id%>" form="modify-form"><%=request._id%></th>
+                  <th class="text-center"><input type="checkbox" name="checkbox" value="<%=request._id%>" form="delete-form"></th>
                   <td><%= request.customer %></td>
                   <td><%= request.from %></td>
                   <td><%= request.to %></td>
@@ -47,7 +47,7 @@
                   <td><%= request.deliveryDate %></td>
                   <td><%= request.weightKg %></td>
                   <td><%= request.weightLb %></td>
-                  <td><%= request.bolNo %></td>
+                  <td><a href="/modify/<%=request._id%>"><%= request.bolNo %></a></td>
                   <td><%= request.truckType %></td>
                   <td><%= request.specialNote %></td>
               </tr>

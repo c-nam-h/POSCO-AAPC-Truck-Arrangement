@@ -95,31 +95,45 @@ app.post("/request", function(req, res){
   };
 });
 
-
+// deletes selected row or rows
+// need to add a warning message to confirm whether the user really wants to perform delete function
 app.post("/delete", function(req, res) {
-  console.log(req.body.checkbox);
-  const checkboxId = req.body.checkbox;
+    const checkboxId = req.body.checkbox;
 
-  Request.deleteOne({_id: checkboxId}, function(err) {
-    if (err) {
-      return handleError(err);
-    }
+    Request.deleteMany({
+      _id: checkboxId
+    }, function(err) {
+      if (err) {
+        return handleError(err);
+      };
+    });
+    res.redirect("/");
   });
-  res.redirect("/");
-});
 
+// renders modify.ejs and shows a selected BOL number's information - dynamic
+app.get("/modify/:_id", function(req, res) {
 
-app.get("/posts/:postName", function(req, res){
-  const requestedTitle = _.lowerCase(req.params.postName);
+  const requestedId = req.params._id;
+  console.log(typeof(requestedId));
 
-  Post.find({}, function(err, posts) {
-    posts.forEach(function(post){
-      const storedTitle = _.lowerCase(post.title);
+  Request.find({}, function(err, requests) {
+    requests.forEach(function(request) {
+      const storedId = request._id;
+      console.log(typeof(storedId));
+      console.log(storedId == requestedId);
 
-      if (storedTitle === requestedTitle) {
-        res.render("post", {
-          title: post.title,
-          content: post.content
+      if (storedId == requestedId) {
+        res.render("modify", {
+          customer: request.customer,
+          from: request.from,
+          to: request.to,
+          shippingDate: request.shippingDate,
+          deliveryDate: request.deliveryDate,
+          weightKg: request.weightKg,
+          weightLb: request.weightLb,
+          bolNo: request.bolNo,
+          truckType: request.truckType,
+          specialNote: request.specialNote
         });
       };
     });
