@@ -100,9 +100,7 @@ app.post("/request", function(req, res){
 app.post("/delete", function(req, res) {
     const checkboxId = req.body.checkbox;
 
-    Request.deleteMany({
-      _id: checkboxId
-    }, function(err) {
+    Request.deleteMany({_id: checkboxId}, function(err) {
       if (err) {
         return handleError(err);
       };
@@ -114,30 +112,54 @@ app.post("/delete", function(req, res) {
 app.get("/modify/:_id", function(req, res) {
 
   const requestedId = req.params._id;
-  console.log(typeof(requestedId));
 
   Request.find({}, function(err, requests) {
-    requests.forEach(function(request) {
-      const storedId = request._id;
-      console.log(typeof(storedId));
-      console.log(storedId == requestedId);
+      if (err) {
+        return handleError(err);
+      } else {
+        requests.forEach(function(request) {
 
-      if (storedId == requestedId) {
-        res.render("modify", {
-          customer: request.customer,
-          from: request.from,
-          to: request.to,
-          shippingDate: request.shippingDate,
-          deliveryDate: request.deliveryDate,
-          weightKg: request.weightKg,
-          weightLb: request.weightLb,
-          bolNo: request.bolNo,
-          truckType: request.truckType,
-          specialNote: request.specialNote
-        });
-      };
-    });
+        const storedId = request._id;
+
+        if (storedId == requestedId) {
+          res.render("modify", {
+            customer: request.customer,
+            from: request.from,
+            to: request.to,
+            shippingDate: request.shippingDate,
+            deliveryDate: request.deliveryDate,
+            weightKg: request.weightKg,
+            weightLb: request.weightLb,
+            bolNo: request.bolNo,
+            truckType: request.truckType,
+            specialNote: request.specialNote
+          });
+        };
+      });
+    };
   });
+});
+
+app.post("/update", function(req, res) {
+
+  const button = req.body.button;
+  const bolNo = req.body.postBOLNo;
+
+  if (button === "cancel") {
+    res.redirect("/");
+  } else {
+    Request.find({}, function(err, requests) {
+      if (err) {
+        return handleError(err);
+      } else {
+        requests.forEach(function(request) {
+          if (request.bolNo === bolNo) {
+            console.log(request);
+          }
+        })
+      }
+    });
+  };
 });
 
 app.listen(3000, function() {
