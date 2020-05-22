@@ -5,10 +5,9 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const _ = require("lodash");
 const mongoose = require("mongoose");
+const ObjectID = require("mongodb").ObjectID;
 
 mongoose.connect("mongodb://localhost:27017/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true});
-
-const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
 
 const app = express();
 
@@ -52,6 +51,7 @@ function setPrice (n) {
 
 const Freight = mongoose.model("Freight", freightSchema);
 
+let requstedId = "";
 
 app.get("/", function(req, res){
   Request.find({}, function(err, requests) {
@@ -111,7 +111,7 @@ app.post("/delete", function(req, res) {
 // renders modify.ejs and shows a selected BOL number's information - dynamic
 app.get("/modify/:_id", function(req, res) {
 
-  const requestedId = req.params._id;
+  requestedId = req.params._id;
 
   Request.find({}, function(err, requests) {
       if (err) {
@@ -140,25 +140,32 @@ app.get("/modify/:_id", function(req, res) {
   });
 });
 
+// update a request information with the selected ID -- still need to modify the code to validate whether a revised BOL No already exists in the database or not.
+// If a revised BOL No already exists in the database, then it should give a warning message that the user cannot use the new BOL No -- WIP
 app.post("/update", function(req, res) {
 
   const button = req.body.button;
-  const bolNo = req.body.postBOLNo;
 
   if (button === "cancel") {
     res.redirect("/");
   } else {
-    Request.find({}, function(err, requests) {
+    Request.updateOne({_id: ObjectID(requestedId)}, {
+      customer: req.body.updateCustomer,
+      from: req.body.updateFrom,
+      to: req.body.updateTo,
+      shippingDate: req.body.updateShippingDate,
+      deliveryDate: req.body.updateDeliveryDate,
+      weightKg: req.body.updateWeightKg,
+      weightLb: Math.round(req.body.updateWeightKg * 2.204623, 0),
+      bolNo: req.body.updateBOLNo,
+      truckType: req.body.truckOptions,
+      specialNote: req.body.updateSpecialNote
+    }, function(err) {
       if (err) {
         return handleError(err);
-      } else {
-        requests.forEach(function(request) {
-          if (request.bolNo === bolNo) {
-            console.log(request);
-          }
-        })
       }
-    });
+    })
+    res.redirect("/");
   };
 });
 
