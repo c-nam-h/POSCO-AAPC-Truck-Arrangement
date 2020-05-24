@@ -9,54 +9,54 @@
     <% } %>
 
     <h1>Request For Trucks</h1>
-    <p>Please enter your shipping information below</p>
+    <p>Please enter your shipping information below and submit</p>
     <br/>
     <form class="" action="/request" method="post">
 
       <div class="form-group">
         <label>Customer</label>
-        <input class="form-control" type="text" name="postCustomer" required>
+        <input class="form-control" type="text" name="customer" required>
       </div>
 
       <div class="row">
         <div class="form-group col-md-6">
           <label for="inputEmail4">Shipping From</label>
-          <input type="text" class="form-control" name="postFrom" required>
+          <input type="text" class="form-control" name="shippingFrom" required>
         </div>
         <div class="form-group col-md-6">
           <label for="inputPassword4">Delivery To</label>
-          <input type="text" class="form-control" name="postTo" required>
+          <input type="text" class="form-control" name="deliveryTo" required>
         </div>
       </div>
 
       <div class="row">
         <div class="form-group col-md-6">
           <label>Shipping Date</label>
-          <input class="form-control" type="date" name="postShippingDate" required>
+          <input class="form-control" type="date" name="shippingDate" required>
         </div>
 
         <div class="form-group col-md-6">
           <label>Delivery Date</label>
-          <input class="form-control" type="date" name="postDeliveryDate" required>
+          <input class="form-control" type="date" name="deliveryDate" required>
         </div>
       </div>
 
       <div class="row">
         <div class="form-group col-md-4">
           <label>Weight(kg)</label>
-          <input class="form-control" type="text" name="postWeightKg" required>
+          <input class="form-control" type="text" name="weightKg" pattern="[0-9]{5}" required>
         </div>
 
         <div class="form-group col-md-4">
           <label>BOL No</label>
-          <input class="form-control" type="text" name="postBOLNo" required>
+          <input class="form-control" id="bolNo" type="text" name="bolNo" pattern="[A-Z]{1}[0-9]{11}" placeholder="Arrangement #" required>
         </div>
 
         <div class="form-group col-md-4">
           <label>Truck Type</label>
           <div class="form-group">
             <div class="form-check radio-inline">
-              <input class="form-check-input" type="radio" name="truckOptions" id="flatbed" value="Flatbed" checked>
+              <input class="form-check-input" type="radio" name="truckOptions" id="flatbed" value="Flatbed">
               <label class="form-check-label" for="flatbed">Flatbed</label>
             </div>
             <div class="form-check radio-inline">
@@ -69,7 +69,7 @@
 
       <div class="form-group">
         <label>Special Note</label>
-        <input class="form-control" type="text" name="postSpecialNote">
+        <input class="form-control" type="text" name="specialNote">
       </div>
 
       <button class="btn btn-primary" type="submit" name="button">Submit</button>

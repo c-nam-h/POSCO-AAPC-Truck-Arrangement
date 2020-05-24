@@ -41,21 +41,34 @@
 
       <div class="form-group col-md-4">
         <label>BOL No</label>
-        <input class="form-control" type="text" name="updateBOLNo" value="<%= bolNo %>" required>
+        <input class="form-control" id="bolNo" type="text" name="updateBOLNo" value="<%= bolNo %>" pattern="[A-Z]{1}[0-9]{11}" placeholder="Arrangement #" required>
       </div>
 
       <div class="form-group col-md-4">
         <label>Truck Type</label>
-        <div class="form-group">
-          <div class="form-check radio-inline">
-            <input class="form-check-input" type="radio" name="truckOptions" id="flatbed" value="Flatbed" checked>
-            <label class="form-check-label" for="flatbed">Flatbed</label>
+        <% if (truckType === "Flatbed") { %>
+          <div class="form-group">
+            <div class="form-check radio-inline">
+              <input class="form-check-input truck-type" type="radio" name="truckOptions" id="flatbed" value="Flatbed" checked required>
+              <label class="form-check-label" for="flatbed">Flatbed</label>
+            </div>
+            <div class="form-check radio-inline">
+              <input class="form-check-input truck-type" type="radio" name="truckOptions" id="van" value="Van" required>
+              <label class="form-check-label" for="flatbed">Van</label>
+            </div>
           </div>
-          <div class="form-check radio-inline">
-            <input class="form-check-input" type="radio" name="truckOptions" id="van" value="Van">
-            <label class="form-check-label" for="flatbed">Van</label>
+        <% } else { %>
+          <div class="form-group">
+            <div class="form-check radio-inline">
+              <input class="form-check-input truck-type" type="radio" name="truckOptions" id="flatbed" value="Flatbed" required>
+              <label class="form-check-label" for="flatbed">Flatbed</label>
+            </div>
+            <div class="form-check radio-inline">
+              <input class="form-check-input truck-type" type="radio" name="truckOptions" id="van" value="Van" checked required>
+              <label class="form-check-label" for="flatbed">Van</label>
+            </div>
           </div>
-        </div>
+        <% } %>
       </div>
     </div>
 
@@ -65,7 +78,6 @@
     </div>
 
     <button class="btn btn-primary" type="submit" name="button" value="update">Update</button>
-    <button class="btn btn-primary" type="submit" name="button" value="cancel">Cancel</button>
 
   </form>
 
