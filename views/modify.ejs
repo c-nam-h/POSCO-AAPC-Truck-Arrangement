@@ -1,4 +1,4 @@
-<%- include('partials/header') %>
+<%- include('partials/header'); -%>
 
   <h1>Update Your Request</h1>
   <p>Please update your shipping information below and submit</p>
@@ -6,79 +6,94 @@
   <form class="" action="/update" method="post">
 
     <div class="form-group">
-      <label>Customer</label>
-      <input class="form-control" type="text" name="updateCustomer" value="<%= customer %>" required>
+      <label for="customer">Customer</label>
+      <input class="form-control" id="inputCustomer" type="text" name="customer" value="<%= customer %>" required>
     </div>
 
     <div class="row">
       <div class="form-group col-md-6">
-        <label for="inputEmail4">Shipping From</label>
-        <input type="text" class="form-control" name="updateFrom" value="<%= from %>" required>
+        <label for="inputShippingFrom">Shipping From</label>
+        <input type="text" class="form-control" id="inputShippingFrom" name="shippingFrom" value="<%= shippingFrom %>" required>
       </div>
       <div class="form-group col-md-6">
-        <label for="inputPassword4">Delivery To</label>
-        <input type="text" class="form-control" name="updateTo" value="<%= to %>" required>
+        <label for="inputDeliveryTo">Delivery To</label>
+        <input type="text" class="form-control" id="inputDeliveryTo" name="deliveryTo" value="<%= deliveryTo %>" required>
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-md-6">
-        <label>Shipping Date</label>
-        <input class="form-control" type="date" name="updateShippingDate" value="<%= shippingDate %>" required>
+        <label for="inputShippingDate">Shipping Date</label>
+        <input class="form-control" id="inputShippingDate" type="date" name="shippingDate" value="<%= shippingDate %>" required>
       </div>
 
       <div class="form-group col-md-6">
-        <label>Delivery Date</label>
-        <input class="form-control" type="date" name="updateDeliveryDate" value="<%= deliveryDate %>" required>
+        <label for="inputDeliveryDate">Delivery Date</label>
+        <input class="form-control" id="inputDeliveryDate" type="date" name="deliveryDate" value="<%= deliveryDate %>" required>
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-md-4">
-        <label>Weight(kg)</label>
-        <input class="form-control" type="text" name="updateWeightKg" value="<%= weightKg %>" required>
+        <label for="inputKg">Weight(kg)</label>
+        <input class="form-control" id="inputKg" type="text" name="weightKg" pattern="[0-9]{1,5}" value="<%= weightKg %>" required>
       </div>
 
       <div class="form-group col-md-4">
-        <label>BOL No</label>
-        <input class="form-control" id="bolNo" type="text" name="updateBOLNo" value="<%= bolNo %>" pattern="[A-Z]{1}[0-9]{11}" placeholder="Arrangement #" required>
+        <label for="inputBolNo">BOL No</label>
+        <input class="form-control" id="inputBolNo" type="text" name="bolNo" value="<%= bolNo %>" pattern="[A-Z]{1}[0-9]{11}" placeholder="Arrangement #" required>
       </div>
 
       <div class="form-group col-md-4">
-        <label>Truck Type</label>
+        <label for="inputTruck">Truck Type</label>
         <% if (truckType === "Flatbed") { %>
           <div class="form-group">
             <div class="form-check radio-inline">
-              <input class="form-check-input truck-type" type="radio" name="truckOptions" id="flatbed" value="Flatbed" checked required>
-              <label class="form-check-label" for="flatbed">Flatbed</label>
+              <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="flatbed" value="Flatbed" checked required>
+              <label class="form-check-label" for="inputTruck">Flatbed</label>
             </div>
             <div class="form-check radio-inline">
-              <input class="form-check-input truck-type" type="radio" name="truckOptions" id="van" value="Van" required>
-              <label class="form-check-label" for="flatbed">Van</label>
+              <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="van" value="Van" required>
+              <label class="form-check-label" for="inputTruck">Van</label>
             </div>
           </div>
         <% } else { %>
           <div class="form-group">
             <div class="form-check radio-inline">
-              <input class="form-check-input truck-type" type="radio" name="truckOptions" id="flatbed" value="Flatbed" required>
-              <label class="form-check-label" for="flatbed">Flatbed</label>
+              <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="flatbed" value="Flatbed" required>
+              <label class="form-check-label" for="inputTruck">Flatbed</label>
             </div>
             <div class="form-check radio-inline">
-              <input class="form-check-input truck-type" type="radio" name="truckOptions" id="van" value="Van" checked required>
-              <label class="form-check-label" for="flatbed">Van</label>
+              <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="van" value="Van" checked required>
+              <label class="form-check-label" for="inputTruck">Van</label>
             </div>
           </div>
         <% } %>
       </div>
     </div>
 
-    <div class="form-group">
-      <label>Special Note</label>
-      <input class="form-control" type="text" name="updateSpecialNote" value="<%= specialNote %>">
+    <div class="row">
+      <div class="form-group col-md-12">
+        <label for="inputSpecialNote">Special Note</label>
+        <input class="form-control" id="inputSpecialNote" type="text" name="specialNote" value="<%= specialNote %>">
+      </div>
     </div>
 
-    <button class="btn btn-primary" type="submit" name="button" value="update">Update</button>
+
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="inputCarrier">Carrier</label>
+        <input class="form-control" id="inputCarrier" type="text" name="carrier">
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="inputFreight">Freight ($/Truck)</label>
+        <input class="form-control" id="inputFreight" type="text" name="freight">
+      </div>
+    </div>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit" name="button" value="update">Update</button>
 
   </form>
 
-<%- include('partials/footer') %>
+<%- include('partials/footer'); -%>

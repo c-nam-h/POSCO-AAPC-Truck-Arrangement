@@ -18,8 +18,8 @@ app.use(express.static("public"));
 
 const requestSchema = new mongoose.Schema({
   customer: String,
-  from: String,
-  to: String,
+  shippingFrom: String,
+  deliveryTo: String,
   shippingDate: String,
   deliveryDate: String,
   weightKg: Number,
@@ -34,26 +34,20 @@ const Request = mongoose.model("Request", requestSchema);
 
 const freightSchema = new mongoose.Schema({
   carrier: String,
-  freight: {
-    type: Number,
-    get: getPrice,
-    set: setPrice
-  }
+  freight: Number,
+  request_id: Object
 });
-
-function getPrice (n) {
-  return (n / 100).toFixed(2);
-};
-
-function setPrice (n) {
-  return n * 100;
-}
 
 const Freight = mongoose.model("Freight", freightSchema);
 
-let requstedId = "";
+var requstedId = "";
 
-app.get("/", function(req, res){
+app.get("/", function(req, res) {
+  res.render("login");
+});
+
+
+app.get("/list", function(req, res){
   Request.find({}, function(err, requests) {
     res.render("home", {
       requests: requests
@@ -72,7 +66,7 @@ app.get("/request", function(req, res){
 app.post("/request", function(req, res){
   const button = req.body.button;
   if (button === "Cancel") {
-    res.redirect("/");
+    res.redirect("/list");
   } else {
     if (req.body.postDeliveryDate < req.body.postShippingDate) {
       res.render("request", {
@@ -81,8 +75,8 @@ app.post("/request", function(req, res){
     } else {
       const request = new Request({
         customer: req.body.customer,
-        from: req.body.shippingFrom,
-        to: req.body.deliveryTo,
+        shippingFrom: req.body.shippingFrom,
+        deliveryTo: req.body.deliveryTo,
         shippingDate: req.body.shippingDate,
         deliveryDate: req.body.deliveryDate,
         weightKg: req.body.weightKg,
@@ -93,7 +87,7 @@ app.post("/request", function(req, res){
       });
       request.save(function(err) {
         if (!err) {
-            res.redirect("/");
+            res.redirect("/list");
         };
       });
     };
@@ -110,7 +104,7 @@ app.post("/delete", function(req, res) {
         return handleError(err);
       };
     });
-    res.redirect("/");
+    res.redirect("/list");
   });
 
 // renders modify.ejs and shows a selected BOL number's information - dynamic
@@ -129,8 +123,8 @@ app.get("/modify/:_id", function(req, res) {
         if (storedId == requestedId) {
           res.render("modify", {
             customer: request.customer,
-            from: request.from,
-            to: request.to,
+            shippingFrom: request.shippingFrom,
+            deliveryTo: request.deliveryTo,
             shippingDate: request.shippingDate,
             deliveryDate: request.deliveryDate,
             weightKg: request.weightKg,
@@ -152,25 +146,35 @@ app.post("/update", function(req, res) {
   const button = req.body.button;
 
   if (button === "cancel") {
-    res.redirect("/");
+    res.redirect("/list");
   } else {
     Request.updateOne({_id: ObjectID(requestedId)}, {
-      customer: req.body.updateCustomer,
-      from: req.body.updateFrom,
-      to: req.body.updateTo,
-      shippingDate: req.body.updateShippingDate,
-      deliveryDate: req.body.updateDeliveryDate,
-      weightKg: req.body.updateWeightKg,
-      weightLb: Math.round(req.body.updateWeightKg * 2.204623, 0),
-      bolNo: req.body.updateBOLNo,
+      customer: req.body.customer,
+      from: req.body.shippingfrom,
+      to: req.body.deliveryTo,
+      shippingDate: req.body.shippingDate,
+      deliveryDate: req.body.deliveryDate,
+      weightKg: req.body.weightKg,
+      weightLb: Math.round(req.body.weightKg * 2.204623, 0),
+      bolNo: req.body.bolNo,
       truckType: req.body.truckOptions,
-      specialNote: req.body.updateSpecialNote
+      specialNote: req.body.specialNote
     }, function(err) {
       if (err) {
         return handleError(err);
       }
     })
-    res.redirect("/");
+    console.log(requestedId);
+    const freight = new Freight({
+      carrier: req.body.carrier,
+      freight: req.body.freight,
+      request_id: ObjectID(requestedId)
+    });
+    freight.save(function(err) {
+      if (!err) {
+        res.redirect("/list");
+      };
+    });
   };
 });
 

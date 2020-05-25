@@ -1,16 +1,13 @@
-
 <%- include("partials/header"); -%>
 
     <form id="delete-form" action="/delete" method="post">
       <button class="btn btn-modify" type="submit" name="button" value="delete">DELETE</button>
     </form>
 
-    <h1><a role="button" data-toggle="collapse" href="#collapse1" aria-expanded="false" aria-controls="collapse1">May 7, 2020</a></h1>
-
         <table class="table table-hover text-center">
           <thead>
             <tr>
-              <th class="text-center">Select<br><input type="checkbox" onClick="toggle(this)"></th>
+              <th class="text-center"><input type="checkbox" onClick="toggle(this)" hover="Select"></th>
               <th class="text-center">Customer</th>
               <th class="text-center">Shipping From</th>
               <th class="text-center">Delivery To</th>
@@ -41,8 +38,8 @@
               <tr>
                   <th class="text-center"><input type="checkbox" name="checkbox" value="<%=request._id%>" form="delete-form"></th>
                   <td><%= request.customer %></td>
-                  <td><%= request.from %></td>
-                  <td><%= request.to %></td>
+                  <td><%= request.shippingFrom %></td>
+                  <td><%= request.deliveryTo %></td>
                   <td><%= request.shippingDate %></td>
                   <td><%= request.deliveryDate %></td>
                   <td><%= request.weightKg %></td>
