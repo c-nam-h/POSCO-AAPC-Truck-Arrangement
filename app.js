@@ -1,20 +1,45 @@
 //jshint esversion:6
-
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const _ = require("lodash");
 const mongoose = require("mongoose");
 const ObjectID = require("mongodb").ObjectID;
-
-mongoose.connect("mongodb://localhost:27017/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true});
+const session = require("express-session");
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local-mongoose");
 
 const app = express();
 
 app.set('view engine', 'ejs');
-
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+mongoose.connect("mongodb://localhost:27017/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+
+const userSchema = new mongoose.Schema({
+  email: String,
+  password: String
+});
+
+userSchema.plugin(passportLocalMongoose);
+
+const User = new mongoose.model("User", userSchema);
+
+passport.use(User.createStrategy());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 const requestSchema = new mongoose.Schema({
   customer: String,
@@ -29,8 +54,7 @@ const requestSchema = new mongoose.Schema({
   specialNote: String
 });
 
-const Request = mongoose.model("Request", requestSchema);
-
+const Request = new mongoose.model("Request", requestSchema);
 
 const freightSchema = new mongoose.Schema({
   carrier: String,
@@ -40,33 +64,86 @@ const freightSchema = new mongoose.Schema({
 
 const Freight = mongoose.model("Freight", freightSchema);
 
-var requstedId = "";
+let requstedId = "";
 
-app.get("/", function(req, res) {
-  res.render("login");
+app.get("/register", function(req, res) {
+  res.render("register");
 });
 
-
-app.get("/list", function(req, res){
-  Request.find({}, function(err, requests) {
-    res.render("home", {
-      requests: requests
-    });
+app.post("/register", function(req, res) {
+  User.register({username: req.body.username}, req.body.password, function(err, user) {
+    if (err) {
+      handleError(err);
+      res.redirect("/register");
+    } else {
+      passport.authenticate("local")(req, res, function() {
+        res.redirect("/");
+      });
+    };
   });
+});
+
+// render a homepage when the user is already logged in and tries to go to the login page
+app.get("/login", function(req, res) {
+  if (req.isAuthenticated()) {
+    res.redirect("/");
+  } else {
+    res.render("login");
+  };
+});
+
+app.post("/login", function(req, res) {
+  const user = new User({
+    username: req.body.username,
+    password: req.body.password
+  });
+
+  console.log(user);
+
+  req.login(user, function(err) {
+    if (err) {
+      handleError(err);
+    } else {
+      passport.authenticate("local")(req, res, function() {
+        res.redirect("/");
+      });
+    };
+  });
+});
+
+app.get("/logout", function(req, res) {
+  req.logout();
+  res.redirect("/login");
+})
+
+app.get("/", function(req, res){
+  if (req.isAuthenticated()) {
+    Request.find({}, function(err, requests) {
+      res.render("home", {
+        requests: requests
+      });
+    });
+  } else {
+    res.redirect("/login");
+  };
 });
 
 
 app.get("/request", function(req, res){
-  res.render("request", {
-    err: null
-  });
+  if (req.isAuthenticated()) {
+    res.render("request", {
+      err: null
+    });
+  } else {
+    res.redirect("/login");
+  };
 });
 
 //date validation - if delivery date is earlier than shipping date, then a user will be asked to revise those dates
 app.post("/request", function(req, res){
   const button = req.body.button;
   if (button === "Cancel") {
-    res.redirect("/list");
+    res.redirect("/");
   } else {
     if (req.body.postDeliveryDate < req.body.postShippingDate) {
       res.render("request", {
@@ -87,7 +164,7 @@ app.post("/request", function(req, res){
       });
       request.save(function(err) {
         if (!err) {
-            res.redirect("/list");
+            res.redirect("/");
         };
       });
     };
@@ -104,7 +181,7 @@ app.post("/delete", function(req, res) {
         return handleError(err);
       };
     });
-    res.redirect("/list");
+    res.redirect("/");
   });
 
 // renders modify.ejs and shows a selected BOL number's information - dynamic
@@ -146,7 +223,7 @@ app.post("/update", function(req, res) {
   const button = req.body.button;
 
   if (button === "cancel") {
-    res.redirect("/list");
+    res.redirect("/");
   } else {
     Request.updateOne({_id: ObjectID(requestedId)}, {
       customer: req.body.customer,
@@ -172,7 +249,7 @@ app.post("/update", function(req, res) {
     });
     freight.save(function(err) {
       if (!err) {
-        res.redirect("/list");
+        res.redirect("/");
       };
     });
   };

@@ -22,19 +22,19 @@
 </nav>
 
 <body class="text-center">
-  <form class="form-signin">
+  <form class="form-signin" action="/login" method="post">
     <div class="text-center">
-      <img class="login-logo" src="https://static.wixstatic.com/media/e7745a_d0cfe9bb792a4b219851beb3f1084a57~mv2.png/v1/fill/w_314,h_120,al_c,q_85,usm_0.66_1.00_0.01/e7745a_d0cfe9bb792a4b219851beb3f1084a57~mv2.webp">
+      <img class="login-logo" src="/img/logo.png">
       <h1>Log In</h1>
       <p>Use POSCO AAPC email address</p>
     </div>
 
     <div class="form-group">
       <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" name="username" required autofocus>
 
       <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
     </div>
 
     <div class="checkbox">
