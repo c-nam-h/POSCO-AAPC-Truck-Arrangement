@@ -95,3 +95,17 @@ h1 {
 .form-signin input[type="password"] {
   margin-bottom: 10px;
 }
+
+.register-link {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.remember-me-input {
+  text-align: left;
+}

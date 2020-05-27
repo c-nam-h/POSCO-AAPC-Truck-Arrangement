@@ -21,7 +21,7 @@
   </div>
 </nav>
 
-<body class="text-center">
+<body class="form-group text-center">
   <form class="form-signin" action="/register" method="post">
     <div class="text-center">
       <img class="login-logo" src="/img/logo.png">
@@ -37,7 +37,10 @@
       <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
     </div>
 
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+    <div class="form-group">
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+    </div>
+    
   </form>
 
 <%- include("partials/footer") -%>

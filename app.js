@@ -142,6 +142,7 @@ app.get("/request", function(req, res){
 //date validation - if delivery date is earlier than shipping date, then a user will be asked to revise those dates
 app.post("/request", function(req, res){
   const button = req.body.button;
+
   if (button === "Cancel") {
     res.redirect("/");
   } else {
@@ -162,9 +163,19 @@ app.post("/request", function(req, res){
         truckType: req.body.truckOptions,
         specialNote: req.body.specialNote
       });
+
       request.save(function(err) {
         if (!err) {
-            res.redirect("/");
+          Request.findOne({bolNo: req.body.bolNo}, function(err, request) {
+            const freight = new Freight({
+              carrier: "TBD",
+              freight: 0,
+              request_id: ObjectID(request._id)
+            });
+            freight.save(function(err) {
+              res.redirect("/");
+            });
+          });
         };
       });
     };
@@ -250,6 +261,27 @@ app.post("/update", function(req, res) {
     freight.save(function(err) {
       if (!err) {
         res.redirect("/");
+      };
+    });
+  };
+});
+
+app.get("/freight-report", function(req, res) {
+  if (req.isAuthenticated()) {
+    Freight.find({}, function(err, freights) {
+      if (err) {
+        handleError(err);
+      } else {
+        Request.find({}, function(err, requests) {
+          if (err) {
+            handleError(err);
+          } else{
+            res.render("freight-report", {
+              freights: freights,
+              requests: requests
+            });
+          };
+        });
       };
     });
   };

@@ -1,0 +1,20 @@
+<%- include("partials/header") -%>
+
+<% freights.forEach(function(freight) { %>
+  <% requests.forEach(function(request) { %>
+    <p><%= freight %></p>
+    <p><%= request %></p>
+    <% if (freight.request_id === request._id) { %>
+      <p><%= freight.carrier %></p>
+      <p><%= freight.freight %></p>
+      <p><%= request.customer %></p>
+      <p><%= request.shippingFrom %></p>
+      <p><%= request.deliveryTo %></p>
+      <p><%= request.shippingDate %></p>
+      <p><%= request.deliveryDate %></p>
+    <% } %>
+  <% }) %>
+<% }) %>
+
+
+<%- include("partials/footer") -%>
