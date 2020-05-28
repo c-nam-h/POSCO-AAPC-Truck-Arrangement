@@ -25,3 +25,13 @@ for (var i = 0; i < truckType.length; i++) {
     truckType.checked = true;
   }
 };
+
+// function compare_date(a, b) {
+//   if (a.shippingDate < b.shippingDate) {
+//     return -1;
+//   } else if (a.shippingDate > b.shippingDate) {
+//     return 1;
+//   } else {
+//     return 0;
+//   }
+// };

@@ -59,12 +59,12 @@ const Request = new mongoose.model("Request", requestSchema);
 const freightSchema = new mongoose.Schema({
   carrier: String,
   freight: Number,
-  request_id: Object
+  request_id: mongoose.Schema.Types.ObjectId
 });
 
 const Freight = mongoose.model("Freight", freightSchema);
 
-let requstedId = "";
+let requestedId = "";
 
 app.get("/register", function(req, res) {
   res.render("register");
@@ -198,7 +198,7 @@ app.post("/delete", function(req, res) {
 // renders modify.ejs and shows a selected BOL number's information - dynamic
 app.get("/modify/:_id", function(req, res) {
 
-  requestedId = req.params._id;
+  requestedId = ObjectID(req.params._id);
 
   Request.find({}, function(err, requests) {
       if (err) {
@@ -206,9 +206,9 @@ app.get("/modify/:_id", function(req, res) {
       } else {
         requests.forEach(function(request) {
 
-        const storedId = request._id;
+        const storedId = ObjectID(request._id);
 
-        if (storedId == requestedId) {
+        if (storedId.equals(requestedId)) {
           res.render("modify", {
             customer: request.customer,
             shippingFrom: request.shippingFrom,
@@ -251,34 +251,40 @@ app.post("/update", function(req, res) {
       if (err) {
         return handleError(err);
       }
-    })
-    console.log(requestedId);
-    const freight = new Freight({
+    });
+
+    Freight.updateOne({request_id: ObjectID(requestedId)}, {
       carrier: req.body.carrier,
-      freight: req.body.freight,
-      request_id: ObjectID(requestedId)
+      freight: req.body.freight
+    }, function(err) {
+      if (err) {
+        return handleError(err);
+      }
     });
-    freight.save(function(err) {
-      if (!err) {
-        res.redirect("/");
-      };
-    });
+    res.redirect("/");
   };
 });
 
 app.get("/freight-report", function(req, res) {
+  const idList = [];
+
   if (req.isAuthenticated()) {
     Freight.find({}, function(err, freights) {
       if (err) {
         handleError(err);
       } else {
+        freights.forEach(function(freight) {
+          idList.push(freight.request_id);
+        });
+
         Request.find({}, function(err, requests) {
           if (err) {
             handleError(err);
           } else{
             res.render("freight-report", {
+              requests: requests,
               freights: freights,
-              requests: requests
+              id: idList
             });
           };
         });
@@ -286,6 +292,7 @@ app.get("/freight-report", function(req, res) {
     });
   };
 });
+
 
 app.listen(3000, function() {
   console.log("Server started on port 3000");

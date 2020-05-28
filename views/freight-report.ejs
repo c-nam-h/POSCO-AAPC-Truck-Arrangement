@@ -1,20 +1,39 @@
-<%- include("partials/header") -%>
+<%- include("partials/header"); -%>
 
-<% freights.forEach(function(freight) { %>
-  <% requests.forEach(function(request) { %>
-    <p><%= freight %></p>
-    <p><%= request %></p>
-    <% if (freight.request_id === request._id) { %>
-      <p><%= freight.carrier %></p>
-      <p><%= freight.freight %></p>
-      <p><%= request.customer %></p>
-      <p><%= request.shippingFrom %></p>
-      <p><%= request.deliveryTo %></p>
-      <p><%= request.shippingDate %></p>
-      <p><%= request.deliveryDate %></p>
-    <% } %>
-  <% }) %>
-<% }) %>
+<table class="table table-hover text-center">
+  <thead>
+    <tr>
+      <th class="text-center"><input type="checkbox" onClick="toggle(this)" hover="Select"></th>
+      <th class="text-center">BOL No</th>
+      <th class="text-center">Carrier</th>
+      <th class="text-center">Freight</th>
+      <th class="text-center">Shipping From</th>
+      <th class="text-center">Delivery To</th>
+      <th class="text-center">Weight(Kg)</th>
+      <th class="text-center">Weight(Lb)</th>
+    </tr>
+  </thead>
 
+  <tbody>
 
-<%- include("partials/footer") -%>
+    <% requests.forEach(function(request) { %>
+      <% freights.forEach(function(freight) { %>
+        <% if (request._id.equals(freight.request_id)) { %>
+          <tr>
+            <th class="text-center"><input type="checkbox" name="checkbox" value="<%=request._id%>" form="delete-form"></th>
+            <td><%= request.bolNo %></td>
+            <td><%= freight.carrier %></td>
+            <td><%= freight.freight %></td>
+            <td><%= request.shippingFrom %></td>
+            <td><%= request.deliveryTo %></td>
+            <td><%= request.weightKg %></td>
+            <td><%= request.weightLb %></td>
+          </tr>
+        <% } %>
+      <% }) %>
+    <% }) %>
+
+  </tbody>
+</table>
+
+<%- include("partials/footer"); -%>
