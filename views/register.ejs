@@ -30,8 +30,14 @@
     </div>
 
     <div class="form-group">
+      <label for="inputFirstName" class="sr-only">First Name</label>
+      <input type="text" id="inputFirstName" class="form-control" placeholder="First Name" name="firstName" required autofocus>
+
+      <label for="inputLastName" class="sr-only">Last Name</label>
+      <input type="text" id="inputLastName" class="form-control" placeholder="Last Name" name="lastName" required>
+
       <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" name="username" required autofocus>
+      <input type="email" id="inputEmail" class="form-control" pattern="[a-z0-9._%+-]+@poscoaapc.com" title="Please use your company email address: ...@poscoaapc.com" placeholder="Email address" name="username" required>
 
       <label for="inputPassword" class="sr-only">Password</label>
       <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
@@ -40,7 +46,7 @@
     <div class="form-group">
       <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
     </div>
-    
+
   </form>
 
 <%- include("partials/footer") -%>

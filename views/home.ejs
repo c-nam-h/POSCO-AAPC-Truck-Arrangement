@@ -33,6 +33,10 @@
               <% } %>
             <% }; %>
 
+            <% function numberWithCommas(n) { %>
+                <% return n.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","); %>
+            <% }; %>
+
             <!-- show each item in the request information -->
             <% requests.sort(compare_date).forEach(function(request) { %>
               <tr>
@@ -42,8 +46,8 @@
                   <td><%= request.deliveryTo %></td>
                   <td><%= request.shippingDate %></td>
                   <td><%= request.deliveryDate %></td>
-                  <td><%= request.weightKg %></td>
-                  <td><%= request.weightLb %></td>
+                  <td><%= numberWithCommas(request.weightKg) %></td>
+                  <td><%= numberWithCommas(request.weightLb) %></td>
                   <td><a href="/modify/<%=request._id%>"><%= request.bolNo %></a></td>
                   <td><%= request.truckType %></td>
                   <td><%= request.specialNote %></td>

@@ -1,9 +1,9 @@
 <%- include('partials/header'); -%>
 
-  <h1>Update Your Request</h1>
-  <p>Please update your shipping information below and submit</p>
+  <h1>Update Your Freight</h1>
+  <p>Please update your carrier and freight information below and submit</p>
   <br/>
-  <form class="" action="/update" method="post">
+  <form class="" action="/modify/<%=request_id%>" method="post">
 
     <div class="form-group">
       <label for="customer">Customer</label>
@@ -76,19 +76,6 @@
       <div class="form-group col-md-12">
         <label for="inputSpecialNote">Special Note</label>
         <input class="form-control" id="inputSpecialNote" type="text" name="specialNote" value="<%= specialNote %>">
-      </div>
-    </div>
-
-
-    <div class="row">
-      <div class="form-group col-md-6">
-        <label for="inputCarrier">Carrier</label>
-        <input class="form-control" id="inputCarrier" type="text" name="carrier">
-      </div>
-
-      <div class="form-group col-md-6">
-        <label for="inputFreight">Freight ($/Truck)</label>
-        <input class="form-control" id="inputFreight" type="text" name="freight">
       </div>
     </div>
 

@@ -27,9 +27,13 @@ app.use(passport.session());
 
 mongoose.connect("mongodb://localhost:27017/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 
+
+// define a schema for user collection
 const userSchema = new mongoose.Schema({
   email: String,
-  password: String
+  password: String,
+  firstName: String,
+  lastName: String
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -41,6 +45,7 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// define a schema for request collection with user_id as a foreign key referencing to the user collection
 const requestSchema = new mongoose.Schema({
   customer: String,
   shippingFrom: String,
@@ -51,11 +56,14 @@ const requestSchema = new mongoose.Schema({
   weightLb: Number,
   bolNo: String,
   truckType: String,
-  specialNote: String
+  specialNote: String,
+  user_id: mongoose.Schema.Types.ObjectId
 });
 
 const Request = new mongoose.model("Request", requestSchema);
 
+
+// define a schema for freight collection with request_id as a foreign key referencing to the request collection
 const freightSchema = new mongoose.Schema({
   carrier: String,
   freight: Number,
@@ -64,12 +72,16 @@ const freightSchema = new mongoose.Schema({
 
 const Freight = mongoose.model("Freight", freightSchema);
 
+// declare this variable to refer to when the user needs to update requests
 let requestedId = "";
 
+// render the register page
 app.get("/register", function(req, res) {
   res.render("register");
 });
 
+// post register information and redirects to the homepage when successfully registered
+// I need to add a validation which loops through the user collection and sees if there is a duplicate eamil address registered already
 app.post("/register", function(req, res) {
   User.register({username: req.body.username}, req.body.password, function(err, user) {
     if (err) {
@@ -146,10 +158,10 @@ app.post("/request", function(req, res){
   if (button === "Cancel") {
     res.redirect("/");
   } else {
-    if (req.body.postDeliveryDate < req.body.postShippingDate) {
+    if (req.body.deliveryDate < req.body.shippingDate) {
       res.render("request", {
         err: "A delivery date cannot be earlier than a delivery date. Please check again."
-      })
+      });
     } else {
       const request = new Request({
         customer: req.body.customer,
@@ -161,8 +173,10 @@ app.post("/request", function(req, res){
         weightLb: Math.round(req.body.weightKg * 2.204623, 0),
         bolNo: req.body.bolNo,
         truckType: req.body.truckOptions,
-        specialNote: req.body.specialNote
+        specialNote: req.body.specialNote,
+        user_id: req.user._id
       });
+
 
       request.save(function(err) {
         if (!err) {
@@ -219,7 +233,8 @@ app.get("/modify/:_id", function(req, res) {
             weightLb: request.weightLb,
             bolNo: request.bolNo,
             truckType: request.truckType,
-            specialNote: request.specialNote
+            specialNote: request.specialNote,
+            request_id: requestedId
           });
         };
       });
@@ -229,14 +244,14 @@ app.get("/modify/:_id", function(req, res) {
 
 // update a request information with the selected ID -- still need to modify the code to validate whether a revised BOL No already exists in the database or not.
 // If a revised BOL No already exists in the database, then it should give a warning message that the user cannot use the new BOL No -- WIP
-app.post("/update", function(req, res) {
+app.post("/modify/:id", function(req, res) {
 
   const button = req.body.button;
 
   if (button === "cancel") {
     res.redirect("/");
   } else {
-    Request.updateOne({_id: ObjectID(requestedId)}, {
+    Request.updateOne({_id: requestedId}, {
       customer: req.body.customer,
       from: req.body.shippingfrom,
       to: req.body.deliveryTo,
@@ -246,21 +261,15 @@ app.post("/update", function(req, res) {
       weightLb: Math.round(req.body.weightKg * 2.204623, 0),
       bolNo: req.body.bolNo,
       truckType: req.body.truckOptions,
-      specialNote: req.body.specialNote
+      specialNote: req.body.specialNote,
+      user_id: req.user._id
     }, function(err) {
       if (err) {
         return handleError(err);
       }
     });
 
-    Freight.updateOne({request_id: ObjectID(requestedId)}, {
-      carrier: req.body.carrier,
-      freight: req.body.freight
-    }, function(err) {
-      if (err) {
-        return handleError(err);
-      }
-    });
+
     res.redirect("/");
   };
 });
@@ -291,6 +300,45 @@ app.get("/freight-report", function(req, res) {
       };
     });
   };
+});
+
+app.get("/freight-detail/:_id", function(req, res) {
+
+  requestedId = ObjectID(req.params._id);
+
+  Request.findOne({_id: requestedId}, function(err, request) {
+    Freight.findOne({request_id: requestedId}, function(err, freight) {
+      res.render("freight-detail", {
+        request_id: request._id,
+        customer: request.customer,
+        shippingFrom: request.shippingFrom,
+        deliveryTo: request.deliveryTo,
+        shippingDate: request.shippingDate,
+        deliveryDate: request.deliveryDate,
+        weightKg: request.weightKg,
+        weightLb: request.weightLb,
+        bolNo: request.bolNo,
+        truckType: request.truckType,
+        specialNote: request.specialNote,
+        frieght_id: freight._id,
+        freight: freight.freight,
+        carrier: freight.carrier
+      });
+    });
+  });
+});
+
+app.post("/freight-detail/:_id", function(req, res) {
+
+  Freight.updateOne({request_id: requestedId}, {
+    carrier: req.body.carrier,
+    freight: req.body.freight
+  }, function(err) {
+    if (err) {
+      handleError(err);
+    };
+  });
+  res.redirect("/freight-report");
 });
 
 
