@@ -25,7 +25,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb://localhost:27017/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+mongoose.connect("mongodb+srv://" + process.env.USERNAME + ":" + process.env.PASSWORD + "@posco-aapc-logistics-l3bdr.mongodb.net/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 
 
 // define a schema for user collection
@@ -80,24 +80,24 @@ let deletedCount = 0;
 
 
 // render the register page
-// app.get("/register", function(req, res) {
-//   res.render("register");
-// });
+app.get("/register", function(req, res) {
+  res.render("register");
+});
 
 // post register information and redirects to the homepage when successfully registered
 // I need to add a validation which loops through the user collection and sees if there is a duplicate eamil address registered already
-// app.post("/register", function(req, res) {
-//   User.register({username: req.body.username}, req.body.password, function(err, user) {
-//     if (err) {
-//       handleError(err);
-//       res.redirect("/register");
-//     } else {
-//       passport.authenticate("local")(req, res, function() {
-//         res.redirect("/");
-//       });
-//     };
-//   });
-// });
+app.post("/register", function(req, res) {
+  User.register({username: req.body.username}, req.body.password, function(err, user) {
+    if (err) {
+      handleError(err);
+      res.redirect("/register");
+    } else {
+      passport.authenticate("local")(req, res, function() {
+        res.redirect("/");
+      });
+    };
+  });
+});
 
 // render a homepage when the user is already logged in and tries to go to the login page
 app.get("/login", function(req, res) {
@@ -113,8 +113,6 @@ app.post("/login", function(req, res) {
     username: req.body.username,
     password: req.body.password
   });
-
-  console.log(user);
 
   req.login(user, function(err) {
     if (err) {
@@ -432,5 +430,5 @@ app.post("/freight-detail/:_id", function(req, res) {
 
 
 app.listen(3000, function() {
-  console.log("Server started on port 3000");
+  console.log("Server started on MongoDB Atlas");
 });
