@@ -1,78 +1,110 @@
 <%- include("partials/header"); -%>
 
-    <% if (err) { %>
-      <div class="alert alert-warning alert-dismissible" role="alert">
-        <button class="close" data-dismiss="alert" aria-label="Close" type="button"><span aria-hidden="true">&times;</span></button>
-        <strong>Warning!</strong> <%= err %>
-      </div>
-    <% } %>
+<% if (err) { %>
+<div class="alert alert-warning alert-dismissible" role="alert">
+  <button class="close" data-dismiss="alert" aria-label="Close" type="button"><span aria-hidden="true">&times;</span></button>
+  <strong>Warning!</strong> <%= err %>
+</div>
+<% } %>
 
-    <h1>Request For Trucks</h1>
-    <p>Please enter your shipping information below and submit</p>
-    <br/>
-    <form class="" action="/request" method="post">
+<h1>Request For Trucks</h1>
+<p>Please enter your shipping information below and submit</p>
+<br />
+<form class="" action="/request" method="post">
 
+  <div class="row">
+    <div class="form-group col-md-12">
+      <label for="customer">Customer</label>
+      <input class="form-control" id="inputCustomer" type="text" name="customer" value="<%= customer %>" required>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-md-6">
+      <label for="inputShippingFrom">Shipping From</label>
+      <input type="text" class="form-control" id="inputShippingFrom" name="shippingFrom" value="<%= shippingFrom %>" required>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputDeliveryTo">Delivery To</label>
+      <input type="text" class="form-control" id="inputDeliveryTo" name="deliveryTo" value="<%= deliveryTo %>" required>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-md-6">
+      <label for="inputShippingDate">Shipping Date</label>
+      <input class="form-control" id="inputShippingDate datepicker" type="date" name="shippingDate" value="<%= shippingDate %>" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
+    </div>
+
+    <div class="form-group col-md-6">
+      <label for="inputDeliveryDate">Delivery Date</label>
+      <input class="form-control" id="inputDeliveryDate" type="date" name="deliveryDate" value="<%= deliveryDate %>" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-md-4">
+      <label for="inputKg">Weight(kg)</label>
+      <input class="form-control" id="inputKg" type="text" name="weightKg" pattern="[0-9]{1,5}" value="<%= weightKg %>" required>
+    </div>
+
+    <div class="form-group col-md-4">
+      <label for="inputBolNo">BOL No</label>
+      <input class="form-control" id="inputBolNo" type="text" name="bolNo" value="<%= bolNo %>" pattern="[A-Z]{1}[0-9]{11}" placeholder="Arrangement #" required>
+    </div>
+
+    <div class="form-group col-md-4">
+      <label for="inputTruck">Truck Type</label>
+      <% if (truckType === "Flatbed") { %>
       <div class="form-group">
-        <label>Customer</label>
-        <input class="form-control" type="text" name="customer" required>
-      </div>
-
-      <div class="row">
-        <div class="form-group col-md-6">
-          <label for="inputEmail4">Shipping From</label>
-          <input type="text" class="form-control" name="shippingFrom" required>
+        <div class="form-check radio-inline">
+          <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="flatbed" value="Flatbed" checked required>
+          <label class="form-check-label" for="inputTruck">Flatbed</label>
         </div>
-        <div class="form-group col-md-6">
-          <label for="inputPassword4">Delivery To</label>
-          <input type="text" class="form-control" name="deliveryTo" required>
+        <div class="form-check radio-inline">
+          <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="van" value="Van" required>
+          <label class="form-check-label" for="inputTruck">Van</label>
         </div>
       </div>
-
-      <div class="row">
-        <div class="form-group col-md-6">
-          <label>Shipping Date</label>
-          <input class="form-control" type="date" name="shippingDate" required>
+      <% } else if (truckType === "Van") { %>
+      <div class="form-group">
+        <div class="form-check radio-inline">
+          <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="flatbed" value="Flatbed" required>
+          <label class="form-check-label" for="inputTruck">Flatbed</label>
         </div>
-
-        <div class="form-group col-md-6">
-          <label>Delivery Date</label>
-          <input class="form-control" type="date" name="deliveryDate" required>
+        <div class="form-check radio-inline">
+          <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="van" value="Van" checked required>
+          <label class="form-check-label" for="inputTruck">Van</label>
         </div>
       </div>
-
-      <div class="row">
-        <div class="form-group col-md-4">
-          <label>Weight(kg)</label>
-          <input class="form-control" type="text" name="weightKg" pattern="[0-9]{1,5}" required>
-        </div>
-
-        <div class="form-group col-md-4">
-          <label>BOL No</label>
-          <input class="form-control" id="bolNo" type="text" name="bolNo" pattern="[A-Z]{1}[0-9]{11}" placeholder="Arrangement #" required>
-        </div>
-
-        <div class="form-group col-md-4">
-          <label>Truck Type</label>
-          <div class="form-group">
-            <div class="form-check radio-inline">
-              <input class="form-check-input" type="radio" name="truckOptions" id="flatbed" value="Flatbed">
-              <label class="form-check-label" for="flatbed">Flatbed</label>
-            </div>
-            <div class="form-check radio-inline">
-              <input class="form-check-input" type="radio" name="truckOptions" id="van" value="Van">
-              <label class="form-check-label" for="flatbed">Van</label>
-            </div>
+      <% } else { %>
+        <div class="form-group">
+          <div class="form-check radio-inline">
+            <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="flatbed" value="Flatbed" required>
+            <label class="form-check-label" for="inputTruck">Flatbed</label>
+          </div>
+          <div class="form-check radio-inline">
+            <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="van" value="Van" required>
+            <label class="form-check-label" for="inputTruck">Van</label>
           </div>
         </div>
-      </div>
+      <% } %>
+    </div>
+  </div>
 
-      <div class="form-group">
-        <label>Special Note</label>
-        <input class="form-control" type="text" name="specialNote">
-      </div>
+  <div class="row">
+    <div class="form-group col-md-12">
+      <label for="inputSpecialNote">Special Note</label>
+      <input class="form-control" id="inputSpecialNote" type="text" name="specialNote" value="<%= specialNote %>">
+    </div>
+  </div>
 
-      <button class="btn btn-lg btn-primary btn-block" type="submit" name="button">Submit</button>
+  <div class="row">
+    <div class="form-group col-md-12">
+      <button class="btn btn-lg btn-primary btn-block" type="submit" name="button" value="submit">Submit</button>
+    </div>
+  </div>
 
-    </form>
+</form>
 
 <%- include("partials/footer"); -%>

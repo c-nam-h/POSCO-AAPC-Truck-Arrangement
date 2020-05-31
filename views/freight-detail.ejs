@@ -5,9 +5,11 @@
   <br/>
   <form class="" action="/freight-detail/<%=request_id%>" method="post">
 
-    <div class="form-group">
-      <label for="customer">Customer</label>
-      <input class="form-control" id="inputCustomer" type="text" name="customer" value="<%= customer %>" required readonly>
+    <div class="row">
+      <div class="form-group col-md-12">
+        <label for="customer">Customer</label>
+        <input class="form-control" id="inputCustomer" type="text" name="customer" value="<%= customer %>" required readonly>
+      </div>
     </div>
 
     <div class="row">
@@ -88,11 +90,15 @@
 
       <div class="form-group col-md-6">
         <label for="inputFreight">Freight ($/Truck)</label>
-        <input class="form-control" id="inputFreight" type="text" name="freight" value="<%= freight %>" pattern="[0-9]{1,9}.[0-9]{0,2}" title="Please enter up to 2 decimal places: $123 or $123.45" required>
+        <input class="form-control" id="inputFreight" type="text" name="freight" value="<%= freight %>" pattern="[0-9]{0,9}.[0-9]{0,2}" title="Please enter up to 2 decimal places: $123 or $123.45" required>
       </div>
     </div>
 
-    <button class="btn btn-lg btn-primary btn-block" type="submit" name="button" value="update">Update</button>
+    <div class="row">
+      <div class="form-group col-md-12">
+        <button class="btn btn-lg btn-primary btn-block" type="submit" name="button" value="update">Update</button>
+      </div>
+    </div>
 
   </form>
 

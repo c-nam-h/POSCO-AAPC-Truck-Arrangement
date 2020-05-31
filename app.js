@@ -75,6 +75,10 @@ const Freight = mongoose.model("Freight", freightSchema);
 // declare this variable to refer to when the user needs to update requests
 let requestedId = "";
 
+// declare this variable to refer to a number of delete requests performed
+let deletedCount = 0;
+
+
 // render the register page
 app.get("/register", function(req, res) {
   res.render("register");
@@ -123,16 +127,19 @@ app.post("/login", function(req, res) {
   });
 });
 
+// log out
 app.get("/logout", function(req, res) {
   req.logout();
   res.redirect("/login");
 })
 
+// render a homepage
 app.get("/", function(req, res){
   if (req.isAuthenticated()) {
     Request.find({}, function(err, requests) {
       res.render("home", {
-        requests: requests
+        requests: requests,
+        msg: deletedCount
       });
     });
   } else {
@@ -140,121 +147,37 @@ app.get("/", function(req, res){
   };
 });
 
-
+// render a request page
 app.get("/request", function(req, res){
   if (req.isAuthenticated()) {
     res.render("request", {
-      err: null
+      err: null,
+      customer: null,
+      shippingFrom: null,
+      deliveryTo: null,
+      shippingDate: null,
+      deliveryDate: null,
+      weightKg: null,
+      weightLb: null,
+      bolNo: null,
+      truckType: null,
+      specialNote: null
     });
   } else {
     res.redirect("/login");
   };
 });
 
-//date validation - if delivery date is earlier than shipping date, then a user will be asked to revise those dates
+
 app.post("/request", function(req, res){
-  const button = req.body.button;
 
-  if (button === "Cancel") {
-    res.redirect("/");
-  } else {
-    if (req.body.deliveryDate < req.body.shippingDate) {
-      res.render("request", {
-        err: "A delivery date cannot be earlier than a delivery date. Please check again."
-      });
-    } else {
-      const request = new Request({
-        customer: req.body.customer,
-        shippingFrom: req.body.shippingFrom,
-        deliveryTo: req.body.deliveryTo,
-        shippingDate: req.body.shippingDate,
-        deliveryDate: req.body.deliveryDate,
-        weightKg: req.body.weightKg,
-        weightLb: Math.round(req.body.weightKg * 2.204623, 0),
-        bolNo: req.body.bolNo,
-        truckType: req.body.truckOptions,
-        specialNote: req.body.specialNote,
-        user_id: req.user._id
-      });
-
-
-      request.save(function(err) {
-        if (!err) {
-          Request.findOne({bolNo: req.body.bolNo}, function(err, request) {
-            const freight = new Freight({
-              carrier: "TBD",
-              freight: 0,
-              request_id: ObjectID(request._id)
-            });
-            freight.save(function(err) {
-              res.redirect("/");
-            });
-          });
-        };
-      });
-    };
-  };
-});
-
-// deletes selected row or rows
-// need to add a warning message to confirm whether the user really wants to perform delete function
-app.post("/delete", function(req, res) {
-    const checkboxId = req.body.checkbox;
-
-    Request.deleteMany({_id: checkboxId}, function(err) {
-      if (err) {
-        return handleError(err);
-      };
-    });
-    res.redirect("/");
-  });
-
-// renders modify.ejs and shows a selected BOL number's information - dynamic
-app.get("/modify/:_id", function(req, res) {
-
-  requestedId = ObjectID(req.params._id);
-
-  Request.find({}, function(err, requests) {
-      if (err) {
-        return handleError(err);
-      } else {
-        requests.forEach(function(request) {
-
-        const storedId = ObjectID(request._id);
-
-        if (storedId.equals(requestedId)) {
-          res.render("modify", {
-            customer: request.customer,
-            shippingFrom: request.shippingFrom,
-            deliveryTo: request.deliveryTo,
-            shippingDate: request.shippingDate,
-            deliveryDate: request.deliveryDate,
-            weightKg: request.weightKg,
-            weightLb: request.weightLb,
-            bolNo: request.bolNo,
-            truckType: request.truckType,
-            specialNote: request.specialNote,
-            request_id: requestedId
-          });
-        };
-      });
-    };
-  });
-});
-
-// update a request information with the selected ID -- still need to modify the code to validate whether a revised BOL No already exists in the database or not.
-// If a revised BOL No already exists in the database, then it should give a warning message that the user cannot use the new BOL No -- WIP
-app.post("/modify/:id", function(req, res) {
-
-  const button = req.body.button;
-
-  if (button === "cancel") {
-    res.redirect("/");
-  } else {
-    Request.updateOne({_id: requestedId}, {
+  //date validation - if delivery date is earlier than shipping date, then a user will be asked to revise those dates
+  if (req.body.shippingDate > req.body.deliveryDate) {
+    res.render("request", {
+      err: "A delivery date cannot be earlier than shipping date!",
       customer: req.body.customer,
-      from: req.body.shippingfrom,
-      to: req.body.deliveryTo,
+      shippingFrom: req.body.shippingFrom,
+      deliveryTo: req.body.deliveryTo,
       shippingDate: req.body.shippingDate,
       deliveryDate: req.body.deliveryDate,
       weightKg: req.body.weightKg,
@@ -262,39 +185,53 @@ app.post("/modify/:id", function(req, res) {
       bolNo: req.body.bolNo,
       truckType: req.body.truckOptions,
       specialNote: req.body.specialNote,
-      user_id: req.user._id
-    }, function(err) {
-      if (err) {
-        return handleError(err);
-      }
     });
+  } else {
 
-
-    res.redirect("/");
-  };
-});
-
-app.get("/freight-report", function(req, res) {
-  const idList = [];
-
-  if (req.isAuthenticated()) {
-    Freight.find({}, function(err, freights) {
-      if (err) {
-        handleError(err);
+    Request.findOne({bolNo: req.body.bolNo}, function(err, request) {
+      if (request) {
+        res.render("request", {
+          err: "The entered BOL NO " + req.body.bolNo + " already exists in the database. Please check again and enter BOL No.",
+          customer: req.body.customer,
+          shippingFrom: req.body.shippingFrom,
+          deliveryTo: req.body.deliveryTo,
+          shippingDate: req.body.shippingDate,
+          deliveryDate: req.body.deliveryDate,
+          weightKg: req.body.weightKg,
+          weightLb: Math.round(req.body.weightKg * 2.204623, 0),
+          bolNo: null,
+          truckType: req.body.truckOptions,
+          specialNote: req.body.specialNote,
+        });
       } else {
-        freights.forEach(function(freight) {
-          idList.push(freight.request_id);
+        const request = new Request({
+          customer: req.body.customer,
+          shippingFrom: req.body.shippingFrom,
+          deliveryTo: req.body.deliveryTo,
+          shippingDate: req.body.shippingDate,
+          deliveryDate: req.body.deliveryDate,
+          weightKg: req.body.weightKg,
+          weightLb: Math.round(req.body.weightKg * 2.204623, 0),
+          bolNo: req.body.bolNo,
+          truckType: req.body.truckOptions,
+          specialNote: req.body.specialNote,
+          user_id: req.user._id
         });
 
-        Request.find({}, function(err, requests) {
-          if (err) {
-            handleError(err);
-          } else{
-            res.render("freight-report", {
-              requests: requests,
-              freights: freights,
-              id: idList
+        request.save(function(err) {
+          if (!err) {
+            Request.findOne({_id: ObjectID(request._id)}, function(err, request) {
+              const freight = new Freight({
+                carrier: "TBD",
+                freight: 0,
+                request_id: ObjectID(request._id)
+              });
+              freight.save(function(err) {
+                res.redirect("/");
+              });
             });
+          } else {
+            handleError(err);
           };
         });
       };
@@ -302,30 +239,182 @@ app.get("/freight-report", function(req, res) {
   };
 });
 
+// delete selected row or rows in request and freight collections and redirect to the homepage
+// I need to add a warning message to confirm whether the user really wants to perform delete function
+app.post("/delete", function(req, res) {
+
+    const checkboxId = req.body.checkbox;
+
+    Request.deleteMany({_id: checkboxId}, function(err, deleteRequest) {
+      deletedCount = deleteRequest.deletedCount;
+
+      Freight.deleteMany({request_id: checkboxId}, function(err) {
+        if (err) {
+          return handleError(err);
+        };
+      });
+    });
+    res.redirect("/");
+  });
+
+// render modify.ejs and shows a selected BOL number's information - dynamic
+app.get("/modify/:_id", function(req, res) {
+
+  requestedId = ObjectID(req.params._id);
+
+  if (req.isAuthenticated) {
+    Request.find({}, function(err, requests) {
+        if (err) {
+          return handleError(err);
+        } else {
+          requests.forEach(function(request) {
+
+          const storedId = ObjectID(request._id);
+
+          if (storedId.equals(requestedId)) {
+            res.render("modify", {
+              err: null,
+              customer: request.customer,
+              shippingFrom: request.shippingFrom,
+              deliveryTo: request.deliveryTo,
+              shippingDate: request.shippingDate,
+              deliveryDate: request.deliveryDate,
+              weightKg: request.weightKg,
+              weightLb: request.weightLb,
+              bolNo: request.bolNo,
+              truckType: request.truckType,
+              specialNote: request.specialNote,
+              request_id: requestedId
+            });
+          };
+        });
+      };
+    });
+  } else {
+    res.redirect("/login");
+  };
+});
+
+
+// update a request information with the selected ID -- still need to modify the code to validate whether a revised BOL No already exists in the database or not.
+// If a revised BOL No already exists in the database, then it should give a warning message that the user cannot use the new BOL No -- WIP
+app.post("/modify/:_id", function(req, res) {
+
+  if (req.body.shippingDate > req.body.deliveryDate) {
+    res.render("modify", {
+      err: "A delivery date cannot be earlier than shipping date!",
+      customer: req.body.customer,
+      shippingFrom: req.body.shippingFrom,
+      deliveryTo: req.body.deliveryTo,
+      shippingDate: req.body.shippingDate,
+      deliveryDate: req.body.deliveryDate,
+      weightKg: req.body.weightKg,
+      weightLb: Math.round(req.body.weightKg * 2.204623, 0),
+      bolNo: req.body.bolNo,
+      truckType: req.body.truckOptions,
+      specialNote: req.body.specialNote,
+      request_id: requestedId
+    });
+  } else {
+    const modifiedBolNo = req.body.bolNo;
+
+    Request.find({bolNo: modifiedBolNo}, function(err, requests) {
+      let count = 0;
+      let id = null;
+
+      requests.forEach(function(request) {
+        count++;
+        id = request._id;
+      });
+      console.log(count);
+
+      if (count === 0 || (count === 1 && requestedId.equals(id))) {
+        Request.updateOne({_id: requestedId}, {
+          customer: req.body.customer,
+          from: req.body.shippingfrom,
+          to: req.body.deliveryTo,
+          shippingDate: req.body.shippingDate,
+          deliveryDate: req.body.deliveryDate,
+          weightKg: req.body.weightKg,
+          weightLb: Math.round(req.body.weightKg * 2.204623, 0),
+          bolNo: req.body.bolNo,
+          truckType: req.body.truckOptions,
+          specialNote: req.body.specialNote,
+          user_id: req.user._id
+        }, function(err) {
+          if (err) {
+            return handleError(err);
+          };
+        });
+        res.redirect("/");
+      } else {
+        res.render("modify", {
+          err: "Your BOL NO '" + modifiedBolNo + "' already exists in the database. Please check again and enter BOL No.",
+          customer: req.body.customer,
+          shippingFrom: req.body.shippingFrom,
+          deliveryTo: req.body.deliveryTo,
+          shippingDate: req.body.shippingDate,
+          deliveryDate: req.body.deliveryDate,
+          weightKg: req.body.weightKg,
+          weightLb: Math.round(req.body.weightKg * 2.204623, 0),
+          bolNo: req.body.bolNo,
+          truckType: req.body.truckOptions,
+          specialNote: req.body.specialNote,
+          request_id: requestedId
+        });
+      };
+    });
+  };
+});
+
+app.get("/freight-report", function(req, res) {
+
+  if (req.isAuthenticated()) {
+    Freight.find({}, function(err, freights) {
+      Request.find({}, function(err, requests) {
+        if (!err) {
+          res.render("freight-report", {
+            requests: requests,
+            freights: freights
+          });
+        } else {
+          handleError(err);
+        };
+      });
+    });
+  } else {
+    res.redirect("/login");
+  };
+});
+
 app.get("/freight-detail/:_id", function(req, res) {
 
   requestedId = ObjectID(req.params._id);
 
-  Request.findOne({_id: requestedId}, function(err, request) {
-    Freight.findOne({request_id: requestedId}, function(err, freight) {
-      res.render("freight-detail", {
-        request_id: request._id,
-        customer: request.customer,
-        shippingFrom: request.shippingFrom,
-        deliveryTo: request.deliveryTo,
-        shippingDate: request.shippingDate,
-        deliveryDate: request.deliveryDate,
-        weightKg: request.weightKg,
-        weightLb: request.weightLb,
-        bolNo: request.bolNo,
-        truckType: request.truckType,
-        specialNote: request.specialNote,
-        frieght_id: freight._id,
-        freight: freight.freight,
-        carrier: freight.carrier
+  if (req.isAuthenticated) {
+    Request.findOne({_id: requestedId}, function(err, request) {
+      Freight.findOne({request_id: requestedId}, function(err, freight) {
+        res.render("freight-detail", {
+          request_id: request._id,
+          customer: request.customer,
+          shippingFrom: request.shippingFrom,
+          deliveryTo: request.deliveryTo,
+          shippingDate: request.shippingDate,
+          deliveryDate: request.deliveryDate,
+          weightKg: request.weightKg,
+          weightLb: request.weightLb,
+          bolNo: request.bolNo,
+          truckType: request.truckType,
+          specialNote: request.specialNote,
+          frieght_id: freight._id,
+          freight: freight.freight,
+          carrier: freight.carrier
+        });
       });
     });
-  });
+  } else {
+    res.redirect("/login");
+  };
 });
 
 app.post("/freight-detail/:_id", function(req, res) {
