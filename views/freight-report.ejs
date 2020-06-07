@@ -17,12 +17,23 @@
 
   <tbody>
 
+    <!-- compare shipping dates in the array of javascript object and sort it in ascending order -->
+    <% function compare_date(a, b) { %>
+      <% if (a.shippingDate < b.shippingDate) { %>
+        <% return -1; %>
+      <% } else if (a.shippingDate > b.shippingDate) { %>
+        <% return 1; %>
+      <% } else { %>
+        <% return 0; %>
+      <% } %>
+    <% }; %>
+
     <% function numberWithCommas(n) { %>
         <% return n.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","); %>
     <% }; %>
 
 
-    <% requests.forEach(function(request) { %>
+    <% requests.sort(compare_date).forEach(function(request) { %>
       <% freights.forEach(function(freight) { %>
 
         <% if (request._id.equals(freight.request_id)) { %>

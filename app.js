@@ -27,7 +27,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb+srv://" + process.env.USERNAME + ":" + process.env.PASSWORD + "@posco-aapc-logistics-l3bdr.mongodb.net/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+// mongoose.connect("mongodb+srv://" + process.env.USERNAME + ":" + process.env.PASSWORD + "@posco-aapc-logistics-l3bdr.mongodb.net/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+mongoose.connect("mongodb://localhost/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 
 
 // define a schema for user collection
@@ -59,6 +60,7 @@ const requestSchema = new mongoose.Schema({
   bolNo: String,
   truckType: String,
   specialNote: String,
+  shipped: String,
   user_id: mongoose.Schema.Types.ObjectId
 });
 
@@ -215,6 +217,7 @@ app.post("/request", function(req, res){
           bolNo: req.body.bolNo,
           truckType: req.body.truckOptions,
           specialNote: req.body.specialNote,
+          shipped: "Not Shipped",
           user_id: req.user._id
         });
 
@@ -241,21 +244,38 @@ app.post("/request", function(req, res){
 
 // delete selected row or rows in request and freight collections and redirect to the homepage
 // I need to add a warning message to confirm whether the user really wants to perform delete function
-app.post("/delete", function(req, res) {
+app.post("/modify", function(req, res) {
 
     const checkboxId = req.body.checkbox;
+    const clickedButton = req.body.button;
 
-    Request.deleteMany({_id: checkboxId}, function(err, deleteRequest) {
-      deletedCount = deleteRequest.deletedCount;
-
-      Freight.deleteMany({request_id: checkboxId}, function(err) {
-        if (err) {
-          return handleError(err);
-        };
+    if (clickedButton === "delete") {
+      Request.deleteMany({_id: checkboxId}, function(err, deleteRequest) {
+        deletedCount = deleteRequest.deletedCount;
+  
+        Freight.deleteMany({request_id: checkboxId}, function(err) {
+          if (err) {
+            return handleError(err);
+          };
+        });
       });
+      res.redirect("/");
+    } else {
+      Request.updateOne({_id: checkboxId}, {shipped: "Shipped"}, function(err) {
+        if (err) {
+          handleError(err);
+      };
     });
     res.redirect("/");
-  });
+  };
+});
+
+app.post("/shipping", function(req, res) {
+
+  const checkboxId = req.body.checkbox;
+  console.log(checkboxId);
+  
+})
 
 // render modify.ejs and shows a selected BOL number's information - dynamic
 app.get("/modify/:_id", function(req, res) {

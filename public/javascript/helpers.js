@@ -7,24 +7,28 @@ function toggle(source) {
   };
 };
 
-// override the default error message and customize it for the BOL No input tag when the user does not enter data with the correct input pattern
-var bolNo = document.getElementById("bolNo");
+// // override the default error message and customize it for the BOL No input tag when the user does not enter data with the correct input pattern
+// var bolNo = document.getElementById("bolNo");
 
-bolNo.oninvalid = function(event) {
-  event.target.setCustomValidity("Must contain one or two uppercase letters followed by 11 numbers. (Ex: F12345678901)");
-};
+// bolNo.oninvalid = function(event) {
+//   event.target.setCustomValidity("Must contain one or two uppercase letters followed by 11 numbers. (Ex: F12345678901)");
+// };
 
-bolNo.oninput = function(event) {
-  event.target.setCustomValidity("");
-}
+// bolNo.oninput = function(event) {
+//   event.target.setCustomValidity("");
+// };
 
-var truckType = document.getElementsByClassName("truck-type");
 
-for (var i = 0; i < truckType.length; i++) {
-  if (truckType[i].value === "Flatbed") {
-    truckType.checked = true;
-  }
-};
+// var truckType = document.getElementsByClassName("truck-type");
+
+// for (var i = 0; i < truckType.length; i++) {
+//   if (truckType[i].value === "Flatbed") {
+//     truckType.checked = true;
+//   }
+// };
+
+
+
 
 // function compare_date(a, b) {
 //   if (a.shippingDate < b.shippingDate) {
