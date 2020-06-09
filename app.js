@@ -2,27 +2,32 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 };
-const express = require("express");
-const bodyParser = require("body-parser");
-const ejs = require("ejs");
-const _ = require("lodash");
-const mongoose = require("mongoose");
-const ObjectID = require("mongodb").ObjectID;
-const session = require("express-session");
-const passport = require("passport");
-const passportLocalMongoose = require("passport-local-mongoose");
 
+const express = require("express");
 const app = express();
 
-app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static("public"));
+const session = require("express-session");
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }));
+
+const bodyParser = require("body-parser");
+const ejs = require("ejs");
+
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static("public"));
+
+const _ = require("lodash");
+
+const mongoose = require("mongoose");
+const ObjectID = require("mongodb").ObjectID;
+
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local-mongoose");
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -31,50 +36,17 @@ app.use(passport.session());
 mongoose.connect("mongodb://localhost/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 
 
-// define a schema for user collection
-const userSchema = new mongoose.Schema({
-  email: String,
-  password: String,
-  firstName: String,
-  lastName: String
-});
+// require each model
+const Request = require("./models/Request");
+const Freight = require("./models/Freight");
+const User = require("./models/User");
+const UserName = require("./models/UserName"); // created this model because passport doesn't allow names to be saved in the collection
 
-userSchema.plugin(passportLocalMongoose);
-
-const User = new mongoose.model("User", userSchema);
 
 passport.use(User.createStrategy());
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-// define a schema for request collection with user_id as a foreign key referencing to the user collection
-const requestSchema = new mongoose.Schema({
-  customer: String,
-  shippingFrom: String,
-  deliveryTo: String,
-  shippingDate: String,
-  deliveryDate: String,
-  weightKg: Number,
-  weightLb: Number,
-  bolNo: String,
-  truckType: String,
-  specialNote: String,
-  shipped: String,
-  user_id: mongoose.Schema.Types.ObjectId
-});
-
-const Request = new mongoose.model("Request", requestSchema);
-
-
-// define a schema for freight collection with request_id as a foreign key referencing to the request collection
-const freightSchema = new mongoose.Schema({
-  carrier: String,
-  freight: Number,
-  request_id: mongoose.Schema.Types.ObjectId
-});
-
-const Freight = mongoose.model("Freight", freightSchema);
 
 // declare this variable to refer to when the user needs to update requests
 let requestedId = "";
@@ -96,6 +68,17 @@ app.post("/register", function(req, res) {
       handleError(err);
       res.redirect("/register");
     } else {
+      // find the id of registered username and store it in UserName collection with firstname and lastname
+      User.findOne({username: req.body.username}, function(err, user) {
+        const user_id = user._id;
+      });
+
+      UserName.create({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        user_id: user._id
+      })
+
       passport.authenticate("local")(req, res, function() {
         res.redirect("/");
       });
@@ -217,7 +200,7 @@ app.post("/request", function(req, res){
           bolNo: req.body.bolNo,
           truckType: req.body.truckOptions,
           specialNote: req.body.specialNote,
-          shipped: "Not Shipped",
+          shipped: false,
           user_id: req.user._id
         });
 

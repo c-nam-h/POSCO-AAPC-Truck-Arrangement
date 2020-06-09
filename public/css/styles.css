@@ -3,6 +3,10 @@ html {
   position: relative;
 }
 
+body {
+  font-size: 13px;
+}
+
 .container-fluid {
     padding-top: 70px;
     padding-bottom: 70px;
@@ -134,8 +138,14 @@ h5 {
 }
 
 .a-request {
-  border-radius: 4px;
+  border-radius: 4px 4px 0 0;
   border: 1px solid #ddd;
+}
+
+.a-special-note {
+  border-radius: 0 0 4px 4px;
+  border: 1px solid #ddd;
+  margin-top: -1px;
 }
 
 .a-request-inner {
@@ -148,7 +158,7 @@ h5 {
 }
 
 .a-fixed-right-grid-inner {
-  padding-right: 260px;
+  padding-right: 220px;
   position: relative;
 }
 
@@ -168,16 +178,32 @@ h5 {
 
 .a-col-left {
   width: 100%;
-  padding-right: 3.5%;
-}
-
-.a-span5 {
-  width: 40.448%;
+  padding-right: 0%;
   float: left;
 }
 
-.a-span7 {
-  width: 57.448%;
-  margin-right: 0;
-  float: right;
+.a-column38 {
+  width: 35%;
+  float: left;
 }
+
+.a-column23 {
+  width: 27%;
+  float: left;
+}
+
+.a-column-header {
+  margin: 0 0 4px 0;
+}
+
+.a-column46 {
+  width: 46%;
+  float: left;
+}
+
+.a-column53 {
+  width: 53%;
+  float: right;
+  text-align: right;
+}
+
