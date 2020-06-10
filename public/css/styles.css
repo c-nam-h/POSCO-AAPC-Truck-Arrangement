@@ -138,9 +138,17 @@ h5 {
 }
 
 .a-request {
-  border-radius: 4px 4px 0 0;
+  border-radius: 0;
   border: 1px solid #ddd;
 }
+
+.a-request-header {
+  border-radius: 4px 4px 0 0;
+  border: 1px solid #ddd;
+  margin-bottom: -1px;
+  background-color: #f6f6f6;
+}
+
 
 .a-special-note {
   border-radius: 0 0 4px 4px;
@@ -205,5 +213,11 @@ h5 {
   width: 53%;
   float: right;
   text-align: right;
+}
+
+.a-request-header-label {
+  font-size: 11px;
+  color: #555;
+
 }
 

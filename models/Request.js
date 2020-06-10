@@ -13,7 +13,7 @@ const requestSchema = new Schema({
     bolNo: String,
     truckType: String,
     specialNote: String,
-    shipped: Boolean,
+    status: String,
     datePosted: {
       type: Date,
       default: new Date()

@@ -121,11 +121,15 @@ app.get("/logout", function(req, res) {
 // render a homepage
 app.get("/", function(req, res){
   if (req.isAuthenticated()) {
+    let user_names = null;
     Request.find({}, function(err, requests) {
-      res.render("home", {
-        requests: requests,
-        msg: deletedCount
-      });
+      UserName.find({}, function(err, usernames) {
+        res.render("home", {
+          requests: requests,
+          usernames: usernames,
+          msg: deletedCount
+        });
+      })
     });
   } else {
     res.redirect("/login");
@@ -200,7 +204,7 @@ app.post("/request", function(req, res){
           bolNo: req.body.bolNo,
           truckType: req.body.truckOptions,
           specialNote: req.body.specialNote,
-          shipped: false,
+          status: "Not Shipped",
           user_id: req.user._id
         });
 
