@@ -7,11 +7,41 @@
   </div>
 <% } %>
 
-<h1>Request For Trucks</h1>
-<p>Please enter your shipping information below and submit</p>
+<h1>Order a Truck</h1>
+<p>Please enter your load information below and submit</p>
 <br />
 <form class="" action="/request" method="post">
 
+  <div class="row">
+    <div class="form-group col-md-4">
+      <label for="selectShippingFrom">Ship From</label>
+      <select id="selectShippingFrom" class="form-control" name="shippingFrom" required>
+        <option value=""></option>
+        <option value="1">LG</option>
+        <option value="2">ABB</option>
+        <option value="3">Marelli</option>
+      </select>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="selectDestination">Destination</label>
+      <select id="selectDestination" class="form-control" name="destination" required>
+        <option value=""></option>
+        <option value="1">LG</option>
+        <option value="2">ABB</option>
+        <option value="3">Marelli</option>
+      </select>
+    </div><div class="form-group col-md-4">
+      <label for="selectAddress">Address</label>
+      <select id="selectAddress" class="form-control" name="address" required>
+        <option value=""></option>
+        <option value="1">LG</option>
+        <option value="2">ABB</option>
+        <option value="3">Marelli</option>
+      </select>
+    </div>
+  </div>
+
+  
   <div class="row">
     <div class="form-group col-md-12">
       <label for="customer">Customer</label>
@@ -21,11 +51,11 @@
 
   <div class="row">
     <div class="form-group col-md-6">
-      <label for="inputShippingFrom">Shipping From</label>
+      <label for="inputShippingFrom">Ship From</label>
       <input type="text" class="form-control" id="inputShippingFrom" name="shippingFrom" value="<%= shippingFrom %>" required>
     </div>
     <div class="form-group col-md-6">
-      <label for="inputDeliveryTo">Delivery To</label>
+      <label for="inputDeliveryTo">Ship To</label>
       <input type="text" class="form-control" id="inputDeliveryTo" name="deliveryTo" value="<%= deliveryTo %>" required>
     </div>
   </div>

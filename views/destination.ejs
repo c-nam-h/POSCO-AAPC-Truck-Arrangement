@@ -1,0 +1,57 @@
+<%- include("partials/header"); -%>
+
+
+<h1>Register a Destination</h1>
+<p>Please enter destination information below and submit</p>
+<br />
+<form class="" action="/register-destination" method="post">
+
+  <div class="row">
+    <div class="form-group col-md-6">
+      <label for="selectShippingFrom">Customer</label>
+      <select id="selectShippingFrom" class="form-control" name="shippingFrom" required>
+        <option value=""></option>
+        <option value="1">LG</option>
+        <option value="2">ABB</option>
+        <option value="3">Marelli</option>
+      </select>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputDestination">Destination</label>
+      <input id="inputDestination" class="form-control" name="destination" type="text" required>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-md-4">
+        <label for="inputStreetAddress">Street Address</label>
+        <input id="inputStreetAddress" class="form-control" name="streetAddrss" type="text" required>
+    </div>
+      <div class="form-group col-md-3">
+        <label for="inputCity">City</label>
+        <input id="inputCity" class="form-control" name="city" type="text" required>
+      </div>
+      <div class="form-group col-md-2">
+        <label for="selectState">State</label>
+        <select id="selectState" class="form-control" name="state" required>
+            <option value=""></option>s
+            <option value="1">LG</option>
+            <option value="2">ABB</option>
+            <option value="3">Marelli</option>
+          </select>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="inputZipcode">City</label>
+        <input id="inputZipcode" class="form-control" name="zipcode" type="text" required>
+      </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-md-12">
+      <button class="btn btn-lg btn-primary btn-block" type="submit" name="button" value="submit">Submit</button>
+    </div>
+  </div>
+
+</form>
+
+<%- include("partials/footer"); -%>

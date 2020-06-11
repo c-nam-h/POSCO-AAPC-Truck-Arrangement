@@ -41,6 +41,8 @@ const Request = require("./models/Request");
 const Freight = require("./models/Freight");
 const User = require("./models/User");
 const UserName = require("./models/UserName"); // created this model because passport doesn't allow names to be saved in the collection
+const Destination = require("./models/Destination");
+const Customer = require("./models/Customer");
 
 
 passport.use(User.createStrategy());
@@ -135,6 +137,14 @@ app.get("/", function(req, res){
     res.redirect("/login");
   };
 });
+
+app.get("/register-destination", function(req, res) {
+  res.render("destination");
+});
+
+app.post("/register-destination", function(req, res) {
+  
+})
 
 // render a request page
 app.get("/request", function(req, res){
