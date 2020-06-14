@@ -7,7 +7,8 @@ const destinationSchema = new Schema({
     streetAddress: String,
     city: String,
     state: String,
-    zipcode: Number
+    zipcode: String,
+    country: String
 });
 
 const Destination = mongoose.model("Destination", destinationSchema);

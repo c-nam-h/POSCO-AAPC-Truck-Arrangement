@@ -1,11 +1,31 @@
 
-// toggle for selecting and deselecting checkboxes in the homepage
-function toggle(source) {
-  checkboxes = document.getElementsByName("checkbox");
-  for (var i = 0; i < checkboxes.length; i++) {
-    checkboxes[i].checked = source.checked;
+module.exports = function() {
+  this.compare_date = function(a, b) {
+    if (a.shippingDate < b.shippingDate) {
+      return -1;
+    } else if (a.shippingDate > b.shippingDate) {
+      return 1;
+    } else {
+      return 0;
+    };
   };
+
+  this.numberWithCommas = function(n) {
+    return n.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+  };
+
 };
+
+
+
+// // toggle for selecting and deselecting checkboxes in the homepage
+// function toggle(source) {
+//   checkboxes = document.getElementsByName("checkbox");
+//   for (var i = 0; i < checkboxes.length; i++) {
+//     checkboxes[i].checked = source.checked;
+//   };
+// };
+
 
 // // override the default error message and customize it for the BOL No input tag when the user does not enter data with the correct input pattern
 // var bolNo = document.getElementById("bolNo");
@@ -30,12 +50,4 @@ function toggle(source) {
 
 
 
-// function compare_date(a, b) {
-//   if (a.shippingDate < b.shippingDate) {
-//     return -1;
-//   } else if (a.shippingDate > b.shippingDate) {
-//     return 1;
-//   } else {
-//     return 0;
-//   }
-// };
+

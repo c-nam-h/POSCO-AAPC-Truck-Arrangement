@@ -35,7 +35,6 @@ app.use(passport.session());
 // mongoose.connect("mongodb+srv://" + process.env.USERNAME + ":" + process.env.PASSWORD + "@posco-aapc-logistics-l3bdr.mongodb.net/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 mongoose.connect("mongodb://localhost/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 
-
 // require each model
 const Request = require("./models/Request");
 const Freight = require("./models/Freight");
@@ -44,11 +43,11 @@ const UserName = require("./models/UserName"); // created this model because pas
 const Destination = require("./models/Destination");
 const Customer = require("./models/Customer");
 
-
 passport.use(User.createStrategy());
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
 
 // declare this variable to refer to when the user needs to update requests
 let requestedId = "";
@@ -120,6 +119,9 @@ app.get("/logout", function(req, res) {
   res.redirect("/login");
 })
 
+
+require("./public/javascript/helpers")();
+
 // render a homepage
 app.get("/", function(req, res){
   if (req.isAuthenticated()) {
@@ -127,7 +129,7 @@ app.get("/", function(req, res){
     Request.find({}, function(err, requests) {
       UserName.find({}, function(err, usernames) {
         res.render("home", {
-          requests: requests,
+          requests: requests.sort(compare_date),
           usernames: usernames,
           msg: deletedCount
         });
@@ -143,29 +145,54 @@ app.get("/register-destination", function(req, res) {
 });
 
 app.post("/register-destination", function(req, res) {
+  Customer.findOne({customer: req.body.customer}, "_id", function(err, customer) {
+    Destination.create({
+      customer_id: customer,
+      destination: req.body.destination,
+      streetAddress: req.body.streetAddress,
+      city: req.body.city,
+      state: req.body.state,
+      zipcode: req.body.zipcode,
+      country: req.body.country
+    });
+  });
   
-})
+  res.redirect("/");
+});
+
+app.get("/register-customer", function(req, res) {
+
+});
+
 
 // render a request page
 app.get("/request", function(req, res){
   if (req.isAuthenticated()) {
-    res.render("request", {
-      err: null,
-      customer: null,
-      shippingFrom: null,
-      deliveryTo: null,
-      shippingDate: null,
-      deliveryDate: null,
-      weightKg: null,
-      weightLb: null,
-      bolNo: null,
-      truckType: null,
-      specialNote: null
+    Destination.find({}, function(err, destinations) {
+      Customer.find({}, function(err, customers) {
+        if (!err) {
+          res.render("request", {
+            err: null,
+            shippingFrom: null,
+            deliveryTo: null,
+            shippingDate: null,
+            deliveryDate: null,
+            weightKg: null,
+            bolNo: null,
+            truckType: null,
+            specialNote: null,
+            destinations: destinations,
+            customers: customers
+          });
+        };
+      });
     });
   } else {
     res.redirect("/login");
   };
 });
+
+
 
 
 app.post("/request", function(req, res){

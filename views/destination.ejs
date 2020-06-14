@@ -1,6 +1,7 @@
 <%- include("partials/header"); -%>
 
-
+<body>
+  <div class="container">
 <h1>Register a Destination</h1>
 <p>Please enter destination information below and submit</p>
 <br />
@@ -9,10 +10,10 @@
   <div class="row">
     <div class="form-group col-md-6">
       <label for="selectShippingFrom">Customer</label>
-      <select id="selectShippingFrom" class="form-control" name="shippingFrom" required>
+      <select id="selectShippingFrom" class="form-control" name="customer" required>
         <option value=""></option>
-        <option value="1">LG</option>
-        <option value="2">ABB</option>
+        <option value="LG">LG</option>
+        <option value="ArcelorMittal">ArcelorMittal</option>
         <option value="3">Marelli</option>
       </select>
     </div>
@@ -25,24 +26,28 @@
   <div class="row">
     <div class="form-group col-md-4">
         <label for="inputStreetAddress">Street Address</label>
-        <input id="inputStreetAddress" class="form-control" name="streetAddrss" type="text" required>
+        <input id="inputStreetAddress" class="form-control" name="streetAddress" type="text" required>
     </div>
       <div class="form-group col-md-3">
         <label for="inputCity">City</label>
         <input id="inputCity" class="form-control" name="city" type="text" required>
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-md-1">
         <label for="selectState">State</label>
         <select id="selectState" class="form-control" name="state" required>
-            <option value=""></option>s
-            <option value="1">LG</option>
-            <option value="2">ABB</option>
-            <option value="3">Marelli</option>
+            <option value=""></option>
+            <option value="TN">TN</option>
+            <option value="AL">AL</option>
+            <option value="FL">FL</option>
           </select>
       </div>
-      <div class="form-group col-md-3">
-        <label for="inputZipcode">City</label>
+      <div class="form-group col-md-2">
+        <label for="inputZipcode">Zipcode</label>
         <input id="inputZipcode" class="form-control" name="zipcode" type="text" required>
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZipcode">Country</label>
+        <input id="inputZipcode" class="form-control" name="country" type="text" required>
       </div>
   </div>
 
@@ -54,4 +59,10 @@
 
 </form>
 
+</div>
+
 <%- include("partials/footer"); -%>
+<%- include("partials/scripts"); -%>
+</body>
+
+</html>
