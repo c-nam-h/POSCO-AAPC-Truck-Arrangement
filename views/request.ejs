@@ -18,9 +18,9 @@
     <div class="form-group col-md-5">
       <label for="selectShipFrom">Ship From</label>
       <select id="selectShipFrom" class="form-control" name="shipFrom" required>
-        <option value="">Select Where From Ship From</option>
+        <option value="">Select Where To Ship From</option>
         <% customers.forEach(function(customer) { %>
-          <option value="<%= customer._id %>"><%= customer.customer %></option>
+          <option value="<%= customer._id %>"><%= customer.customer %></option>z
         <% }) %>
       </select>
     </div>
@@ -29,7 +29,7 @@
       <select id="selectShipFromAddress" class="form-control" name="shipFromAddress" required>
         <option value="">Select Ship From Address</option>
         <% destinations.forEach(function(destination) { %>
-          <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+          <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
         <% }) %>
       </select>
     </div>
@@ -38,7 +38,7 @@
   <div class="row">
     <div class="form-group col-md-5">
       <label for="selectShipTo">Ship To</label>
-      <select id="selectShipTo" class="form-control" name="customer" required>
+      <select id="selectShipTo" class="form-control" name="shipTo" required>
         <option value="">Select Where To Ship To</option>
         <% customers.forEach(function(customer) { %>
           <option value="<%= customer._id %>"><%= customer.customer %></option>
@@ -50,7 +50,7 @@
       <select id="selectShipToAddress" class="form-control" name="shipToAddress" required>
         <option value="">Select Ship To Address</option>
         <% destinations.forEach(function(destination) { %>
-          <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+          <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
         <% }) %>
       </select>
     </div>

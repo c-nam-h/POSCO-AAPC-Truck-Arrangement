@@ -196,7 +196,7 @@ app.get("/request", function(req, res){
 
 
 app.post("/request", function(req, res){
-
+  console.log(req.body);
   //date validation - if delivery date is earlier than shipping date, then a user will be asked to revise those dates
   if (req.body.shippingDate > req.body.deliveryDate) {
     res.render("request", {
