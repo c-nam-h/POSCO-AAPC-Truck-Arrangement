@@ -14,119 +14,118 @@
 
     <div class="a-request-group">
       <% requests.forEach(function(request) { %>
-        <% usernames.forEach(function(username) { %>
-          <% if (username.user_id.equals(request.user_id)) { %>
-            <div class="a-request-header">
-              <div class="a-request-inner">
-                <div class="a-fixed-right-grid">
-                  <div class="a-fixed-right-grid-inner" style="overflow: hidden;">
-                    <div class="a-fixed-right-grid-col a-col-left" style="padding-right: 0%; float: left;">
-                      <div class="a-column38">
-                        <div>
-                          <span class="a-request-header-label">ORDER PLACED</span>
+          <% usernames.forEach(function(username) { %>
+            <% if (username.user_id.equals(request.user_id)) { %>
+              <div class="a-request-header">
+                <div class="a-request-inner">
+                  <div class="a-fixed-right-grid">
+                    <div class="a-fixed-right-grid-inner" style="overflow: hidden;">
+                      <div class="a-fixed-right-grid-col a-col-left" style="padding-right: 0%; float: left;">
+                        <div class="a-column38">
+                          <div>
+                            <span class="a-request-header-label">ORDER PLACED</span>
+                          </div>
+                          <div>
+                            <span><%= request.datePosted.toDateString() %></span>
+                          </div>
                         </div>
-                        <div>
-                          <span><%= request.datePosted.toDateString() %></span>
+                        <div class="a-column38">
+                          <div>
+                            <span class="a-request-header-label">REQUESTED BY</span>
+                          </div>
+                          <div>
+                            <span><%= username.firstName %> <%= username.lastName %></span>
+                          </div>
                         </div>
-                      </div>
-                      <div class="a-column38">
-                        <div>
-                          <span class="a-request-header-label">REQUESTED BY</span>
-                        </div>
-                        <div>
-                          <span><%= username.firstName %> <%= username.lastName %></span>
-                        </div>
-                      </div>
-                      <div class="a-columne23">
-                        <div>
-                          <span class="a-request-header-label">ORDER STATUS</span>
-                        </div>
-                        <div>
-                          <span><%= request.status %></span>
-                        </div>
-                      </div>
-                    </div>
-                    <div style="width: 220px; margin-right: -220px; float: left;">
-                      <button class="btn btn-default" style="font-size: 13px; height: 100%; width: 100%; ">Modify Order</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="a-request">
-              <div class="a-request-inner">
-                <div class="a-fixed-right-grid">
-                  <div class="a-fixed-right-grid-inner" style="overflow: hidden;">
-                    <div class="a-fixed-right-grid-col a-col-left">
-                      <div class="a-column38">
-                        <h5 class="a-column-header">Ship From</h5>
-                        <ul class="displayAddressUL">
-                          <li class="displayAddressLI"><%= request.shippingFrom %></li>
-                          <li class="displayAddressLI">Street Address</li>
-                          <li class="displayAddressLI">City, States, Zipcode</li>
-                          <li class="displayAddressLI">Country</li>
-                        </ul>
-                      </div>
-                      <div class="a-column38">
-                        <h5 class="a-column-header">Ship To</h5>
-                        <ul class="displayAddressUL">
-                          <li class="displayAddressLI"><%= request.customer %></li>
-                          <li class="displayAddressLI">Street Address</li>
-                          <li class="displayAddressLI">City, States, Zipcode</li>
-                          <li class="displayAddressLI">Country</li>
-                        </ul>
-                      </div>
-                      <div class="a-column23">
-                        <h5 class="a-column-header">Load Summary</h5>
-                        <div style="overflow: hidden;">
-                          <div class="a-column46">BOL No:</div>
-                          <div class="a-column53"><%= request.bolNo %></div>
-                        </div>
-                        <div style="overflow: hidden;">
-                          <div class="a-column46">Weight:</div>
-                          <div class="a-column53"><%= numberWithCommas(request.weightKg) %>kg / <%= numberWithCommas(request.weightLb) %>lb</div>
-                        </div>
-                        <div style="overflow: hidden;">
-                          <div class="a-column46">Truck Type:</div>
-                          <div class="a-column53"><%= request.truckType %></div>
-                        </div>
-                        <div style="overflow: hidden;">
-                          <div class="a-column46">Shipping Date:</div>
-                          <div class="a-column53"><%= request.shippingDate %></div>
-                        </div>
-                        <div style="overflow: hidden;">
-                          <div class="a-column46">Delivery Date:</div>
-                          <div class="a-column53"><%= request.deliveryDate %></div>
+                        <div class="a-columne23">
+                          <div>
+                            <span class="a-request-header-label">ORDER STATUS</span>
+                          </div>
+                          <div>
+                            <span><%= request.status %></span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="a-fixed-right-grid-col a-col-right" style="width: 220px; margin-right: -220px; float: left;">
-                      <div class="a-row">
-                        <div class="a-button-stack">
-                          <span><button class="btn btn-default" style="font-size: 13px; height: 100%; width: 100%; margin-bottom: 6px;">Delete Order</button></span>
-                          <span><button class="btn btn-default" style="font-size: 13px; height: 100%; width: 100%; margin-bottom: 6px;">Assign Carrier and Freight</button></span>
-                          <span><button class="btn btn-default" style="font-size: 13px; height: 100%; width: 100%; ">Confirm Shipping</button></span>
-                        </div>
+                      <div style="width: 220px; margin-right: -220px; float: left;">
+                        <button class="btn btn-default" style="font-size: 13px; height: 100%; width: 100%; ">Modify Order</button>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="a-special-note">
-              <div class="a-request-inner">
-                <div class="a-row">
-                  <% if (request.specialNote) { %>
-                    <h5 class="a-column-header">Special Note</h5>
-                  <div><%= request.specialNote %></div>
-                  <% } %>
+              <div class="a-request">
+                <div class="a-request-inner">
+                  <div class="a-fixed-right-grid">
+                    <div class="a-fixed-right-grid-inner" style="overflow: hidden;">
+                      <div class="a-fixed-right-grid-col a-col-left">
+                        <div class="a-column38">
+                          <h5 class="a-column-header">Ship From</h5>
+                          <ul class="displayAddressUL">
+                            <li class="displayAddressLI"><%= request.shipFrom %></li>
+                            <li class="displayAddressLI"><%= request.shipFromStreetAddress %></li>
+                            <li class="displayAddressLI"><%= request.shipFromCity %>, <%= request.shipFromState %>, <%= request.shipFromZipcode%></li>
+                            <li class="displayAddressLI"><%= request.shipFromCountry %></li>
+                          </ul>
+                        </div>
+                        <div class="a-column38">
+                          <h5 class="a-column-header">Ship To</h5>
+                          <ul class="displayAddressUL">
+                            <li class="displayAddressLI"><%= request.shipTo %></li>
+                            <li class="displayAddressLI"><%= request.shipToStreetAddress %></li>
+                            <li class="displayAddressLI"><%= request.shipToCity %>, <%= request.shipToState %>, <%= request.shipToZipcode%></li>
+                            <li class="displayAddressLI"><%= request.shipToCountry %></li>
+                          </ul>
+                        </div>
+                        <div class="a-column23">
+                          <h5 class="a-column-header">Load Summary</h5>
+                          <div style="overflow: hidden;">
+                            <div class="a-column46">BOL No:</div>
+                            <div class="a-column53"><%= request.bolNo %></div>
+                          </div>
+                          <div style="overflow: hidden;">
+                            <div class="a-column46">Weight:</div>
+                            <div class="a-column53"><%= numberWithCommas(request.weightKg) %>kg / <%= numberWithCommas(request.weightLb) %>lb</div>
+                          </div>
+                          <div style="overflow: hidden;">
+                            <div class="a-column46">Truck Type:</div>
+                            <div class="a-column53"><%= request.truckType %></div>
+                          </div>
+                          <div style="overflow: hidden;">
+                            <div class="a-column46">Shipping Date:</div>
+                            <div class="a-column53"><%= request.shippingDate %></div>
+                          </div>
+                          <div style="overflow: hidden;">
+                            <div class="a-column46">Delivery Date:</div>
+                            <div class="a-column53"><%= request.deliveryDate %></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="a-fixed-right-grid-col a-col-right" style="width: 220px; margin-right: -220px; float: left;">
+                        <div class="a-row">
+                          <div class="a-button-stack">
+                            <span><button class="btn btn-default" style="font-size: 13px; height: 100%; width: 100%; margin-bottom: 6px;">Delete Order</button></span>
+                            <span><button class="btn btn-default" style="font-size: 13px; height: 100%; width: 100%; margin-bottom: 6px;">Assign Carrier and Freight</button></span>
+                            <span><button class="btn btn-default" style="font-size: 13px; height: 100%; width: 100%; ">Confirm Shipping</button></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <br>
-          <% } %>
+              <div class="a-special-note">
+                <div class="a-request-inner">
+                  <div class="a-row">
+                    <% if (request.specialNote) { %>
+                      <h5 class="a-column-header">Special Note</h5>
+                    <div><%= request.specialNote %></div>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+              <br>
+            <% } %>
         
-      
       <% }) %>
       <% }) %>
     </div>

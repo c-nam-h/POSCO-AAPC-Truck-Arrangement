@@ -3,23 +3,35 @@ const Schema = mongoose.Schema;
 
 // define a schema for request collection with user_id as a foreign key referencing to the user collection
 const requestSchema = new Schema({
-    customer: String,
-    shippingFrom: String,
-    deliveryTo: String,
-    shippingDate: String,
-    deliveryDate: String,
-    weightKg: Number,
-    weightLb: Number,
-    bolNo: String,
-    truckType: String,
-    specialNote: String,
-    status: String,
-    datePosted: {
-      type: Date,
-      default: new Date()
-    },
-    user_id: mongoose.Schema.Types.ObjectId
-  });
+  shipFrom: String,
+  shipFromStreetAddress: String,
+  shipFromCity: String,
+  shipFromState: String,
+  shipFromZipcode: String,
+  shipFromCountry: String,
+  shipTo: String,
+  shipToStreetAddress: String,
+  shipToCity: String,
+  shipToState: String,
+  shipToZipcode: String,
+  shipToCountry: String,
+  weightKg: Number,
+  weightLb: Number,
+  bolNo: String,
+  truckType: String,
+  shippingDate: String,
+  deliveryDate: String,
+  specialNote: String,
+  status: {
+    type: String,
+    default: "Not Shipped"
+  },
+  datePosted: {
+    type: Date,
+    default: new Date()
+  },
+  user_id: Schema.Types.ObjectId
+});
   
   const Request = new mongoose.model("Request", requestSchema);
 
