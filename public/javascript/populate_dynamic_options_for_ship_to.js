@@ -31,6 +31,12 @@ selectShipTo.addEventListener("change", function() {
     const selectedDestination = destinations_ship_to[this.value];
     const selectedDestination_id = destinations_ship_to_id[this.value];
 
+    let selectShipToDestination_final = {};
+
+    for (var i = 0; i < selectedDestination.length; i++) {
+        selectShipToDestination_final[selectedDestination[i]] = selectedDestination_id[i];
+    };
+
     while (selectShipToAddress.length > 0) {
         selectShipToAddress.options.remove(0);
     }
@@ -38,8 +44,9 @@ selectShipTo.addEventListener("change", function() {
     let option = new Option("Select Ship To Address", "Select Ship To Address");
     selectShipToAddress.appendChild(option);
     
+
     Array.from(selectedDestination).forEach(function(element) {
-        option = new Option(element, selectedDestination_id);
+        option = new Option(element, selectShipToDestination_final[element]);
 
         selectShipToAddress.appendChild(option);
     })

@@ -30,7 +30,7 @@ const requestSchema = new Schema({
     type: Date,
     default: new Date()
   },
-  user_id: Schema.Types.ObjectId
+  requestedBy: String
 });
   
   const Request = new mongoose.model("Request", requestSchema);

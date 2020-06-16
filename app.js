@@ -122,14 +122,8 @@ require("./public/javascript/helpers")();
 app.get("/", function(req, res){
   if (req.isAuthenticated()) {
     Request.find({}, function(err, requests) {
-      Destination.find({}, function(err, destinations) {
-        UserName.find({}, function(err, usernames) {
-          res.render("home", {
-            requests: requests.sort(compare_date),
-            destinations: destinations,
-            usernames: usernames
-          });
-        });
+      res.render("home", {
+        requests: requests.sort(compare_date)
       });
     });
   } else {
@@ -284,44 +278,43 @@ app.post("/request", function(req, res){
                 shipToAddress["state"] = destination.state;
                 shipToAddress["zipcode"] = destination.zipcode;
                 shipToAddress["country"] = destination.country;
+                UserName.findOne({user_id: ObjectID(req.user._id)}, function(err, userName) {
+                  const fullname = userName.firstName + " " + userName.lastName;
 
-                console.log(shipFrom);
-                console.log(shipFromAddress);
-                console.log(shipTo);
-                console.log(shipToAddress);
-
-                Request.create({
-                  shipFrom: shipFrom["shipFromCustomer"],
-                  shipFromStreetAddress: shipFromAddress["streetAddress"],
-                  shipFromCity: shipFromAddress["city"],
-                  shipFromState: shipFromAddress["state"],
-                  shipFromZipcode: shipFromAddress["zipcode"],
-                  shipFromCountry: shipFromAddress["country"],
-                  shipTo: shipTo["shipToCustomer"],
-                  shipToStreetAddress: shipToAddress["streetAddress"],
-                  shipToCity: shipToAddress["city"],
-                  shipToState: shipToAddress["state"],
-                  shipToZipcode: shipToAddress["zipcode"],
-                  shipToCountry: shipToAddress["country"],
-                  weightKg: req.body.weightKg,
-                  weightLb: Math.round(req.body.weightKg * 2.204623, 0),
-                  bolNo: req.body.bolNo,
-                  truckType: req.body.truckOptions,
-                  shippingDate: req.body.shippingDate,
-                  deliveryDate: req.body.deliveryDate,
-                  specialNote: req.body.specialNote,
-                  user_id: req.user._id
-                });
+                  Request.create({
+                    shipFrom: shipFrom["shipFromCustomer"],
+                    shipFromStreetAddress: shipFromAddress["streetAddress"],
+                    shipFromCity: shipFromAddress["city"],
+                    shipFromState: shipFromAddress["state"],
+                    shipFromZipcode: shipFromAddress["zipcode"],
+                    shipFromCountry: shipFromAddress["country"],
+                    shipTo: shipTo["shipToCustomer"],
+                    shipToStreetAddress: shipToAddress["streetAddress"],
+                    shipToCity: shipToAddress["city"],
+                    shipToState: shipToAddress["state"],
+                    shipToZipcode: shipToAddress["zipcode"],
+                    shipToCountry: shipToAddress["country"],
+                    weightKg: req.body.weightKg,
+                    weightLb: Math.round(req.body.weightKg * 2.204623, 0),
+                    bolNo: req.body.bolNo,
+                    truckType: req.body.truckOptions,
+                    shippingDate: req.body.shippingDate,
+                    deliveryDate: req.body.deliveryDate,
+                    specialNote: req.body.specialNote,
+                    requestedBy: fullname
+                  });
+                  Freight.create({
+                    request_id: req.user._id
+                  });
+          
+                  res.redirect("/");
+                });              
               });
             });
           });
         });
 
-        Freight.create({
-          request_id: req.user._id
-        });
-
-        res.redirect("/");
+        
       };
     });
   };
