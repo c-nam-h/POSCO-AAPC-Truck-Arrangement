@@ -45,7 +45,7 @@
                   </div>
                 </div>
                 <div style="width: 220px; margin-right: -220px; float: left;">
-                  <button class="btn btn-default" style="font-size: 13px; height: 100%; width: 100%; margin-top: 2px;">Modify Order</button>
+                  <span><a href="/modify/<%= request._id %>" class="homepage-first-button">Modify Order</a></span>
                 </div>
               </div>
             </div>
@@ -101,16 +101,9 @@
                 <div class="a-fixed-right-grid-col a-col-right" style="width: 220px; margin-right: -220px; float: left;">
                   <div class="a-row">
                     <div class="a-button-stack">
-                      <form action="#" method="get">
-                        <span><button class="btn btn-default" value="<%= request._id %>" style="font-size: 13px; height: 100%; width: 100%; margin-bottom: 6px;">Assign Carrier and Freight</button></span>
-                      </form>
-                      <form action="/confirm-shipping" method="post">
-                        <span><button class="btn btn-default" value="<%= request._id %>" style="font-size: 13px; height: 100%; width: 100%; margin-bottom: 6px;">Confirm Shipping</button></span>
-                      </form>
-                      <form action="/delete-order" method="post">
-                        <span><button class="btn btn-default" value="<%= request._id %>" style="font-size: 13px; height: 100%; width: 100%;">Delete Order</button></span>
-                      </form>
-                      <a href="/delete-order/<%= request._id %>">Delete</a>
+                      <span><a href="/assign-carrier-and-freight/<%= request._id %>" class="homepage-button">Assign Carrier and Freight</a></span>
+                      <span><a href="/confirm-shipping/<%= request._id %>" class="homepage-button">Confirm Shipping</a></span>
+                      <span><a href="/delete-order/<%= request._id %>" class="homepage-last-button">Delete</a></span>
                     </div>
                   </div>
                 </div>

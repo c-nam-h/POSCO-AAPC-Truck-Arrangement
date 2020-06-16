@@ -24,6 +24,7 @@ app.use(express.static("public"));
 const _ = require("lodash");
 
 const mongoose = require("mongoose");
+mongoose.set("useFindAndModify", false); // opt in to using the MongoDB driver's findOneAndUpdate() function
 const ObjectID = require("mongodb").ObjectID;
 
 const passport = require("passport");
@@ -338,11 +339,13 @@ app.get("/delete-order/:_id", function(req, res) {
   res.redirect("/");
 });
 
-app.post("/shipping", function(req, res) {
-
-  const checkboxId = req.body.checkbox;
-  console.log(checkboxId);
+app.get("/confirm-shipping/:_id", function(req, res) {
+  const selectedOrderId = req.params._id;
   
+  Request.findByIdAndUpdate(selectedOrderId, {status: "Shipped"}, function(err, request) {
+    console.log(err);
+  });
+  res.redirect("/");
 })
 
 // render modify.ejs and shows a selected BOL number's information - dynamic
@@ -475,7 +478,7 @@ app.get("/freight-report", function(req, res) {
   };
 });
 
-app.get("/freight-detail/:_id", function(req, res) {
+app.get("/assign-carrier-and-freight/:_id", function(req, res) {
 
   requestedId = ObjectID(req.params._id);
 
