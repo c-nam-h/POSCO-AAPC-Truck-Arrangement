@@ -45,7 +45,7 @@
                   </div>
                 </div>
                 <div style="width: 220px; margin-right: -220px; float: left;">
-                  <button class="btn btn-default" style="font-size: 13px; height: 100%; width: 100%; ">Modify Order</button>
+                  <button class="btn btn-default" style="font-size: 13px; height: 100%; width: 100%; margin-top: 2px;">Modify Order</button>
                 </div>
               </div>
             </div>
@@ -101,9 +101,16 @@
                 <div class="a-fixed-right-grid-col a-col-right" style="width: 220px; margin-right: -220px; float: left;">
                   <div class="a-row">
                     <div class="a-button-stack">
-                      <span><button class="btn btn-default" style="font-size: 13px; height: 100%; width: 100%; margin-bottom: 6px;">Delete Order</button></span>
-                      <span><button class="btn btn-default" style="font-size: 13px; height: 100%; width: 100%; margin-bottom: 6px;">Assign Carrier and Freight</button></span>
-                      <span><button class="btn btn-default" style="font-size: 13px; height: 100%; width: 100%; ">Confirm Shipping</button></span>
+                      <form action="#" method="get">
+                        <span><button class="btn btn-default" value="<%= request._id %>" style="font-size: 13px; height: 100%; width: 100%; margin-bottom: 6px;">Assign Carrier and Freight</button></span>
+                      </form>
+                      <form action="/confirm-shipping" method="post">
+                        <span><button class="btn btn-default" value="<%= request._id %>" style="font-size: 13px; height: 100%; width: 100%; margin-bottom: 6px;">Confirm Shipping</button></span>
+                      </form>
+                      <form action="/delete-order" method="post">
+                        <span><button class="btn btn-default" value="<%= request._id %>" style="font-size: 13px; height: 100%; width: 100%;">Delete Order</button></span>
+                      </form>
+                      <a href="/delete-order/<%= request._id %>">Delete</a>
                     </div>
                   </div>
                 </div>

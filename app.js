@@ -281,7 +281,7 @@ app.post("/request", function(req, res){
                 UserName.findOne({user_id: ObjectID(req.user._id)}, function(err, userName) {
                   const fullname = userName.firstName + " " + userName.lastName;
 
-                  Request.create({
+                  const request = new Request({
                     shipFrom: shipFrom["shipFromCustomer"],
                     shipFromStreetAddress: shipFromAddress["streetAddress"],
                     shipFromCity: shipFromAddress["city"],
@@ -303,11 +303,13 @@ app.post("/request", function(req, res){
                     specialNote: req.body.specialNote,
                     requestedBy: fullname
                   });
-                  Freight.create({
-                    request_id: req.user._id
+
+                  request.save(function(err, request) {
+                    Freight.create({
+                      request_id: request._id
+                    });
+                    res.redirect("/");
                   });
-          
-                  res.redirect("/");
                 });              
               });
             });
@@ -322,30 +324,18 @@ app.post("/request", function(req, res){
 
 // delete selected row or rows in request and freight collections and redirect to the homepage
 // I need to add a warning message to confirm whether the user really wants to perform delete function
-app.post("/modify", function(req, res) {
+app.get("/delete-order/:_id", function(req, res) {
+  const selectedOrderId = req.params._id;
 
-    const checkboxId = req.body.checkbox;
-    const clickedButton = req.body.button;
+  Request.findByIdAndDelete(selectedOrderId, function(err, request) {
+    console.log("Successfully deleted");
+  });
 
-    if (clickedButton === "delete") {
-      Request.deleteMany({_id: checkboxId}, function(err, deleteRequest) {
-        deletedCount = deleteRequest.deletedCount;
-  
-        Freight.deleteMany({request_id: checkboxId}, function(err) {
-          if (err) {
-            return handleError(err);
-          };
-        });
-      });
-      res.redirect("/");
-    } else {
-      Request.updateOne({_id: checkboxId}, {shipped: "Shipped"}, function(err) {
-        if (err) {
-          handleError(err);
-      };
-    });
-    res.redirect("/");
-  };
+  Freight.deleteOne({request_id: selectedOrderId}, function(err, freight) {
+    console.log("Successfully deleted");
+  })
+
+  res.redirect("/");
 });
 
 app.post("/shipping", function(req, res) {
