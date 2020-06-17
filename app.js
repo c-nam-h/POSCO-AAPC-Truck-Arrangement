@@ -343,6 +343,7 @@ app.get("/delete-order/:_id", function(req, res) {
   res.redirect("/");
 });
 
+
 app.get("/confirm-shipping/:_id", function(req, res) {
   const selectedOrderId = req.params._id;
   
@@ -351,6 +352,7 @@ app.get("/confirm-shipping/:_id", function(req, res) {
   });
   res.redirect("/");
 })
+
 
 // render modify.ejs and shows a selected BOL number's information - dynamic
 app.get("/modify/:_id", function(req, res) {
@@ -505,6 +507,7 @@ app.post("/modify/:_id", function(req, res) {
   };
 });
 
+
 app.get("/freight-report", function(req, res) {
 
   if (req.isAuthenticated()) {
@@ -525,28 +528,25 @@ app.get("/freight-report", function(req, res) {
   };
 });
 
+
 app.get("/assign-carrier-and-freight/:_id", function(req, res) {
 
-  requestedId = ObjectID(req.params._id);
+  const orderId = ObjectID(req.params._id);
 
   if (req.isAuthenticated) {
-    Request.findOne({_id: requestedId}, function(err, request) {
-      Freight.findOne({request_id: requestedId}, function(err, freight) {
-        res.render("freight-detail", {
-          request_id: request._id,
-          customer: request.customer,
-          shippingFrom: request.shippingFrom,
-          deliveryTo: request.deliveryTo,
-          shippingDate: request.shippingDate,
-          deliveryDate: request.deliveryDate,
-          weightKg: request.weightKg,
-          weightLb: request.weightLb,
-          bolNo: request.bolNo,
-          truckType: request.truckType,
-          specialNote: request.specialNote,
-          frieght_id: freight._id,
-          freight: freight.freight,
-          carrier: freight.carrier
+    Customer.find({}, function(err, customers) {
+      Destination.find({}, function(err, destinations) {
+        Request.findById(orderId, function(err, request) {
+          Freight.find({request_id: orderId}, function(err, freight) {
+            res.render("assign-carrier-freight", {
+              customers: customers,
+              destinations: destinations,
+              selectedRequest: request,
+              carrier: freight.carrier,
+              freight: freight.freight,
+              err: null
+            });
+          });
         });
       });
     });
@@ -555,9 +555,9 @@ app.get("/assign-carrier-and-freight/:_id", function(req, res) {
   };
 });
 
-app.post("/freight-detail/:_id", function(req, res) {
+app.post("/assign-carrier-and-freight/:_id", function(req, res) {
 
-  Freight.updateOne({request_id: requestedId}, {
+  Freight.updateOne({request_id: req.params._id}, {
     carrier: req.body.carrier,
     freight: req.body.freight
   }, function(err) {
@@ -565,7 +565,7 @@ app.post("/freight-detail/:_id", function(req, res) {
       handleError(err);
     };
   });
-  res.redirect("/freight-report");
+  res.redirect("/");
 });
 
 
