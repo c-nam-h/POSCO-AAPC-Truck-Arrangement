@@ -162,16 +162,16 @@ app.get("/request", function(req, res){
         if (!err) {
           res.render("request", {
             err: null,
-            shipFromId: req.body.shipFrom,
-            shipFromAddressId: req.body.shipFromAddress,
-            shipToId: req.body.shipTo,
-            shipToAddressId: req.body.shipToAddress,
-            weightKg: req.body.weightKg,
-            bolNo: req.body.bolNo,
-            truckType: req.body.truckOptions,
+            shipFromId: null,
+            shipFromAddressId: null,
+            shipToId: null,
+            shipToAddressId: null,
+            weightKg: null,
+            bolNo: null,
+            truckType: null,
             shippingDate: null,
             deliveryDate: null,
-            specialNote: req.body.specialNote,
+            specialNote: null,
             destinations: destinations,
             customers: customers
           });
@@ -187,6 +187,7 @@ app.get("/request", function(req, res){
 
 
 app.post("/request", function(req, res){
+  console.log(req.body);
   //date validation - if delivery date is earlier than shipping date, then a user will be asked to revise those dates
   if (req.body.shippingDate > req.body.deliveryDate) {
     Destination.find({}, function(err, destinations) {

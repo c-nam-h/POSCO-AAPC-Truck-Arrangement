@@ -19,18 +19,38 @@
       <label for="selectShipFrom">Ship From</label>
       <select id="selectShipFrom" class="form-control" name="shipFrom" required>
         <option value="">Select Where To Ship From</option>
-        <% customers.forEach(function(customer) { %>
-          <option value="<%= customer._id %>"><%= customer.customer %></option>
-        <% }) %>
+        <% if (!shipFromId) { %>
+          <% customers.forEach(function(customer) { %>
+            <option value="<%= customer._id %>"><%= customer.customer %></option>
+          <% }) %>  
+        <% } else { %>
+          <% customers.forEach(function(customer) { %>
+            <% if (customer._id.equals(shipFromId)) { %>
+              <option value="<%= customer._id %>" selected><%= customer.customer %></option>
+            <% } else { %>
+              <option value="<%= customer._id %>"><%= customer.customer %></option>
+            <% } %>
+          <% }) %>
+        <% } %>
       </select>
     </div>
     <div class="form-group col-md-7">
       <label for="selectShipFromAddress">Ship From Address</label>
       <select id="selectShipFromAddress" class="form-control" name="shipFromAddress" required>
         <option value="">Select Ship From Address</option>
-        <% destinations.forEach(function(destination) { %>
-          <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
-        <% }) %>
+        <% if (!shipFromAddressId) { %>
+          <% destinations.forEach(function(destination) { %>
+            <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+          <% }) %>
+        <% } else { %>
+          <% destinations.forEach(function(destination) { %>
+            <% if (destination._id.equals(shipFromAddressId)) { %>
+              <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;" selected><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+            <% } else { %>
+              <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+            <% } %>
+          <% }) %>
+        <% } %>
       </select>
     </div>
   </div>
@@ -40,18 +60,38 @@
       <label for="selectShipTo">Ship To</label>
       <select id="selectShipTo" class="form-control" name="shipTo" required>
         <option value="">Select Where To Ship To</option>
-        <% customers.forEach(function(customer) { %>
-          <option value="<%= customer._id %>"><%= customer.customer %></option>
-        <% }) %>
+        <% if (!shipToId) { %>
+          <% customers.forEach(function(customer) { %>
+            <option value="<%= customer._id %>"><%= customer.customer %></option>
+          <% }) %>  
+        <% } else { %>
+          <% customers.forEach(function(customer) { %>
+            <% if (customer._id.equals(shipToId)) { %>
+              <option value="<%= customer._id %>" selected><%= customer.customer %></option>
+            <% } else { %>
+              <option value="<%= customer._id %>"><%= customer.customer %></option>
+            <% } %>
+          <% }) %>
+        <% } %>
       </select>
     </div>
     <div class="form-group col-md-7">
       <label for="selectShipToAddress">Ship To Address</label>
       <select id="selectShipToAddress" class="form-control" name="shipToAddress" required>
         <option value="">Select Ship To Address</option>
-        <% destinations.forEach(function(destination) { %>
-          <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
-        <% }) %>
+        <% if (!shipToAddressId) { %>
+          <% destinations.forEach(function(destination) { %>
+            <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+          <% }) %>
+        <% } else { %>
+          <% destinations.forEach(function(destination) { %>
+            <% if (destination._id.equals(shipToAddressId)) { %>
+              <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;" selected><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+            <% } else { %>
+              <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+            <% } %>
+          <% }) %>
+        <% } %>
       </select>
     </div>
   </div>
