@@ -4,12 +4,14 @@ const Schema = mongoose.Schema;
 // define a schema for request collection with user_id as a foreign key referencing to the user collection
 const requestSchema = new Schema({
   shipFrom: String,
+  shipFromDestination: String,
   shipFromStreetAddress: String,
   shipFromCity: String,
   shipFromState: String,
   shipFromZipcode: String,
   shipFromCountry: String,
   shipTo: String,
+  shipToDestination: String,
   shipToStreetAddress: String,
   shipToCity: String,
   shipToState: String,
