@@ -162,14 +162,16 @@ app.get("/request", function(req, res){
         if (!err) {
           res.render("request", {
             err: null,
-            shippingFrom: null,
-            deliveryTo: null,
+            shipFromId: req.body.shipFrom,
+            shipFromAddressId: req.body.shipFromAddress,
+            shipToId: req.body.shipTo,
+            shipToAddressId: req.body.shipToAddress,
+            weightKg: req.body.weightKg,
+            bolNo: req.body.bolNo,
+            truckType: req.body.truckOptions,
             shippingDate: null,
             deliveryDate: null,
-            weightKg: null,
-            bolNo: null,
-            truckType: null,
-            specialNote: null,
+            specialNote: req.body.specialNote,
             destinations: destinations,
             customers: customers
           });
