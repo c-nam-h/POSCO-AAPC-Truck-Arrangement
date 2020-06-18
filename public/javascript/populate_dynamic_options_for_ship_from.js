@@ -52,8 +52,3 @@ selectShipFrom.addEventListener("change", function() {
     })
 
 });
-
-const btn = document.getElementsByName("button")[0];
-btn.addEventListener("click", function() {
-    confirm("Are you sure you want to place an order for a truck?");
-})

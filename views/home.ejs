@@ -98,11 +98,11 @@
                     <div class="a-button-stack">
                       <span><a href="/assign-carrier-and-freight/<%= requests[i]._id %>" class="homepage-second-button">Assign Carrier and Freight</a></span>
                       <% if (requests[i].status === "Not Shipped") { %>
-                        <span><a href="/confirm-shipping/<%= requests[i]._id %>" class="homepage-third-button" id="confirm-shipping-btn<%= i %>">Confirm Shipping</a></span>
+                        <span><a href="/confirm-shipping/<%= requests[i]._id %>" onclick="return confirm('Are you sure you want to confirm shipping?')" class="homepage-third-button" id="confirm-shipping-btn<%= i %>">Confirm Shipping</a></span>
                       <% } else { %>
-                        <span><a href="/cancel-shipping/<%= requests[i]._id %>" class="homepage-third-button" id="confirm-shipping-btn<%= i %>">Cancel Shipping</a></span>
+                        <span><a href="/cancel-shipping/<%= requests[i]._id %>" onclick="return confirm('Are you sure you want to cancel shipping?')" class="homepage-third-button" id="confirm-shipping-btn<%= i %>">Cancel Shipping</a></span>
                       <% } %>
-                      <span><a href="/delete-order/<%= requests[i]._id %>" class="homepage-last-button">Delete</a></span>
+                      <span><a onclick="return confirm('Are you sure you want to delete this order?')" href="/delete-order/<%= requests[i]._id %>" class="homepage-last-button">Delete Order</a></span>
                     </div>
                   </div>
                 </div>

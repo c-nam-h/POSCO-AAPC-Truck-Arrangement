@@ -344,6 +344,7 @@ app.get("/delete-order/:_id", function(req, res) {
 });
 
 
+// confirm the shipping and change the shipping status to "Shipped"
 app.get("/confirm-shipping/:_id", function(req, res) {
   const selectedOrderId = req.params._id;
   
@@ -353,6 +354,7 @@ app.get("/confirm-shipping/:_id", function(req, res) {
   res.redirect("/");
 })
 
+// confirm the shipping and change the shipping status to "Not Shipped"
 app.get("/cancel-shipping/:_id", function(req, res) {
   const selectedOrderId = req.params._id;
   
