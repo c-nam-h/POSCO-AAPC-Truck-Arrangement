@@ -129,11 +129,12 @@ a:hover {
   background-color: gray;
 }
 
-.title {
+.homepage-title {
   padding-left: 15px;
 }
 
 h5 {
+  font-size: 13px;
   font-weight: 700;
 }
 

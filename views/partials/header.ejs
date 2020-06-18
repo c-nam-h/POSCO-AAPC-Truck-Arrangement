@@ -11,18 +11,24 @@
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
-    <div class="navbar-header">
-      <p class="navbar-brand"><a href="/">TRUCK ARRANGEMENT</a></p>
+    <a class="navbar-brand" href="/">TRUCK ARRANGEMENT</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/request">ORDER TRUCK <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/freight-report">FREIGHT REPORT</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">LOGOUT</a>
+        </li>
+      </ul>
     </div>
-    <div class="navbar-header">
-      <input type="text">
-    </div>
-    <ul class="nav navbar-nav navbar-right">
-      <li id="request"><a href="/request">TRUCK ORDER</a></li>
-      <li id="freight"><a href="/freight-report">FREIGHT REPORT</a></li>
-      <li id="logout"><a href="/logout">LOGOUT</a></li>
-    </ul>
   </div>
 </nav>
