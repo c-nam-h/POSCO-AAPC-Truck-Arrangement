@@ -13,16 +13,6 @@ module.exports = function() {
   this.numberWithCommas = function(n) {
     return n.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
   };
-
-  this.confirm = function() {
-    const choice = confirm("Are you sure you want to place an order for a truck?");
-
-    if (choice) {
-        return true;
-    } else {
-        return false;
-    }
-  };
 };
 
 
