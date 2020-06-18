@@ -353,6 +353,15 @@ app.get("/confirm-shipping/:_id", function(req, res) {
   res.redirect("/");
 })
 
+app.get("/cancel-shipping/:_id", function(req, res) {
+  const selectedOrderId = req.params._id;
+  
+  Request.findByIdAndUpdate(selectedOrderId, {status: "Not Shipped"}, function(err, request) {
+    console.log(err);
+  });
+  res.redirect("/");
+})
+
 
 // render modify.ejs and shows a selected BOL number's information - dynamic
 app.get("/modify/:_id", function(req, res) {
@@ -557,13 +566,18 @@ app.get("/assign-carrier-and-freight/:_id", function(req, res) {
 
 app.post("/assign-carrier-and-freight/:_id", function(req, res) {
 
-  Freight.updateOne({request_id: req.params._id}, {
+  const orderId = ObjectID(req.params._id);
+  console.log(orderId);
+
+  Freight.updateOne({request_id: orderId}, {
     carrier: req.body.carrier,
     freight: req.body.freight
   }, function(err) {
     if (err) {
       handleError(err);
     };
+    console.log(req.body.carrier)
+    console.log(req.body.freight)
   });
   res.redirect("/");
 });
