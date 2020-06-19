@@ -2,160 +2,162 @@
 
 <body>
   <div class="container">
-<% if (err) { %>
-  <div class="alert alert-warning alert-dismissible" role="alert">
-    <button class="close" data-dismiss="alert" aria-label="Close" type="button"><span aria-hidden="true">&times;</span></button>
-    <strong>Warning!</strong> <%= err %>
-  </div>
-<% } %>
+    <% if (err) { %>
+      <div class="alert alert-warning alert-dismissible" role="alert">
+        <button class="close" data-dismiss="alert" aria-label="Close" type="button"><span aria-hidden="true">&times;</span></button>
+        <strong>Warning!</strong> <%= err %>
+      </div>
+    <% } %>
 
-<h1>Modify Your Order</h1>
-<p>Please update your load information below and submit</p>
-<br />
-<form class="" action="/modify/<%= selectedRequest._id %>" method="post">
-
-  <div class="row">
-    <div class="form-group col-md-5">
-      <label for="selectShipFrom">Ship From</label>
-      <select id="selectShipFrom" class="form-control" name="shipFrom" required>
-        <option value="">Select Where To Ship From</option>
-        <% customers.forEach(function(customer) { %>
-          <% if (customer.customer === selectedRequest.shipFrom) { %>
-            <option value="<%= customer._id %>" selected><%= customer.customer %></option>
-          <% } else { %>
-            <option value="<%= customer._id %>"><%= customer.customer %></option>
-          <% } %>
-        <% }) %>
-      </select>
-    </div>
-    <div class="form-group col-md-7">
-      <label for="selectShipFromAddress">Ship From Address</label>
-      <select id="selectShipFromAddress" class="form-control" name="shipFromAddress" required>
-        <option value="">Select Ship From Address</option>
-        <% destinations.forEach(function(destination) { %>
-          <% if (destination.destination === selectedRequest.shipFromDestination) { %>
-            <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" selected><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
-          <% } else { %>
-            <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
-          <% } %>
-        <% }) %>
-      </select>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="form-group col-md-5">
-      <label for="selectShipTo">Ship To</label>
-      <select id="selectShipTo" class="form-control" name="shipTo" required>
-        <option value="">Select Where To Ship To</option>
-        <% customers.forEach(function(customer) { %>
-          <% if (customer.customer === selectedRequest.shipTo) { %>
-            <option value="<%= customer._id %>" selected><%= customer.customer %></option>
-          <% } else { %>
-            <option value="<%= customer._id %>"><%= customer.customer %></option>
-          <% } %>
-        <% }) %>
-      </select>
-    </div>
-    <div class="form-group col-md-7">
-      <label for="selectShipToAddress">Ship To Address</label>
-      <select id="selectShipToAddress" class="form-control" name="shipToAddress" required>
-        <option value="">Select Ship To Address</option>
-        <% destinations.forEach(function(destination) { %>
-          <% if (destination.destination === selectedRequest.shipToDestination) { %>
-            <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" selected><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
-          <% } else { %>
-            <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
-          <% } %>
-        <% }) %>
-      </select>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="form-group col-md-4">
-      <label for="inputKg">Weight(kg)</label>
-      <input class="form-control" id="inputKg" type="text" name="weightKg" pattern="[0-9]{1,5}" value="<%= selectedRequest.weightKg %>" required>
+    <div class="title">
+      <h2 class="title-heading">Modify Your Order</h1>
+      <p>Please update your load information below and submit</p>
     </div>
 
-    <div class="form-group col-md-4">
-      <label for="inputBolNo">BOL No</label>
-      <input class="form-control" id="inputBolNo" type="text" name="bolNo" value="<%= selectedRequest.bolNo %>" pattern="[A-Z]{1}[0-9]{11}" placeholder="Arrangement #" required>
-    </div>
+    <form action="/modify/<%= selectedRequest._id %>" method="post">
 
-    <div class="form-group col-md-4">
-      <label for="inputTruck">Truck Type</label>
-      <% if (selectedRequest.truckType === "Flatbed") { %>
-      <div class="form-group">
-        <div class="form-check radio-inline">
-          <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="flatbed" value="Flatbed" checked required>
-          <label class="form-check-label" for="inputTruck">Flatbed</label>
+      <div class="row">
+        <div class="col-md-5">
+          <label for="selectShipFrom">Ship From</label>
+          <select id="selectShipFrom" class="form-control" name="shipFrom" required>
+            <option value="">Select Where To Ship From</option>
+            <% customers.forEach(function(customer) { %>
+              <% if (customer.customer === selectedRequest.shipFrom) { %>
+                <option value="<%= customer._id %>" selected><%= customer.customer %></option>
+              <% } else { %>
+                <option value="<%= customer._id %>"><%= customer.customer %></option>
+              <% } %>
+            <% }) %>
+          </select>
         </div>
-        <div class="form-check radio-inline">
-          <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="van" value="Van" required>
-          <label class="form-check-label" for="inputTruck">Van</label>
+        <div class="col-md-7">
+          <label for="selectShipFromAddress">Ship From Address</label>
+          <select id="selectShipFromAddress" class="form-control" name="shipFromAddress" required>
+            <option value="">Select Ship From Address</option>
+            <% destinations.forEach(function(destination) { %>
+              <% if (destination.destination === selectedRequest.shipFromDestination) { %>
+                <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" selected><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+              <% } else { %>
+                <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+              <% } %>
+            <% }) %>
+          </select>
         </div>
       </div>
-      <% } else if (selectedRequest.truckType === "Van") { %>
-      <div class="form-group">
-        <div class="form-check radio-inline">
-          <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="flatbed" value="Flatbed" required>
-          <label class="form-check-label" for="inputTruck">Flatbed</label>
+
+      <div class="row">
+        <div class="col-md-5">
+          <label for="selectShipTo">Ship To</label>
+          <select id="selectShipTo" class="form-control" name="shipTo" required>
+            <option value="">Select Where To Ship To</option>
+            <% customers.forEach(function(customer) { %>
+              <% if (customer.customer === selectedRequest.shipTo) { %>
+                <option value="<%= customer._id %>" selected><%= customer.customer %></option>
+              <% } else { %>
+                <option value="<%= customer._id %>"><%= customer.customer %></option>
+              <% } %>
+            <% }) %>
+          </select>
         </div>
-        <div class="form-check radio-inline">
-          <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="van" value="Van" checked required>
-          <label class="form-check-label" for="inputTruck">Van</label>
+        <div class="col-md-7">
+          <label for="selectShipToAddress">Ship To Address</label>
+          <select id="selectShipToAddress" class="form-control" name="shipToAddress" required>
+            <option value="">Select Ship To Address</option>
+            <% destinations.forEach(function(destination) { %>
+              <% if (destination.destination === selectedRequest.shipToDestination) { %>
+                <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" selected><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+              <% } else { %>
+                <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+              <% } %>
+            <% }) %>
+          </select>
         </div>
       </div>
-      <% } else { %>
-        <div class="form-group">
-          <div class="form-check radio-inline">
-            <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="flatbed" value="Flatbed" required>
-            <label class="form-check-label" for="inputTruck">Flatbed</label>
-          </div>
-          <div class="form-check radio-inline">
-            <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="van" value="Van" required>
-            <label class="form-check-label" for="inputTruck">Van</label>
-          </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <label for="inputKg">Weight(kg)</label>
+          <input class="form-control" id="inputKg" type="text" name="weightKg" pattern="[0-9]{1,5}" value="<%= selectedRequest.weightKg %>" required>
         </div>
-      <% } %>
-    </div>
+
+        <div class="col-md-4">
+          <label for="inputBolNo">BOL No</label>
+          <input class="form-control" id="inputBolNo" type="text" name="bolNo" value="<%= selectedRequest.bolNo %>" pattern="[A-Z]{1}[0-9]{11}" placeholder="Arrangement #" required>
+        </div>
+
+        <div class="col-md-4">
+          <label for="inputTruck">Truck Type</label>
+          <% if (selectedRequest.truckType === "Flatbed") { %>
+          <div class="">
+            <div class="form-check radio-inline">
+              <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="flatbed" value="Flatbed" checked required>
+              <label class="form-check-label" for="inputTruck">Flatbed</label>
+            </div>
+            <div class="form-check radio-inline">
+              <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="van" value="Van" required>
+              <label class="form-check-label" for="inputTruck">Van</label>
+            </div>
+          </div>
+          <% } else if (selectedRequest.truckType === "Van") { %>
+          <div class="">
+            <div class="form-check radio-inline">
+              <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="flatbed" value="Flatbed" required>
+              <label class="form-check-label" for="inputTruck">Flatbed</label>
+            </div>
+            <div class="form-check radio-inline">
+              <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="van" value="Van" checked required>
+              <label class="form-check-label" for="inputTruck">Van</label>
+            </div>
+          </div>
+          <% } else { %>
+            <div class="">
+              <div class="form-check radio-inline">
+                <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="flatbed" value="Flatbed" required>
+                <label class="form-check-label" for="inputTruck">Flatbed</label>
+              </div>
+              <div class="form-check radio-inline">
+                <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="van" value="Van" required>
+                <label class="form-check-label" for="inputTruck">Van</label>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <label for="inputShippingDate">Shipping Date</label>
+          <input class="form-control" id="inputShippingDate datepicker" type="date" name="shippingDate" value="<%= selectedRequest.shippingDate %>" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
+        </div>
+
+        <div class="col-md-6">
+          <label for="inputDeliveryDate">Delivery Date</label>
+          <input class="form-control" id="inputDeliveryDate" type="date" name="deliveryDate" value="<%= selectedRequest.deliveryDate %>" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
+        </div>
+      </div>
+
+      
+
+      <div class="row">
+        <div class="col-md-12">
+          <label for="inputSpecialNote">Special Note</label>
+          <textarea class="form-control" id="inputSpecialNote" type="text" name="specialNote" value="<%= selectedRequest.specialNote %>"></textarea>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <button onclick="return confirm('Are you sure you want to modify this order?')" class="btn btn-lg btn-primary btn-block" type="submit" name="button" value="submit">Submit</button>
+        </div>
+      </div>
+
+    </form>
   </div>
 
-  <div class="row">
-    <div class="form-group col-md-6">
-      <label for="inputShippingDate">Shipping Date</label>
-      <input class="form-control" id="inputShippingDate datepicker" type="date" name="shippingDate" value="<%= selectedRequest.shippingDate %>" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
-    </div>
-
-    <div class="form-group col-md-6">
-      <label for="inputDeliveryDate">Delivery Date</label>
-      <input class="form-control" id="inputDeliveryDate" type="date" name="deliveryDate" value="<%= selectedRequest.deliveryDate %>" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
-    </div>
-  </div>
-
-  
-
-  <div class="row">
-    <div class="form-group col-md-12">
-      <label for="inputSpecialNote">Special Note</label>
-      <input class="form-control" id="inputSpecialNote" type="text" name="specialNote" value="<%= selectedRequest.specialNote %>">
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="form-group col-md-12">
-      <button onclick="return confirm('Are you sure you want to modify this order?')" class="btn btn-lg btn-primary btn-block" type="submit" name="button" value="submit">Submit</button>
-    </div>
-  </div>
-
-</form>
-</div>
-
-<%- include("partials/footer"); -%>
-<%- include("partials/scripts"); -%>
-<script src="/javascript/populate_dynamic_options_for_ship_from.js"></script>
-<script src="/javascript/populate_dynamic_options_for_ship_to.js"></script>
+  <%- include("partials/footer"); -%>
+  <%- include("partials/scripts"); -%>
+  <script src="/javascript/populate_dynamic_options_for_ship_from.js"></script>
+  <script src="/javascript/populate_dynamic_options_for_ship_to.js"></script>
 
 </body>
 

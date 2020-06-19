@@ -585,6 +585,19 @@ app.post("/assign-carrier-and-freight/:_id", function(req, res) {
 });
 
 
+app.post("/search", function(req, res) {
+  const searchedBolNo = req.body.search;
+
+  Request.findOne({bolNo: searchedBolNo}, function(err, request) {
+    res.render("search", {
+      request
+    });
+  });
+});
+
+
+
+
 let port = process.env.PORT;
 if (port == null || port == "") {
   port = 3000;

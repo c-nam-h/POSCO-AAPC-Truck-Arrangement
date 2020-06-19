@@ -11,16 +11,20 @@
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
     <a class="navbar-brand" href="/">TRUCK ARRANGEMENT</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+    <form action="/search" method="post" class="form-inline" style="width: 45%;">
+      <input class="form-control mr-sm-2" style="width: 60%;" type="search" placeholder="Search BOL No" aria-label="Search" name="search" required>
+      <button class="btn search-btn my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
+    <div class="justify-content-end" id="navbarNavDropdown">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="/request">ORDER TRUCK <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/request">ORDER TRUCK</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/freight-report">FREIGHT REPORT</a>
@@ -30,5 +34,6 @@
         </li>
       </ul>
     </div>
+    
   </div>
 </nav>

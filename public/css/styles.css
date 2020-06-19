@@ -3,25 +3,22 @@ html {
   position: relative;
 }
 
+.navbar {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border: 0;
+  border-radius: 0;
+  margin-bottom: 0;
+  font-size: 13px;
+}
+
+.navbar-nav  li a:hover {
+  color: lightskyblue !important;
+}
+
 body {
   font-size: 13px;
   font-family: Arial;
-}
-
-.container-fluid {
-    padding-top: 70px;
-    padding-bottom: 70px;
-}
-.navbar {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    border: 0;
-    border-radius: 0;
-    margin-bottom: 0;
-    font-size: 13px;
-}
-.navbar-nav  li a:hover {
-    color: #1abc9c !important;
 }
 
 .footer-padding {
@@ -43,8 +40,17 @@ body {
   color: #fff;
 }
 
-h1 {
-  display: block;
+
+.row {
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  font-size: 13px;
+}
+
+label.form-check-label {
+  font-weight: 300;
 }
 
 .btn-delete {
@@ -83,16 +89,12 @@ h1 {
   margin: auto;
 }
 
-.form-signin .checkbox {
-  font-weight: 400;
-}
-
 .form-signin .form-control {
   position: relative;
   box-sizing: border-box;
   height: auto;
   padding: 10px;
-  font-size: 16px;
+  font-size: 13px;
 }
 
 .form-signin .form-control:focus {
@@ -111,11 +113,11 @@ h1 {
   margin-bottom: 10px;
 }
 
-.register-link {
+/* .register-link {
   list-style: none;
   padding: 0;
   text-align: left;
-}
+} */
 
 a:hover {
   text-decoration: underline;
@@ -125,12 +127,22 @@ a:hover {
   text-align: left;
 }
 
-.shipped {
-  background-color: gray;
+.title {
+  margin-top: 1rem;
 }
 
-.homepage-title {
-  padding-left: 15px;
+.homepage-title-heading {
+  margin-bottom: 1rem;
+}
+
+.title-heading {
+  margin-bottom: 0;
+}
+
+
+form label {
+  font-weight: bold;
+  margin-bottom: 0;
 }
 
 h5 {
@@ -222,11 +234,11 @@ h5 {
 
 }
 
-.homepage-first-button {
+.modify-order-btn {
   display: block;
   background: #f6f6f6;
   width: 100%;
-  height: 32px;
+  height: 33px;
   padding: 6px 12px;
   font-size: 13px;
   text-align: center;
@@ -237,11 +249,11 @@ h5 {
   margin-top: 2px;
 }
 
-.homepage-second-button {
+.assign-carrier-and-freight-btn {
   display: block;
   background: #fff;
   width: 100%;
-  height: 32px;
+  height: 33px;
   padding: 6px 12px;
   font-size: 13px;
   text-align: center;
@@ -249,14 +261,14 @@ h5 {
   border: 1px solid;
   border-color: #ccc;
   border-radius: 4px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
-.homepage-third-button {
+.shipping-btn {
   display: block;
   background: #fff;
   width: 100%;
-  height: 32px;
+  height: 33px;
   padding: 6px 12px;
   font-size: 13px;
   text-align: center;
@@ -264,14 +276,14 @@ h5 {
   border: 1px solid;
   border-color: #ccc;
   border-radius: 4px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
-.homepage-last-button {
+.delete-order-btn {
   display: block;
   background: #fff;
   width: 100%;
-  height: 32px;
+  height: 33px;
   padding: 6px 12px;
   font-size: 13px;
   text-align: center;

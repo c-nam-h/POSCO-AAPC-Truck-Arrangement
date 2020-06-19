@@ -6,17 +6,17 @@
   <title>POSCO AAPC: LOGISTICS</title>
   <meta charset="utf-8">
 
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
-    <div class="navbar-header">
-      <p class="navbar-brand"><a href="/">TRUCK ARRANGEMENT</a></p>
-    </div>
+    <a class="navbar-brand" href="/login">TRUCK ARRANGEMENT</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
   </div>
 </nav>
 
@@ -24,7 +24,7 @@
   <form class="form-group form-signin" action="/login" method="post">
     <div class="text-center">
       <img class="login-logo" src="/img/logo.png">
-      <h1>Log In</h1>
+      <h1 class="title">SIGN IN</h1>
     </div>
 
     <div class="form-group">
@@ -35,21 +35,9 @@
       <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
     </div>
 
-    <!-- <div class="form-group checkbox">
-      <label class="remember-me-input">
-        <input type="checkbox" value="remember-me"> Remember me
-      </label>
-    </div> -->
-
     <div class="form-group">
       <button class="btn btn-lg btn-primary btn-block" type="submit" name="signin">Sign in</button>
     </div>
-
-    <!-- <div class="form-group">
-      <ul class="register-link">
-        <li><a href="/register">Create New Account</a></li>
-      </ul>
-    </div> -->
 
   </form>
   <%- include("partials/footer"); -%>

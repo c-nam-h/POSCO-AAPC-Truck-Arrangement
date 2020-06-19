@@ -1,14 +1,12 @@
 <%- include("partials/header"); -%>
+
 <body>
   <div class="container">
-    <div class="row">
-      <div class="form-group">
-        <h2 class="title">SEARCH RESULT</h1>
-      </div>
+    <div class="title">
+      <h2 class="homepage-title-heading">Search Result</h1>
     </div>
 
     <div class="a-request-group">
-      <% for (var i = 0; i < requests.length; i++) { %>
         <div class="a-request-header">
           <div class="a-request-inner">
             <div class="a-fixed-right-grid">
@@ -19,33 +17,38 @@
                       <span class="a-request-header-label">ORDER PLACED</span>
                     </div>
                     <div>
-                      <span><%= requests[i].datePosted.toDateString() %></span>
+                      <span><%= request.datePosted.toDateString() %></span>
                     </div>
                   </div>
+
                   <div class="a-column38">
                     <div>
                       <span class="a-request-header-label">REQUESTED BY</span>
                     </div>
                     <div>
-                      <span><%= requests[i].requestedBy %></span>
+                      <span><%= request.requestedBy %></span>
                     </div>
                   </div>
+
                   <div class="a-columne23">
                     <div>
                       <span class="a-request-header-label">ORDER STATUS</span>
                     </div>
                     <div>
-                      <span class="order-status"><%= requests[i].status %></span>
+                      <span class="order-status"><%= request.status %></span>
                     </div>
                   </div>
                 </div>
+
                 <div style="width: 220px; margin-right: -220px; float: left;">
-                  <span><a href="/modify/<%= requests[i]._id %>" class="homepage-first-button">Modify Order</a></span>
+                  <span><a href="/modify/<%= request._id %>" class="modify-order-btn">Modify Order</a></span>
                 </div>
+
               </div>
             </div>
           </div>
         </div>
+        
         <div class="a-request">
           <div class="a-request-inner">
             <div class="a-fixed-right-grid">
@@ -54,55 +57,59 @@
                   <div class="a-column38">
                     <h5 class="a-column-header">Ship From</h5>
                     <ul class="displayAddressUL">
-                      <li class="displayAddressLI"><%= requests[i].shipFrom %></li>
-                      <li class="displayAddressLI"><%= requests[i].shipFromStreetAddress %></li>
-                      <li class="displayAddressLI"><%= requests[i].shipFromCity %>, <%= requests[i].shipFromState %>, <%= requests[i].shipFromZipcode%></li>
-                      <li class="displayAddressLI"><%= requests[i].shipFromCountry %></li>
+                      <li class="displayAddressLI"><%= request.shipFrom %></li>
+                      <li class="displayAddressLI"><%= request.shipFromStreetAddress %></li>
+                      <li class="displayAddressLI"><%= request.shipFromCity %>, <%= request.shipFromState %>, <%= request.shipFromZipcode%></li>
+                      <li class="displayAddressLI"><%= request.shipFromCountry %></li>
                     </ul>
                   </div>
+
                   <div class="a-column38">
                     <h5 class="a-column-header">Ship To</h5>
                     <ul class="displayAddressUL">
-                      <li class="displayAddressLI"><%= requests[i].shipTo %></li>
-                      <li class="displayAddressLI"><%= requests[i].shipToStreetAddress %></li>
-                      <li class="displayAddressLI"><%= requests[i].shipToCity %>, <%= requests[i].shipToState %>, <%= requests[i].shipToZipcode%></li>
-                      <li class="displayAddressLI"><%= requests[i].shipToCountry %></li>
+                      <li class="displayAddressLI"><%= request.shipTo %></li>
+                      <li class="displayAddressLI"><%= request.shipToStreetAddress %></li>
+                      <li class="displayAddressLI"><%= request.shipToCity %>, <%= request.shipToState %>, <%= request.shipToZipcode%></li>
+                      <li class="displayAddressLI"><%= request.shipToCountry %></li>
                     </ul>
                   </div>
+
                   <div class="a-column23">
                     <h5 class="a-column-header">Load Summary</h5>
                     <div style="overflow: hidden;">
                       <div class="a-column46">BOL No:</div>
-                      <div class="a-column53"><%= requests[i].bolNo %></div>
+                      <div class="a-column53"><%= request.bolNo %></div>
                     </div>
                     <div style="overflow: hidden;">
                       <div class="a-column46">Weight:</div>
-                      <div class="a-column53"><%= numberWithCommas(requests[i].weightKg) %>kg / <%= numberWithCommas(requests[i].weightLb) %>lb</div>
+                      <div class="a-column53"><%= numberWithCommas(request.weightKg) %>kg / <%= numberWithCommas(request.weightLb) %>lb</div>
                     </div>
                     <div style="overflow: hidden;">
                       <div class="a-column46">Truck Type:</div>
-                      <div class="a-column53"><%= requests[i].truckType %></div>
+                      <div class="a-column53"><%= request.truckType %></div>
                     </div>
                     <div style="overflow: hidden;">
                       <div class="a-column46">Shipping Date:</div>
-                      <div class="a-column53"><%= requests[i].shippingDate %></div>
+                      <div class="a-column53"><%= request.shippingDate %></div>
                     </div>
                     <div style="overflow: hidden;">
                       <div class="a-column46">Delivery Date:</div>
-                      <div class="a-column53"><%= requests[i].deliveryDate %></div>
+                      <div class="a-column53"><%= request.deliveryDate %></div>
                     </div>
                   </div>
+
                 </div>
+
                 <div class="a-fixed-right-grid-col a-col-right" style="width: 220px; margin-right: -220px; float: left;">
                   <div class="a-row">
                     <div class="a-button-stack">
-                      <span><a href="/assign-carrier-and-freight/<%= requests[i]._id %>" class="homepage-second-button">Assign Carrier and Freight</a></span>
-                      <% if (requests[i].status === "Not Shipped") { %>
-                        <span><a href="/confirm-shipping/<%= requests[i]._id %>" onclick="return confirm('Are you sure you want to confirm shipping?')" class="homepage-third-button" id="confirm-shipping-btn<%= i %>">Confirm Shipping</a></span>
+                      <span><a href="/assign-carrier-and-freight/<%= request._id %>" class="assign-carrier-and-freight-btn">Assign Carrier and Freight</a></span>
+                      <% if (request.status === "Not Shipped") { %>
+                        <span><a href="/confirm-shipping/<%= request._id %>" onclick="return confirm('Are you sure you want to confirm shipping?')" class="shipping-btn" id="confirm-shipping-btn">Confirm Shipping</a></span>
                       <% } else { %>
-                        <span><a href="/cancel-shipping/<%= requests[i]._id %>" onclick="return confirm('Are you sure you want to cancel shipping?')" class="homepage-third-button" id="confirm-shipping-btn<%= i %>">Cancel Shipping</a></span>
+                        <span><a href="/cancel-shipping/<%= request._id %>" onclick="return confirm('Are you sure you want to cancel shipping?')" class="shipping-btn" id="cancel-shipping-btn">Cancel Shipping</a></span>
                       <% } %>
-                      <span><a onclick="return confirm('Are you sure you want to delete this order?')" href="/delete-order/<%= requests[i]._id %>" class="homepage-last-button">Delete Order</a></span>
+                      <span><a onclick="return confirm('Are you sure you want to delete this order?')" href="/delete-order/<%= request._id %>" class="delete-order-btn">Delete Order</a></span>
                     </div>
                   </div>
                 </div>
@@ -110,18 +117,18 @@
             </div>
           </div>
         </div>
+
         <div class="a-special-note">
           <div class="a-request-inner">
             <div class="a-row">
-              <% if (requests[i].specialNote) { %>
+              <% if (request.specialNote) { %>
                 <h5 class="a-column-header">Special Note</h5>
-              <div><%= requests[i].specialNote %></div>
+              <div><%= request.specialNote %></div>
               <% } %>
             </div>
           </div>
         </div>
         <br>
-      <% } %>
     </div>
   </div>
 
