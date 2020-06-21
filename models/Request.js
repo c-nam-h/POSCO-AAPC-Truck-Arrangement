@@ -32,9 +32,10 @@ const requestSchema = new Schema({
     type: Date,
     default: new Date()
   },
-  requestedBy: String
+  requestedBy: String,
+  user_id: Schema.Types.ObjectId
 });
   
-  const Request = new mongoose.model("Request", requestSchema);
+const Request = new mongoose.model("Request", requestSchema);
 
-  module.exports = Request;
+module.exports = Request;

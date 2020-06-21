@@ -119,12 +119,22 @@ require("./public/javascript/helpers")();
 
 // render a homepage with order information sorted by shipping date (oldest to newest)
 app.get("/", function(req, res){
+
+  console.log(req.user)
   if (req.isAuthenticated()) {
-    Request.find({}, function(err, requests) {
-      res.render("home", {
-        requests: requests.sort(compare_date)
+    if (req.user.username !== "admin@poscoaapc.com") {
+      Request.find({user_id: req.user._id}, function(err, requests) {
+        res.render("home", {
+          requests: requests.sort(compare_date)
+        });
       });
-    });
+    } else {
+      Request.find({}, function(err, requests) {
+        res.render("home", {
+          requests: requests.sort(compare_date)
+        });
+      });
+    };
   } else {
     res.redirect("/login");
   };
@@ -307,7 +317,8 @@ app.post("/request", function(req, res){
                     shippingDate: req.body.shippingDate,
                     deliveryDate: req.body.deliveryDate,
                     specialNote: req.body.specialNote,
-                    requestedBy: fullname
+                    requestedBy: fullname,
+                    user_id: req.user._id
                   });
 
                   request.save(function(err, request) {

@@ -12,24 +12,22 @@
 
         <br>
 
-        <div>
-            <table class="table table-hover text-center">
-                <thead>
+        <table class="table table-hover text-center">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" onClick="toggle(this)"></th>
+                    <th>Carrier</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% carriers.forEach(function(carrier) { %>
                     <tr>
-                        <th style="width: 50px;"><input type="checkbox" onClick="toggle(this)"></th>
-                        <th>Carrier</th>
+                        <th><input type="checkbox" name="checkbox" form="carrier-form" value="<%= carrier._id %>"></th>
+                        <td><%= carrier.carrierName %></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <% carriers.forEach(function(carrier) { %>
-                        <tr>
-                            <th><input type="checkbox" name="checkbox" form="carrier-form" value="<%= carrier._id %>"></th>
-                            <td><%= carrier.carrierName %></td>
-                        </tr>
-                    <% }); %>
-                </tbody>
-            </table>
-        </div>
+                <% }); %>
+            </tbody>
+        </table>
     </div>
 
     <%- include("partials/footer"); -%>
