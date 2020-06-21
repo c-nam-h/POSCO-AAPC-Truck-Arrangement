@@ -101,6 +101,24 @@ label.form-check-label {
   z-index: 2;
 }
 
+.search-box {
+  padding: 8px 90px 8px 8px;
+  border: 1px solid;
+  border-radius: 4px 0 0 4px;
+  border-color: #ccc;
+}
+
+.search-btn {
+  padding: 8px;
+  border: 1px solid;
+  border-color: #ccc;
+  border-radius: 0 4px 4px 0;
+  margin-left: -1px;
+  font-size: 13px;
+  float: right;
+  background-color: #f8f9fa!important;
+}
+
 .form-signin input[type="text"] {
   margin-bottom: 5px;
 }
