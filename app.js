@@ -672,6 +672,16 @@ app.post("/search", function(req, res) {
   });
 });
 
+
+app.get("/destination", function(req, res) {
+  if (req.isAuthenticated()) {
+    res.render("destination");
+  } else {
+    res.redirect("/login");
+  };
+});
+
+
 app.get("/carrier", function(req, res) {
   if (req.isAuthenticated()) {
     Carrier.find({}, function(err, carriers) {
