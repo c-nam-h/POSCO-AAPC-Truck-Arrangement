@@ -17,13 +17,13 @@ module.exports = function() {
 
 
 
-// // toggle for selecting and deselecting checkboxes in the homepage
-// function toggle(source) {
-//   checkboxes = document.getElementsByName("checkbox");
-//   for (var i = 0; i < checkboxes.length; i++) {
-//     checkboxes[i].checked = source.checked;
-//   };
-// };
+// toggle for selecting and deselecting checkboxes in the homepage
+function toggle(source) {
+  checkboxes = document.getElementsByName("checkbox");
+  for (var i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].checked = source.checked;
+  };
+};
 
 
 // // override the default error message and customize it for the BOL No input tag when the user does not enter data with the correct input pattern
