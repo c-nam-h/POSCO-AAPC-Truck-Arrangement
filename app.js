@@ -43,6 +43,7 @@ const User = require("./models/User");
 const UserName = require("./models/UserName"); // created this model because passport doesn't allow names to be saved in the collection
 const Destination = require("./models/Destination");
 const Customer = require("./models/Customer");
+const Carrier = require("./models/Carrier");
 
 passport.use(User.createStrategy());
 
@@ -332,11 +333,11 @@ app.post("/request", function(req, res){
 app.get("/delete-order/:_id", function(req, res) {
   const selectedOrderId = req.params._id;
 
-  Request.findByIdAndDelete(selectedOrderId, function(err, request) {
+  Request.findByIdAndDelete(selectedOrderId, function(err) {
     console.log("Successfully deleted");
   });
 
-  Freight.deleteOne({request_id: selectedOrderId}, function(err, freight) {
+  Freight.deleteOne({request_id: selectedOrderId}, function(err) {
     console.log("Successfully deleted");
   })
 
@@ -595,6 +596,36 @@ app.post("/search", function(req, res) {
   });
 });
 
+app.get("/carrier", function(req, res) {
+  Carrier.find({}, function(err, carriers) {
+    res.render("carrier", {
+      carriers
+    });
+  });
+});
+
+app.post("/delete-carrier", function(req, res) {
+  const selectedCarrierId = req.body.checkbox;
+
+  Carrier.deleteMany({_id: selectedCarrierId}, function(err) {
+    console.log(err);
+  });
+  res.redirect("/carrier");
+});
+
+
+app.get("/add-carrier", function(req, res) {
+  res.render("add-carrier");
+});
+
+app.post("/add-carrier", function(req, res) {
+  const newCarrier = req.body.carrierName;
+  
+  Carrier.create({
+    carrierName: newCarrier
+  });
+  res.redirect("/carrier");
+});
 
 
 

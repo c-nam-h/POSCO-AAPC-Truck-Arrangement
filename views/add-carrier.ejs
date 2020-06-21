@@ -1,0 +1,28 @@
+<%- include("partials/header"); -%>
+<body>
+    <div class="container">
+        <div class="title">
+            <h2 class="title-heading">Add a Carrier</h2>
+            <p>Please enter a new carrier information and submit</p>
+        </div>
+
+        <form action="/add-carrier", method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="carrierNameInput">Carrier Name</label>
+                    <input id="carrierNameInput" class="form-control" type="text" name="carrierName" placeholder="Plase enter a carrier name" required>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-primary btn-block" onclick="return confirm('Do you want to submit?')" type="submit" name="button">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+<%- include("partials/footer"); -%>
+<%- include("partials/scripts"); -%>
+</body>
+
+</html>
