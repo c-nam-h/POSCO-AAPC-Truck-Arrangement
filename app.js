@@ -605,28 +605,26 @@ app.post("/search", function(req, res) {
   const userId = req.user._id;
 
   Request.findOne({bolNo: searchedBolNo}, function(err, request) {
-    if (admin_list.includes(userName)) {
-      res.render("search", {
-        request
-      });
-    } else {
-      if (request) {
-        if (request.user_id.equals(userId)) {
+    if (request) {
+      if (admin_list.includes(userName)) {
+        res.render("search", {
+          request
+        });
+      } else if (request.user_id.equals(userId)) {
           res.render("search", {
             request
           });
-        } else {
-          res.render("search", {
-            request: null,
-            err: "Someone else ordered a truck for " + searchedBolNo + ". Please check and try again."
-          })
-        }
       } else {
         res.render("search", {
           request: null,
-          err: "There is no truck order for " + searchedBolNo + ". Please check and try again."
+          err: "Someone else ordered a truck for " + searchedBolNo + ". Please check and try again."
         });
       };
+    } else {
+      res.render("search", {
+        request: null,
+        err: "There is no truck order for " + searchedBolNo + ". Please check and try again."
+      });
     };
   });
 });
