@@ -599,12 +599,29 @@ app.post("/assign-carrier-and-freight/:_id", function(req, res) {
 
 app.post("/search", function(req, res) {
   const searchedBolNo = req.body.search;
-
-  Request.findOne({bolNo: searchedBolNo}, function(err, request) {
-    res.render("search", {
-      request
+  if (req.isAuthenticated()) {
+    Request.findOne({bolNo: searchedBolNo}, function(err, request) {
+      if (request) {
+        if (request.user_id.equals(req.user._id)) {
+          res.render("search", {
+            request
+          });
+        } else {
+          res.render("search", {
+            request: null,
+            err: "Someone else ordered a truck for " + searchedBolNo + ". Please check and try again."
+          })
+        }
+      } else {
+        res.render("search", {
+          request: null,
+          err: "There is no truck order for " + searchedBolNo + ". Please check and try again."
+        });
+      };
     });
-  });
+  }
+
+  
 });
 
 app.get("/carrier", function(req, res) {

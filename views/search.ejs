@@ -6,7 +6,9 @@
       <h2 class="homepage-title-heading">Search Result</h1>
     </div>
 
-    <div class="a-request-group">
+
+    <% if (request) { %>
+      <div class="a-request-group">
         <div class="a-request-header">
           <div class="a-request-inner">
             <div class="a-fixed-right-grid">
@@ -129,7 +131,14 @@
           </div>
         </div>
         <br>
-    </div>
+      </div>
+    <% } else { %>
+      <div class="alert alert-warning alert-dismissible" role="alert">
+        <button class="close" data-dismiss="alert" aria-label="Close" type="button"><span aria-hidden="true">&times;</span></button>
+        <strong>Warning!</strong> <%= err %>
+      </div>
+    <% } %>
+    
   </div>
 
   <%- include("partials/footer"); -%>
