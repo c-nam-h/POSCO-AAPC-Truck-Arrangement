@@ -50,6 +50,8 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// the email addresses in the list below will be able to see the entire website, whereas other users are limited to only certain parts of the website.
+let admin_list = ["admin@poscoaapc.com", "jburnett@poscoaapc.com", "isabell.terry@poscoaapc.com", "dglover@poscoaapc.com"];
 
 // render the register page
 app.get("/register", function(req, res) {
@@ -599,28 +601,26 @@ app.post("/assign-carrier-and-freight/:_id", function(req, res) {
 
 app.post("/search", function(req, res) {
   const searchedBolNo = req.body.search;
-  if (req.isAuthenticated()) {
-    Request.findOne({bolNo: searchedBolNo}, function(err, request) {
-      if (request) {
-        if (request.user_id.equals(req.user._id)) {
-          res.render("search", {
-            request
-          });
-        } else {
-          res.render("search", {
-            request: null,
-            err: "Someone else ordered a truck for " + searchedBolNo + ". Please check and try again."
-          })
-        }
+
+  Request.findOne({bolNo: searchedBolNo}, function(err, request) {
+    if (request) {
+      if (request.user_id.equals(req.user._id)) {
+        res.render("search", {
+          request
+        });
       } else {
         res.render("search", {
           request: null,
-          err: "There is no truck order for " + searchedBolNo + ". Please check and try again."
-        });
-      };
-    });
-  }
-
+          err: "Someone else ordered a truck for " + searchedBolNo + ". Please check and try again."
+        })
+      }
+    } else {
+      res.render("search", {
+        request: null,
+        err: "There is no truck order for " + searchedBolNo + ". Please check and try again."
+      });
+    };
+  });
   
 });
 
