@@ -55,7 +55,18 @@ let admin_list = ["admin@poscoaapc.com", "jburnett@poscoaapc.com", "isabell.terr
 
 // render the register page
 app.get("/register", function(req, res) {
-  res.render("register");
+  if (req.isAuthenticated()) {
+    const currentUsername = req.user.username;
+
+    if (admin_list.includes(currentUsername)) {
+      res.render("register");
+    } else {
+      res.render("error-unauthorized");
+    };
+  } else {
+    res.redirect("/login");
+  }
+  
 });
 
 // post register information and redirects to the homepage when successfully registered
@@ -63,8 +74,7 @@ app.get("/register", function(req, res) {
 app.post("/register", function(req, res) {
   User.register({username: req.body.username}, req.body.password, function(err, user) {
     if (err) {
-      handleError(err);
-      res.redirect("/register");
+      res.render("error-user-already-registered");
     } else {
       // find the id of registered username and store it in UserName collection with firstname and lastname
       User.findOne({username: req.body.username}, function(err, user) {
@@ -121,18 +131,19 @@ require("./public/javascript/helpers")();
 
 // render a homepage with order information sorted by shipping date (oldest to newest)
 app.get("/", function(req, res){
-
-  console.log(req.user)
   if (req.isAuthenticated()) {
-    if (req.user.username !== "admin@poscoaapc.com") {
-      Request.find({user_id: req.user._id}, function(err, requests) {
-        res.render("home", {
+    const currentUsername = req.user.username;
+    const currentUserId = req.user._id;
+
+    if (admin_list.includes(currentUsername)) {
+      Request.find({}, function(err, requests) {
+        res.render("home-for-admin", {
           requests: requests.sort(compare_date)
         });
       });
     } else {
-      Request.find({}, function(err, requests) {
-        res.render("home", {
+      Request.find({user_id: currentUserId}, function(err, requests) {
+        res.render("home-for-regular-users", {
           requests: requests.sort(compare_date)
         });
       });
@@ -142,9 +153,17 @@ app.get("/", function(req, res){
   };
 });
 
+
+
 app.get("/register-destination", function(req, res) {
-  res.render("destination");
+  if (req.isAuthenticated()) {
+    res.render("destination");
+  } else {
+    res.redirect("/login");
+  }
 });
+
+
 
 app.post("/register-destination", function(req, res) {
   Customer.findOne({customer: req.body.customer}, "_id", function(err, customer) {
@@ -162,9 +181,6 @@ app.post("/register-destination", function(req, res) {
   res.redirect("/");
 });
 
-app.get("/register-customer", function(req, res) {
-
-});
 
 
 // render a request page
@@ -346,36 +362,67 @@ app.post("/request", function(req, res){
 app.get("/delete-order/:_id", function(req, res) {
   const selectedOrderId = req.params._id;
 
-  Request.findByIdAndDelete(selectedOrderId, function(err) {
-    console.log("Successfully deleted");
-  });
+  if (req.isAuthenticated()) {
+    Request.findByIdAndDelete(selectedOrderId, function(err) {
+      if (err) {
+        res.render("error-404");
+      }
+    });
+  
+    Freight.deleteOne({request_id: selectedOrderId}, function(err) {
+      if (err) {
+        res.render("error-404");
+      }
+    });
 
-  Freight.deleteOne({request_id: selectedOrderId}, function(err) {
-    console.log("Successfully deleted");
-  })
-
-  res.redirect("/");
+    res.redirect("/");
+  } else {
+    res.redirect("/login");
+  };
 });
+
 
 
 // confirm the shipping and change the shipping status to "Shipped"
 app.get("/confirm-shipping/:_id", function(req, res) {
   const selectedOrderId = req.params._id;
-  
-  Request.findByIdAndUpdate(selectedOrderId, {status: "Shipped"}, function(err, request) {
-    console.log(err);
-  });
-  res.redirect("/");
+  const currentUsername = req.user.username;
+
+  if (req.isAuthenticated()) {
+    if (admin_list.includes(currentUsername)) {
+      Request.findByIdAndUpdate(selectedOrderId, {status: "Shipped"}, function(err, request) {
+        if (err) {
+          res.render("error-404");
+        }
+      });
+      res.redirect("/");
+    } else {
+      res.render("error-unauthorized");
+    }
+  } else {
+    res.redirect("/login");
+  };  
 })
 
 // confirm the shipping and change the shipping status to "Not Shipped"
 app.get("/cancel-shipping/:_id", function(req, res) {
   const selectedOrderId = req.params._id;
+  const currentUsername = req.user.username;
   
-  Request.findByIdAndUpdate(selectedOrderId, {status: "Not Shipped"}, function(err, request) {
-    console.log(err);
-  });
-  res.redirect("/");
+  if (req.isAuthenticated()) {
+    if (admin_list.includes(currentUsername)) {
+      Request.findByIdAndUpdate(selectedOrderId, {status: "Not Shipped"}, function(err, request) {
+        if (err) {
+          res.render("error-404");
+        };
+      });
+      res.redirect("/");
+    } else {
+      res.render("error");
+    }
+  } else {
+    res.redirect("/login");
+  };  
 })
 
 
@@ -581,19 +628,15 @@ app.get("/assign-carrier-and-freight/:_id", function(req, res) {
 });
 
 app.post("/assign-carrier-and-freight/:_id", function(req, res) {
-
   const orderId = ObjectID(req.params._id);
-  console.log(orderId);
 
   Freight.updateOne({request_id: orderId}, {
     carrier: req.body.carrier,
     freight: req.body.freight
   }, function(err) {
     if (err) {
-      handleError(err);
+      res.render("error-404");
     };
-    console.log(req.body.carrier)
-    console.log(req.body.freight)
   });
   res.redirect("/");
 });
@@ -630,11 +673,15 @@ app.post("/search", function(req, res) {
 });
 
 app.get("/carrier", function(req, res) {
-  Carrier.find({}, function(err, carriers) {
-    res.render("carrier", {
-      carriers
+  if (req.isAuthenticated()) {
+    Carrier.find({}, function(err, carriers) {
+      res.render("carrier", {
+        carriers
+      });
     });
-  });
+  } else {
+    res.redirect("/login");
+  };
 });
 
 app.post("/delete-carrier", function(req, res) {
@@ -648,7 +695,11 @@ app.post("/delete-carrier", function(req, res) {
 
 
 app.get("/add-carrier", function(req, res) {
-  res.render("add-carrier");
+  if (req.isAuthenticated()) {
+    res.render("add-carrier");
+  } else {
+    res.redirect("/login");
+  };
 });
 
 app.post("/add-carrier", function(req, res) {
