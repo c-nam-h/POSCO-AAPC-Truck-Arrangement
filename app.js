@@ -14,6 +14,14 @@ app.use(session({
   saveUninitialized: false
 }));
 
+// clears out cache and prevents the user from accessing the website using the cached website
+app.use(function(req, res, next) {
+  if (!req.user) {
+    res.header("Cache-Control", "private, no-cache, no-store, must-revalidate");
+  }
+  next();
+});
+
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 
@@ -122,8 +130,9 @@ app.post("/login", function(req, res) {
 
 // log out
 app.get("/logout", function(req, res) {
-  req.logout();
-  res.redirect("/login");
+  req.session.destroy(function (err) {
+    res.redirect("/login");
+  })
 })
 
 
@@ -387,6 +396,7 @@ app.get("/delete-order/:_id", function(req, res) {
 app.get("/confirm-shipping/:_id", function(req, res) {
   const selectedOrderId = req.params._id;
   const currentUsername = req.user.username;
+  console.log(req);
 
   if (req.isAuthenticated()) {
     if (admin_list.includes(currentUsername)) {
