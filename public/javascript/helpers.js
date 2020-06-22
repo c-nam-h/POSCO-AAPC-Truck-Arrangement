@@ -13,6 +13,13 @@ module.exports = function() {
   this.numberWithCommas = function(n) {
     return n.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
   };
+
+  this.nocache = function(req, res, next) {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    res.header('Expires', '-1');
+    res.header('Pragma', 'no-cache');
+    next();
+  }
 };
 
 
