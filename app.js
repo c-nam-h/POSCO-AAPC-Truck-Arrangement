@@ -385,11 +385,10 @@ app.get("/delete-order/:_id", function(req, res) {
 
 // confirm the shipping and change the shipping status to "Shipped"
 app.get("/confirm-shipping/:_id", function(req, res) {
-  const selectedOrderId = req.params._id;
-  const currentUsername = req.user.username;
-  console.log(req);
 
   if (req.isAuthenticated()) {
+    const selectedOrderId = req.params._id;
+    const currentUsername = req.user.username;
     if (admin_list.includes(currentUsername)) {
       Request.findByIdAndUpdate(selectedOrderId, {status: "Shipped"}, function(err, request) {
         if (err) {
@@ -407,10 +406,10 @@ app.get("/confirm-shipping/:_id", function(req, res) {
 
 // confirm the shipping and change the shipping status to "Not Shipped"
 app.get("/cancel-shipping/:_id", function(req, res) {
-  const selectedOrderId = req.params._id;
-  const currentUsername = req.user.username;
   
   if (req.isAuthenticated()) {
+    const selectedOrderId = req.params._id;
+    const currentUsername = req.user.username;
     if (admin_list.includes(currentUsername)) {
       Request.findByIdAndUpdate(selectedOrderId, {status: "Not Shipped"}, function(err, request) {
         if (err) {
