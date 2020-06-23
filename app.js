@@ -608,18 +608,25 @@ app.get("/assign-carrier-and-freight/:_id", function(req, res) {
   const orderId = ObjectID(req.params._id);
 
   if (req.isAuthenticated) {
-    Customer.find({}, function(err, customers) {
-      Destination.find({}, function(err, destinations) {
-        Request.findById(orderId, function(err, request) {
-          Freight.find({request_id: orderId}, function(err, freight) {
-            res.render("assign-carrier-freight", {
-              customers: customers,
-              destinations: destinations,
-              selectedRequest: request,
-              carrier: freight.carrier,
-              freight: freight.freight,
-              err: null
-            });
+    Request.findById(orderId, function(err, request) {
+      Freight.findOne({request_id: orderId}, function(err, freight) {
+        Carrier.find({}, function(err, carriers) {
+          res.render("assign-carrier-freight", {
+            _id: request._id,
+            shipFrom: request.shipFrom,
+            shipFromAddress: request.shipFromStreetAddress + ", " + request.shipFromCity + " " + request.shipFromState + ", " + request.shipFromZipcode + ", " + request.shipFromCountry,
+            shipTo: request.shipTo,
+            shipToAddress: request.shipToStreetAddress + ", " + request.shipToCity + " " + request.shipToState + ", " + request.shipToZipcode + ", " + request.shipToCountry,
+            weightKg: request.weightKg,
+            bolNo: request.bolNo,
+            truckType: request.truckType,
+            shippingDate: request.shippingDate,
+            deliveryDate: request.deliveryDate,
+            specialNote: request.specialNote,
+            carriers: carriers,
+            selectedCarrier: freight.carrier,
+            freight: freight.freight,
+            err: null
           });
         });
       });
