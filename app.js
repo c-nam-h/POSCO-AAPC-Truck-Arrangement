@@ -83,26 +83,37 @@ app.get("/register", function(req, res) {
 // post register information and redirects to the homepage when successfully registered
 // I need to add a validation which loops through the user collection and sees if there is a duplicate eamil address registered already
 app.post("/register", function(req, res) {
-  User.register({username: req.body.username}, req.body.password, function(err, user) {
-    if (err) {
-      res.render("error-user-already-registered");
+
+  if (req.isAuthenticated()) {
+    const currentUsername = req.user.username;
+    
+    if (admin_list.includes(currentUsername)) {
+      User.register({username: req.body.username}, req.body.password, function(err, user) {
+        if (err) {
+          res.render("error-user-already-registered");
+        } else {
+          // find the id of registered username and store it in UserName collection with firstname and lastname
+          User.findOne({username: req.body.username}, function(err, user) {
+            const user_id = user._id;
+          });
+    
+          UserName.create({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            user_id: user._id
+          })
+    
+          passport.authenticate("local")(req, res, function() {
+            res.redirect("/");
+          });
+        };
+      });
     } else {
-      // find the id of registered username and store it in UserName collection with firstname and lastname
-      User.findOne({username: req.body.username}, function(err, user) {
-        const user_id = user._id;
-      });
-
-      UserName.create({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        user_id: user._id
-      })
-
-      passport.authenticate("local")(req, res, function() {
-        res.redirect("/");
-      });
+      res.redirect("/error-unauthorized");
     };
-  });
+  } else {
+    res.redirect("/login");
+  };
 });
 
 // render a homepage when the user is already logged in and tries to go to the login page
@@ -156,31 +167,31 @@ app.get("/", function(req, res){
 
 
 
-app.get("/register-destination", function(req, res) {
-  if (req.isAuthenticated()) {
-    res.render("destination");
-  } else {
-    res.redirect("/login");
-  }
-});
+// app.get("/register-destination", function(req, res) {
+//   if (req.isAuthenticated()) {
+//     res.render("destination");
+//   } else {
+//     res.redirect("/login");
+//   }
+// });
 
 
 
-app.post("/register-destination", function(req, res) {
-  Customer.findOne({customer: req.body.customer}, "_id", function(err, customer) {
-    Destination.create({
-      customer_id: customer,
-      destination: req.body.destination,
-      streetAddress: req.body.streetAddress,
-      city: req.body.city,
-      state: req.body.state,
-      zipcode: req.body.zipcode,
-      country: req.body.country
-    });
-  });
+// app.post("/register-destination", function(req, res) {
+//   Customer.findOne({customer: req.body.customer}, "_id", function(err, customer) {
+//     Destination.create({
+//       customer_id: customer,
+//       destination: req.body.destination,
+//       streetAddress: req.body.streetAddress,
+//       city: req.body.city,
+//       state: req.body.state,
+//       zipcode: req.body.zipcode,
+//       country: req.body.country
+//     });
+//   });
   
-  res.redirect("/");
-});
+//   res.redirect("/");
+// });
 
 
 
@@ -217,144 +228,149 @@ app.get("/request", function(req, res){
 
 
 app.post("/request", function(req, res){
-  //date validation - if delivery date is earlier than shipping date, then a user will be asked to revise those dates
-  if (req.body.shippingDate > req.body.deliveryDate) {
-    Destination.find({}, function(err, destinations) {
-      Customer.find({}, function(err, customers) {
-        if (!err) {
-          res.render("request", {
-            err: "A delivery date cannot be earlier than shipping date! Please check your delivery date and submit again.",
-            shipFromId: req.body.shipFrom,
-            shipFromAddressId: req.body.shipFromAddress,
-            shipToId: req.body.shipTo,
-            shipToAddressId: req.body.shipToAddress,
-            weightKg: req.body.weightKg,
-            bolNo: req.body.bolNo,
-            truckType: req.body.truckOptions,
-            shippingDate: null,
-            deliveryDate: null,
-            specialNote: req.body.specialNote,
-            destinations: destinations,
-            customers: customers
-          });
-        };
+
+  if (req.isAuthenticated()) {
+    //date validation - if delivery date is earlier than shipping date, then a user will be asked to revise those dates
+    if (req.body.shippingDate > req.body.deliveryDate) {
+      Destination.find({}, function(err, destinations) {
+        Customer.find({}, function(err, customers) {
+          if (!err) {
+            res.render("request", {
+              err: "A delivery date cannot be earlier than shipping date! Please check your delivery date and submit again.",
+              shipFromId: req.body.shipFrom,
+              shipFromAddressId: req.body.shipFromAddress,
+              shipToId: req.body.shipTo,
+              shipToAddressId: req.body.shipToAddress,
+              weightKg: req.body.weightKg,
+              bolNo: req.body.bolNo,
+              truckType: req.body.truckOptions,
+              shippingDate: null,
+              deliveryDate: null,
+              specialNote: req.body.specialNote,
+              destinations: destinations,
+              customers: customers
+            });
+          };
+        });
       });
-    });
-  } else {
-    Request.findOne({bolNo: req.body.bolNo}, function(err, request) {
-      if (request) {
-        Destination.find({}, function(err, destinations) {
-          Customer.find({}, function(err, customers) {
-            if (!err) {
-              res.render("request", {
-                err: "There is already an order for your BOL NO, " + req.body.bolNo + ". Please check again.",
-                shipFromId: req.body.shipFrom,
-                shipFromAddressId: req.body.shipFromAddress,
-                shipToId: req.body.shipTo,
-                shipToAddressId: req.body.shipToAddress,
-                weightKg: req.body.weightKg,
-                bolNo: null,
-                truckType: req.body.truckOptions,
-                shippingDate: req.body.shippingDate,
-                deliveryDate: req.body.deliveryDate,
-                specialNote: req.body.specialNote,
-                destinations: destinations,
-                customers: customers
-              });
-            };
-          });
-        });        
-      } else {
-        let shipFrom = {
-          shipFromCustomer: ""
-        };
-
-        let shipFromAddress = {
-          destination: "",
-          streetAddress: "",
-          city: "",
-          state: "",
-          zipcode: "",
-          country: ""
-        }
-
-        let shipTo = {
-          shipToCustomer: ""
-        };
-
-        let shipToAddress = {
-          destination: "",
-          streetAddress: "",
-          city: "",
-          state: "",
-          zipcode: "",
-          country: ""
-        }
-
-
-        Customer.findOne({_id: ObjectID(req.body.shipFrom)}, function(err, customer) {
-          shipFrom["shipFromCustomer"] = customer.customer;
-          Destination.findOne({_id: ObjectID(req.body.shipFromAddress)}, function(err, destination) {
-            shipFromAddress["destination"] = destination.destination;
-            shipFromAddress["streetAddress"] = destination.streetAddress;
-            shipFromAddress["city"] = destination.city;
-            shipFromAddress["state"] = destination.state;
-            shipFromAddress["zipcode"] = destination.zipcode;
-            shipFromAddress["country"] = destination.country;
-            Customer.findOne({_id: ObjectID(req.body.shipTo)}, function(err, customer) {
-              shipTo["shipToCustomer"] = customer.customer;
-              Destination.findOne({_id: ObjectID(req.body.shipToAddress)}, function(err, destination) {
-                shipToAddress["destination"] = destination.destination;
-                shipToAddress["streetAddress"] = destination.streetAddress;
-                shipToAddress["city"] = destination.city;
-                shipToAddress["state"] = destination.state;
-                shipToAddress["zipcode"] = destination.zipcode;
-                shipToAddress["country"] = destination.country;
-                UserName.findOne({user_id: ObjectID(req.user._id)}, function(err, userName) {
-                  const fullname = userName.firstName + " " + userName.lastName;
-
-                  const request = new Request({
-                    shipFrom: shipFrom["shipFromCustomer"],
-                    shipFromDestination: shipFromAddress["destination"],
-                    shipFromStreetAddress: shipFromAddress["streetAddress"],
-                    shipFromCity: shipFromAddress["city"],
-                    shipFromState: shipFromAddress["state"],
-                    shipFromZipcode: shipFromAddress["zipcode"],
-                    shipFromCountry: shipFromAddress["country"],
-                    shipTo: shipTo["shipToCustomer"],
-                    shipToDestination: shipToAddress["destination"],
-                    shipToStreetAddress: shipToAddress["streetAddress"],
-                    shipToCity: shipToAddress["city"],
-                    shipToState: shipToAddress["state"],
-                    shipToZipcode: shipToAddress["zipcode"],
-                    shipToCountry: shipToAddress["country"],
-                    weightKg: req.body.weightKg,
-                    weightLb: Math.round(req.body.weightKg * 2.204623, 0),
-                    bolNo: req.body.bolNo,
-                    truckType: req.body.truckOptions,
-                    shippingDate: req.body.shippingDate,
-                    deliveryDate: req.body.deliveryDate,
-                    specialNote: req.body.specialNote,
-                    requestedBy: fullname,
-                    user_id: req.user._id
-                  });
-
-                  request.save(function(err, request) {
-                    Freight.create({
-                      request_id: request._id
+    } else {
+      Request.findOne({bolNo: req.body.bolNo}, function(err, request) {
+        if (request) {
+          Destination.find({}, function(err, destinations) {
+            Customer.find({}, function(err, customers) {
+              if (!err) {
+                res.render("request", {
+                  err: "There is already an order for your BOL NO, " + req.body.bolNo + ". Please check again.",
+                  shipFromId: req.body.shipFrom,
+                  shipFromAddressId: req.body.shipFromAddress,
+                  shipToId: req.body.shipTo,
+                  shipToAddressId: req.body.shipToAddress,
+                  weightKg: req.body.weightKg,
+                  bolNo: null,
+                  truckType: req.body.truckOptions,
+                  shippingDate: req.body.shippingDate,
+                  deliveryDate: req.body.deliveryDate,
+                  specialNote: req.body.specialNote,
+                  destinations: destinations,
+                  customers: customers
+                });
+              };
+            });
+          });        
+        } else {
+          let shipFrom = {
+            shipFromCustomer: ""
+          };
+  
+          let shipFromAddress = {
+            destination: "",
+            streetAddress: "",
+            city: "",
+            state: "",
+            zipcode: "",
+            country: ""
+          }
+  
+          let shipTo = {
+            shipToCustomer: ""
+          };
+  
+          let shipToAddress = {
+            destination: "",
+            streetAddress: "",
+            city: "",
+            state: "",
+            zipcode: "",
+            country: ""
+          }
+  
+  
+          Customer.findOne({_id: ObjectID(req.body.shipFrom)}, function(err, customer) {
+            shipFrom["shipFromCustomer"] = customer.customer;
+            Destination.findOne({_id: ObjectID(req.body.shipFromAddress)}, function(err, destination) {
+              shipFromAddress["destination"] = destination.destination;
+              shipFromAddress["streetAddress"] = destination.streetAddress;
+              shipFromAddress["city"] = destination.city;
+              shipFromAddress["state"] = destination.state;
+              shipFromAddress["zipcode"] = destination.zipcode;
+              shipFromAddress["country"] = destination.country;
+              Customer.findOne({_id: ObjectID(req.body.shipTo)}, function(err, customer) {
+                shipTo["shipToCustomer"] = customer.customer;
+                Destination.findOne({_id: ObjectID(req.body.shipToAddress)}, function(err, destination) {
+                  shipToAddress["destination"] = destination.destination;
+                  shipToAddress["streetAddress"] = destination.streetAddress;
+                  shipToAddress["city"] = destination.city;
+                  shipToAddress["state"] = destination.state;
+                  shipToAddress["zipcode"] = destination.zipcode;
+                  shipToAddress["country"] = destination.country;
+                  UserName.findOne({user_id: ObjectID(req.user._id)}, function(err, userName) {
+                    const fullname = userName.firstName + " " + userName.lastName;
+  
+                    const request = new Request({
+                      shipFrom: shipFrom["shipFromCustomer"],
+                      shipFromDestination: shipFromAddress["destination"],
+                      shipFromStreetAddress: shipFromAddress["streetAddress"],
+                      shipFromCity: shipFromAddress["city"],
+                      shipFromState: shipFromAddress["state"],
+                      shipFromZipcode: shipFromAddress["zipcode"],
+                      shipFromCountry: shipFromAddress["country"],
+                      shipTo: shipTo["shipToCustomer"],
+                      shipToDestination: shipToAddress["destination"],
+                      shipToStreetAddress: shipToAddress["streetAddress"],
+                      shipToCity: shipToAddress["city"],
+                      shipToState: shipToAddress["state"],
+                      shipToZipcode: shipToAddress["zipcode"],
+                      shipToCountry: shipToAddress["country"],
+                      weightKg: req.body.weightKg,
+                      weightLb: Math.round(req.body.weightKg * 2.204623, 0),
+                      bolNo: req.body.bolNo,
+                      truckType: req.body.truckOptions,
+                      shippingDate: req.body.shippingDate,
+                      deliveryDate: req.body.deliveryDate,
+                      specialNote: req.body.specialNote,
+                      requestedBy: fullname,
+                      user_id: req.user._id
                     });
-                    res.redirect("/");
-                  });
-                });              
+  
+                    request.save(function(err, request) {
+                      Freight.create({
+                        request_id: request._id
+                      });
+                      res.redirect("/");
+                    });
+                  });              
+                });
               });
             });
           });
-        });
-
-        
-      };
-    });
-  };
+  
+          
+        };
+      });
+    };
+  } else {
+    res.redirect("/login");
+  }; 
 });
 
 // delete selected row or rows in request and freight collections and redirect to the homepage
@@ -418,7 +434,7 @@ app.get("/cancel-shipping/:_id", function(req, res) {
       });
       res.redirect("/");
     } else {
-      res.render("error");
+      res.render("error-unauthorized");
     }
   } else {
     res.redirect("/login");
@@ -455,146 +471,155 @@ app.get("/modify/:_id", function(req, res) {
 app.post("/modify/:_id", function(req, res) {
   const orderId = req.params._id;
 
-  if (req.body.shippingDate > req.body.deliveryDate) {
-    Customer.find({}, function(err, customers) {
-      Destination.find({}, function(err, destinations) {
-        Request.findById(orderId, function(err, request) {
-          res.render("modify", {
-            customers: customers,
-            destinations: destinations,
-            selectedRequest: request,
-            err: "A delivery date cannot be earlier than shipping date!"
+  if (req.isAuthenticated()) {
+    if (req.body.shippingDate > req.body.deliveryDate) {
+      Customer.find({}, function(err, customers) {
+        Destination.find({}, function(err, destinations) {
+          Request.findById(orderId, function(err, request) {
+            res.render("modify", {
+              customers: customers,
+              destinations: destinations,
+              selectedRequest: request,
+              err: "A delivery date cannot be earlier than shipping date!"
+            });
           });
         });
       });
-    });
+    } else {
+      const modifiedBolNo = req.body.bolNo;
+  
+      Request.find({bolNo: modifiedBolNo}, function(err, requests) {
+        let count = 0;
+        let id = "";
+  
+        requests.forEach(function(request) {
+          count++;
+          id = ObjectID(request._id);
+        });
+  
+        if (count === 0 || (count === 1 && id.equals(orderId))) {
+          let shipFrom = {
+            shipFromCustomer: ""
+          };
+  
+          let shipFromAddress = {
+            destination: "",
+            streetAddress: "",
+            city: "",
+            state: "",
+            zipcode: "",
+            country: ""
+          }
+  
+          let shipTo = {
+            shipToCustomer: ""
+          };
+  
+          let shipToAddress = {
+            destination: "",
+            streetAddress: "",
+            city: "",
+            state: "",
+            zipcode: "",
+            country: ""
+          }
+  
+  
+          Customer.findOne({_id: ObjectID(req.body.shipFrom)}, function(err, customer) {
+            shipFrom["shipFromCustomer"] = customer.customer;
+            Destination.findOne({_id: ObjectID(req.body.shipFromAddress)}, function(err, destination) {
+              shipFromAddress["destination"] = destination.destination;
+              shipFromAddress["streetAddress"] = destination.streetAddress;
+              shipFromAddress["city"] = destination.city;
+              shipFromAddress["state"] = destination.state;
+              shipFromAddress["zipcode"] = destination.zipcode;
+              shipFromAddress["country"] = destination.country;
+              Customer.findOne({_id: ObjectID(req.body.shipTo)}, function(err, customer) {
+                shipTo["shipToCustomer"] = customer.customer;
+                Destination.findOne({_id: ObjectID(req.body.shipToAddress)}, function(err, destination) {
+                  shipToAddress["destination"] = destination.destination;
+                  shipToAddress["streetAddress"] = destination.streetAddress;
+                  shipToAddress["city"] = destination.city;
+                  shipToAddress["state"] = destination.state;
+                  shipToAddress["zipcode"] = destination.zipcode;
+                  shipToAddress["country"] = destination.country;
+                  UserName.findOne({user_id: ObjectID(req.user._id)}, function(err, userName) {
+                    const fullname = userName.firstName + " " + userName.lastName;
+  
+                    Request.findByIdAndUpdate(orderId, {
+                      shipFrom: shipFrom["shipFromCustomer"],
+                      shipFromDestination: shipFromAddress["destination"],
+                      shipFromStreetAddress: shipFromAddress["streetAddress"],
+                      shipFromCity: shipFromAddress["city"],
+                      shipFromState: shipFromAddress["state"],
+                      shipFromZipcode: shipFromAddress["zipcode"],
+                      shipFromCountry: shipFromAddress["country"],
+                      shipTo: shipTo["shipToCustomer"],
+                      shipToDestination: shipToAddress["destination"],
+                      shipToStreetAddress: shipToAddress["streetAddress"],
+                      shipToCity: shipToAddress["city"],
+                      shipToState: shipToAddress["state"],
+                      shipToZipcode: shipToAddress["zipcode"],
+                      shipToCountry: shipToAddress["country"],
+                      weightKg: req.body.weightKg,
+                      weightLb: Math.round(req.body.weightKg * 2.204623, 0),
+                      bolNo: req.body.bolNo,
+                      truckType: req.body.truckOptions,
+                      shippingDate: req.body.shippingDate,
+                      deliveryDate: req.body.deliveryDate,
+                      specialNote: req.body.specialNote,
+                      requestedBy: fullname
+                    }, function(err, request) {
+                      console.log(err);
+                    });
+                    res.redirect("/");
+                  });              
+                });
+              });
+            });
+          });
+        } else {
+          Customer.find({}, function(err, customers) {
+            Destination.find({}, function(err, destinations) {
+              Request.findById(orderId, function(err, request) {
+                res.render("modify", {
+                  customers: customers,
+                  destinations: destinations,
+                  selectedRequest: request,
+                  err: "Your BOL NO '" + modifiedBolNo + "' already exists in the database. Please check again and enter BOL No."
+                });
+              });
+            });
+          });
+        };
+      });
+    };
   } else {
-    const modifiedBolNo = req.body.bolNo;
-
-    Request.find({bolNo: modifiedBolNo}, function(err, requests) {
-      let count = 0;
-      let id = "";
-
-      requests.forEach(function(request) {
-        count++;
-        id = ObjectID(request._id);
-      });
-
-      if (count === 0 || (count === 1 && id.equals(orderId))) {
-        let shipFrom = {
-          shipFromCustomer: ""
-        };
-
-        let shipFromAddress = {
-          destination: "",
-          streetAddress: "",
-          city: "",
-          state: "",
-          zipcode: "",
-          country: ""
-        }
-
-        let shipTo = {
-          shipToCustomer: ""
-        };
-
-        let shipToAddress = {
-          destination: "",
-          streetAddress: "",
-          city: "",
-          state: "",
-          zipcode: "",
-          country: ""
-        }
-
-
-        Customer.findOne({_id: ObjectID(req.body.shipFrom)}, function(err, customer) {
-          shipFrom["shipFromCustomer"] = customer.customer;
-          Destination.findOne({_id: ObjectID(req.body.shipFromAddress)}, function(err, destination) {
-            shipFromAddress["destination"] = destination.destination;
-            shipFromAddress["streetAddress"] = destination.streetAddress;
-            shipFromAddress["city"] = destination.city;
-            shipFromAddress["state"] = destination.state;
-            shipFromAddress["zipcode"] = destination.zipcode;
-            shipFromAddress["country"] = destination.country;
-            Customer.findOne({_id: ObjectID(req.body.shipTo)}, function(err, customer) {
-              shipTo["shipToCustomer"] = customer.customer;
-              Destination.findOne({_id: ObjectID(req.body.shipToAddress)}, function(err, destination) {
-                shipToAddress["destination"] = destination.destination;
-                shipToAddress["streetAddress"] = destination.streetAddress;
-                shipToAddress["city"] = destination.city;
-                shipToAddress["state"] = destination.state;
-                shipToAddress["zipcode"] = destination.zipcode;
-                shipToAddress["country"] = destination.country;
-                UserName.findOne({user_id: ObjectID(req.user._id)}, function(err, userName) {
-                  const fullname = userName.firstName + " " + userName.lastName;
-
-                  Request.findByIdAndUpdate(orderId, {
-                    shipFrom: shipFrom["shipFromCustomer"],
-                    shipFromDestination: shipFromAddress["destination"],
-                    shipFromStreetAddress: shipFromAddress["streetAddress"],
-                    shipFromCity: shipFromAddress["city"],
-                    shipFromState: shipFromAddress["state"],
-                    shipFromZipcode: shipFromAddress["zipcode"],
-                    shipFromCountry: shipFromAddress["country"],
-                    shipTo: shipTo["shipToCustomer"],
-                    shipToDestination: shipToAddress["destination"],
-                    shipToStreetAddress: shipToAddress["streetAddress"],
-                    shipToCity: shipToAddress["city"],
-                    shipToState: shipToAddress["state"],
-                    shipToZipcode: shipToAddress["zipcode"],
-                    shipToCountry: shipToAddress["country"],
-                    weightKg: req.body.weightKg,
-                    weightLb: Math.round(req.body.weightKg * 2.204623, 0),
-                    bolNo: req.body.bolNo,
-                    truckType: req.body.truckOptions,
-                    shippingDate: req.body.shippingDate,
-                    deliveryDate: req.body.deliveryDate,
-                    specialNote: req.body.specialNote,
-                    requestedBy: fullname
-                  }, function(err, request) {
-                    console.log(err);
-                  });
-                  res.redirect("/");
-                });              
-              });
-            });
-          });
-        });
-      } else {
-        Customer.find({}, function(err, customers) {
-          Destination.find({}, function(err, destinations) {
-            Request.findById(orderId, function(err, request) {
-              res.render("modify", {
-                customers: customers,
-                destinations: destinations,
-                selectedRequest: request,
-                err: "Your BOL NO '" + modifiedBolNo + "' already exists in the database. Please check again and enter BOL No."
-              });
-            });
-          });
-        });
-      };
-    });
-  };
+    res.redirect("/login");
+  };  
 });
 
 
 app.get("/freight-report", function(req, res) {
 
   if (req.isAuthenticated()) {
-    Freight.find({}, function(err, freights) {
-      Request.find({}, function(err, requests) {
-        if (!err) {
-          res.render("freight-report", {
-            requests: requests,
-            freights: freights
-          });
-        } else {
-          handleError(err);
-        };
+    const currentUsername = req.user.username;
+    if (admin_list.includes(currentUsername)) {
+      Freight.find({}, function(err, freights) {
+        Request.find({}, function(err, requests) {
+          if (!err) {
+            res.render("freight-report", {
+              requests: requests,
+              freights: freights
+            });
+          } else {
+            handleError(err);
+          };
+        });
       });
-    });
+    } else {
+      res.redirect("/");  
+    };
   } else {
     res.redirect("/login");
   };
@@ -603,65 +628,78 @@ app.get("/freight-report", function(req, res) {
 
 app.get("/assign-carrier-and-freight/:_id", function(req, res) {
 
-  const orderId = ObjectID(req.params._id);
-
   if (req.isAuthenticated) {
-    Request.findById(orderId, function(err, request) {
-      Freight.findOne({request_id: orderId}, function(err, freight) {
-        Carrier.find({}, function(err, carriers) {
-          res.render("assign-carrier-freight", {
-            _id: request._id,
-            shipFrom: request.shipFrom,
-            shipFromAddress: request.shipFromStreetAddress + ", " + request.shipFromCity + " " + request.shipFromState + ", " + request.shipFromZipcode + ", " + request.shipFromCountry,
-            shipTo: request.shipTo,
-            shipToAddress: request.shipToStreetAddress + ", " + request.shipToCity + " " + request.shipToState + ", " + request.shipToZipcode + ", " + request.shipToCountry,
-            weightKg: request.weightKg,
-            bolNo: request.bolNo,
-            truckType: request.truckType,
-            shippingDate: request.shippingDate,
-            deliveryDate: request.deliveryDate,
-            specialNote: request.specialNote,
-            carriers: carriers,
-            selectedCarrier: freight.carrier,
-            freight: freight.freight,
-            err: null
+    const selectedOrderId = req.params._id;
+    const currentUsername = req.user.username;
+    if (admin_list.includes(currentUsername)) {
+      Request.findById(selectedOrderId, function(err, request) {
+        Freight.findOne({request_id: selectedOrderId}, function(err, freight) {
+          Carrier.find({}, function(err, carriers) {
+            res.render("assign-carrier-freight", {
+              _id: request._id,
+              shipFrom: request.shipFrom,
+              shipFromAddress: request.shipFromStreetAddress + ", " + request.shipFromCity + " " + request.shipFromState + ", " + request.shipFromZipcode + ", " + request.shipFromCountry,
+              shipTo: request.shipTo,
+              shipToAddress: request.shipToStreetAddress + ", " + request.shipToCity + " " + request.shipToState + ", " + request.shipToZipcode + ", " + request.shipToCountry,
+              weightKg: request.weightKg,
+              bolNo: request.bolNo,
+              truckType: request.truckType,
+              shippingDate: request.shippingDate,
+              deliveryDate: request.deliveryDate,
+              specialNote: request.specialNote,
+              carriers: carriers,
+              selectedCarrier: freight.carrier,
+              freight: freight.freight,
+              err: null
+            });
           });
         });
       });
-    });
+    } else {
+      res.render("error-unauthorized");
+    };
   } else {
     res.redirect("/login");
   };
 });
 
 app.post("/assign-carrier-and-freight/:_id", function(req, res) {
-  const orderId = ObjectID(req.params._id);
 
-  Freight.updateOne({request_id: orderId}, {
-    carrier: req.body.carrier,
-    freight: req.body.freight
-  }, function(err) {
-    if (err) {
-      res.render("error-404");
-    };
-  });
-  res.redirect("/");
+  if (req.isAuthenticated()) {
+    const selectedOrderId = req.params._id;
+    const currentUsername = req.user.username;
+    if (admin_list.includes(currentUsername)) {
+      Freight.updateOne({request_id: selectedOrderId}, {
+        carrier: req.body.carrier,
+        freight: req.body.freight
+      }, function(err) {
+        if (err) {
+          res.render("error-404");
+        };
+      });
+      res.redirect("/");
+    } else {
+      res.render("error-unauthorized");
+    };    
+  } else {
+    res.redirect("/login");
+  };
 });
 
 
 app.post("/search", function(req, res) {
   if (req.isAuthenticated()) {
     const searchedBolNo = req.body.search;
-    const userName = req.user.username;
-    const userId = req.user._id;
+    const currentUsername = req.user.username;
+    const currentUserId = req.user._id;
   
     Request.findOne({bolNo: searchedBolNo}, function(err, request) {
       if (request) {
-        if (admin_list.includes(userName)) {
+        if (admin_list.includes(currentUsername)) {
           res.render("search", {
             request
           });
-        } else if (request.user_id.equals(userId)) {
+        } else if (request.user_id.equals(currentUserId)) {
             res.render("search", {
               request
             });
@@ -686,7 +724,7 @@ app.post("/search", function(req, res) {
 
 app.get("/destination", function(req, res) {
   if (req.isAuthenticated()) {
-    res.render("destination");
+    res.redirect("/");
   } else {
     res.redirect("/login");
   };
@@ -695,11 +733,16 @@ app.get("/destination", function(req, res) {
 
 app.get("/carrier", function(req, res) {
   if (req.isAuthenticated()) {
-    Carrier.find({}, function(err, carriers) {
-      res.render("carrier", {
-        carriers
+    const currentUsername = req.user.username;
+    if (admin_list.includes(currentUsername)) {
+      Carrier.find({}, function(err, carriers) {
+        res.render("carrier", {
+          carriers
+        });
       });
-    });
+    } else {
+      res.redirect("/");
+    };
   } else {
     res.redirect("/login");
   };
@@ -708,16 +751,30 @@ app.get("/carrier", function(req, res) {
 app.post("/delete-carrier", function(req, res) {
   const selectedCarrierId = req.body.checkbox;
 
-  Carrier.deleteMany({_id: selectedCarrierId}, function(err) {
-    console.log(err);
-  });
-  res.redirect("/carrier");
+  if (req.isAuthenticated()) {
+    const currentUsername = req.user.username;
+    if (admin_list.includes(currentUsername)) {
+      Carrier.deleteMany({_id: selectedCarrierId}, function(err) {
+        console.log(err);
+      });
+      res.redirect("/carrier");
+    } else {
+      res.render("error-unauthorized");
+    };
+  } else {
+    res.redirect("/login");
+  };  
 });
 
 
 app.get("/add-carrier", function(req, res) {
   if (req.isAuthenticated()) {
-    res.render("add-carrier");
+    const currentUsername = req.user.username;
+    if (admin_list.includes(currentUsername)) {
+      res.render("add-carrier");
+    } else {
+      res.redirect("/");
+    };
   } else {
     res.redirect("/login");
   };
@@ -726,10 +783,19 @@ app.get("/add-carrier", function(req, res) {
 app.post("/add-carrier", function(req, res) {
   const newCarrier = req.body.carrierName;
   
-  Carrier.create({
-    carrierName: newCarrier
-  });
-  res.redirect("/carrier");
+  if (req.isAuthenticated()) {
+    const currentUsername = req.user.username;
+    if (admin_list.includes(currentUsername)) {
+      Carrier.create({
+        carrierName: newCarrier
+      });
+      res.redirect("/carrier");
+    } else {
+      res.render("error-unauthorized");
+    };
+  } else {
+    res.redirect("/login");
+  };
 });
 
 
