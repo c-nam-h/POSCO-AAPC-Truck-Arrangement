@@ -696,23 +696,23 @@ app.post("/search", function(req, res) {
     Request.findOne({bolNo: searchedBolNo}, function(err, request) {
       if (request) {
         if (admin_list.includes(currentUsername)) {
-          res.render("search", {
+          res.render("search-for-admin", {
             request
           });
         } else if (request.user_id.equals(currentUserId)) {
-            res.render("search", {
+            res.render("search-for-regular-users", {
               request
             });
         } else {
-          res.render("search", {
+          res.render("search-for-regular-users", {
             request: null,
-            err: "Someone else ordered a truck for " + searchedBolNo + ". Please check and try again."
+            err: "You are not authorized to see someone else's order for " + searchedBolNo + ". Please check and try again."
           });
         };
       } else {
-        res.render("search", {
+        res.render("search-for-regular-users", {
           request: null,
-          err: "There is no truck order for " + searchedBolNo + ". Please check and try again."
+          err: "There is no order for " + searchedBolNo + ". Please check and try again."
         });
       };
     });
