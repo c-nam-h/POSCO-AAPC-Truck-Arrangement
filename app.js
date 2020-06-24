@@ -51,7 +51,7 @@ mongoose.connect("mongodb+srv://" + process.env.USERNAME + ":" + process.env.PAS
 const Request = require("./models/Request");
 const Freight = require("./models/Freight");
 const User = require("./models/User");
-const UserName = require("./models/UserName"); // created this model because passport doesn't allow names to be saved in the collection
+const UserName = require("./models/Username"); // created this model because passport doesn't allow names to be saved in the collection
 const Destination = require("./models/Destination");
 const Customer = require("./models/Customer");
 const Carrier = require("./models/Carrier");
