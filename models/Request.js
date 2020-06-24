@@ -30,7 +30,7 @@ const requestSchema = new Schema({
   },
   datePosted: {
     type: Date,
-    default: new Date()
+    default: new Date().toLocaleDateString()
   },
   requestedBy: String,
   user_id: Schema.Types.ObjectId
