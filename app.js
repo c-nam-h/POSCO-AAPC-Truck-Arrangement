@@ -143,31 +143,26 @@ require("./public/javascript/helpers")();
 
 // render a homepage with order information sorted by shipping date (oldest to newest)
 app.get("/", function(req, res){
-  // if (req.isAuthenticated()) {
-  //   const currentUsername = req.user.username;
-  //   const currentUserId = req.user._id;
+  if (req.isAuthenticated()) {
+    const currentUsername = req.user.username;
+    const currentUserId = req.user._id;
 
-  //   if (admin_list.includes(currentUsername)) {
-  //     Request.find({}, function(err, requests) {
-  //       res.render("home-for-admin", {
-  //         requests: requests.sort(compare_date)
-  //       });
-  //     });
-  //   } else {
-  //     Request.find({user_id: currentUserId}, function(err, requests) {
-  //       res.render("home-for-regular-users", {
-  //         requests: requests.sort(compare_date)
-  //       });
-  //     });
-  //   };
-  // } else {
-  //   res.redirect("/login");
-  // };
+    if (admin_list.includes(currentUsername)) {
       Request.find({}, function(err, requests) {
         res.render("home-for-admin", {
           requests: requests.sort(compare_date)
         });
       });
+    } else {
+      Request.find({user_id: currentUserId}, function(err, requests) {
+        res.render("home-for-regular-users", {
+          requests: requests.sort(compare_date)
+        });
+      });
+    };
+  } else {
+    res.redirect("/login");
+  };
 });
 
 
