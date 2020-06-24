@@ -44,8 +44,8 @@ const passportLocalMongoose = require("passport-local-mongoose");
 app.use(passport.initialize());
 app.use(passport.session());
 
-// mongoose.connect("mongodb+srv://" + process.env.USERNAME + ":" + process.env.PASSWORD + "@posco-aapc-logistics-l3bdr.mongodb.net/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
-mongoose.connect("mongodb://localhost/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+mongoose.connect("mongodb+srv://" + process.env.USERNAME + ":" + process.env.PASSWORD + "@posco-aapc-logistics-l3bdr.mongodb.net/truckRequestDB?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+// mongoose.connect("mongodb://localhost/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 
 // require each model
 const Request = require("./models/Request");
@@ -143,26 +143,31 @@ require("./public/javascript/helpers")();
 
 // render a homepage with order information sorted by shipping date (oldest to newest)
 app.get("/", function(req, res){
-  if (req.isAuthenticated()) {
-    const currentUsername = req.user.username;
-    const currentUserId = req.user._id;
+  // if (req.isAuthenticated()) {
+  //   const currentUsername = req.user.username;
+  //   const currentUserId = req.user._id;
 
-    if (admin_list.includes(currentUsername)) {
+  //   if (admin_list.includes(currentUsername)) {
+  //     Request.find({}, function(err, requests) {
+  //       res.render("home-for-admin", {
+  //         requests: requests.sort(compare_date)
+  //       });
+  //     });
+  //   } else {
+  //     Request.find({user_id: currentUserId}, function(err, requests) {
+  //       res.render("home-for-regular-users", {
+  //         requests: requests.sort(compare_date)
+  //       });
+  //     });
+  //   };
+  // } else {
+  //   res.redirect("/login");
+  // };
       Request.find({}, function(err, requests) {
         res.render("home-for-admin", {
           requests: requests.sort(compare_date)
         });
       });
-    } else {
-      Request.find({user_id: currentUserId}, function(err, requests) {
-        res.render("home-for-regular-users", {
-          requests: requests.sort(compare_date)
-        });
-      });
-    };
-  } else {
-    res.redirect("/login");
-  };
 });
 
 
