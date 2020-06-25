@@ -3,8 +3,11 @@
 <body>
   <div class="container">
     <div class="title">
-      <h2 class="homepage-title-heading">Freight Report</h2>
+      <h2 class="homepage-title-heading" style="display: inline;">Freight Report</h2>
+      <button class="export-csv-btn" onclick="exportTableToCSV('members.csv')" name="button">Export to CSV File</button>
     </div>
+
+    <br>
 
     <table class="table table-hover text-center">
       <thead>
@@ -16,6 +19,7 @@
           <th class="text-center">Delivery To</th>
           <th class="text-center">Weight(Kg)</th>
           <th class="text-center">Weight(Lb)</th>
+          <th class="text-center">Status</th>
           <th class="text-center">Carrier</th>
           <th class="text-center">Freight</th>
         </tr>
@@ -29,12 +33,13 @@
               <th class="text-center"><input type="checkbox" name="checkbox" value="<%=request._id%>" form="delete-form"></th>
               <td><%= request.shippingDate %></td>
               <td><%= request.bolNo %></td>
-              <td><%= request.shipFromCity %>, <%= request.shipFromState %></td>
-              <td><%= request.shipToCity %>, <%= request.shipToState %></td>
-              <td><%= numberWithCommas(request.weightKg) %></td>
-              <td><%= numberWithCommas(request.weightLb) %></td>
+              <td><%= request.shipFromCity %> <%= request.shipFromState %></td>
+              <td><%= request.shipToCity %> <%= request.shipToState %></td>
+              <td><%= request.weightKg %></td>
+              <td><%= request.weightLb %></td>
+              <td><%= request.status %></td>
               <td><%= freight.carrier %></td>
-              <td>$<%= numberWithCommas(freight.freight.toFixed(2)) %></td>
+              <td>$<%= freight.freight.toFixed(2) %></td>
             </tr>
           <% } %>
         <% }) %>
