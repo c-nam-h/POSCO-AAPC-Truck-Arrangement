@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const moment = require("moment-timezone");
+const now = moment().tz("America/Chicago").format("l");
 
 // define a schema for request collection with user_id as a foreign key referencing to the user collection
 const requestSchema = new Schema({
@@ -30,7 +32,7 @@ const requestSchema = new Schema({
   },
   datePosted: {
     type: Date,
-    default: new Date().toLocaleDateString()
+    default: now
   },
   requestedBy: String,
   user_id: Schema.Types.ObjectId
