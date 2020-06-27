@@ -44,8 +44,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb+srv://" + process.env.USERNAME + ":" + process.env.PASSWORD + "@posco-aapc-logistics-l3bdr.mongodb.net/truckRequestDB?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
-// mongoose.connect("mongodb://localhost/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+mongoose.connect("mongodb://localhost/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 
 // require each model
 const Request = require("./models/Request");
@@ -63,6 +62,18 @@ passport.deserializeUser(User.deserializeUser());
 
 // the email addresses in the list below will be able to see the entire website, whereas other users are limited to only certain parts of the website.
 let admin_list = ["admin@poscoaapc.com", "jburnett@poscoaapc.com", "isabell.terry@poscoaapc.com", "dglover@poscoaapc.com"];
+
+// declare a global variable to distinguish which use is logged in
+global.loggedIn = null;
+
+// specify with the wildcard that on all requests, this middleware should be executed
+app.use("*", function(req, res, next) {
+  // assign loggedIn to req.user.username if it exists
+  if (req.user) {
+    loggedIn = req.user.username;
+  };
+  next();
+});
 
 // render the register page
 app.get("/register", function(req, res) {
