@@ -191,7 +191,7 @@ app.get("/request", function(req, res){
             deliveryDate: null,
             specialNote: null,
             destinations: destinations,
-            customers: customers
+            customers: customers.sort(compare_name)
           });
         };
       });

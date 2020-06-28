@@ -20,6 +20,20 @@ module.exports = function() {
     res.header('Pragma', 'no-cache');
     next();
   }
+
+  this.compare_name = function(a, b) {
+    var nameA = a.customer.toUpperCase(); // ignore upper and lowercase
+    var nameB = b.customer.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+  
+    // if the name is the same
+    return 0;
+  }
 };
 
 
