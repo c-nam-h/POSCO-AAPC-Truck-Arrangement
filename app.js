@@ -14,13 +14,10 @@ app.use(session({
   saveUninitialized: false
 }));
 
-// clears out cache and prevents the user from accessing the website using the cached website
-app.use(function (req, res, next) {
-  res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-  res.header('Expires', '-1');
-  res.header('Pragma', 'no-cache');
-  next()
-});
+
+const deleteCacheMiddleware = require("./middleware/deleteCacheMiddleware");
+app.use(deleteCacheMiddleware);
+
 
 app.set("etag", false);
 app.disable("view cache");
@@ -63,93 +60,62 @@ passport.deserializeUser(User.deserializeUser());
 // the email addresses in the list below will be able to see the entire website, whereas other users are limited to only certain parts of the website.
 let admin_list = ["admin@poscoaapc.com", "jburnett@poscoaapc.com", "isabell.terry@poscoaapc.com", "dglover@poscoaapc.com"];
 
+
+
 // declare a global variable to distinguish which use is logged in
-global.loggedIn = null;
+global.currentUsername = null;
+const assignLoggedInUsernameMiddleware = require("./middleware/assignLoggedInUsernameMiddleware");
+app.use("*", assignLoggedInUsernameMiddleware); // specify with the wildcard that on all requests, this middleware should be executed
 
-// specify with the wildcard that on all requests, this middleware should be executed
-app.use("*", function(req, res, next) {
-  // assign loggedIn to req.user.username if it exists
-  if (req.user) {
-    loggedIn = req.user.username;
-  };
-  next();
-});
 
-// render the register page
-app.get("/register", function(req, res) {
-  if (req.isAuthenticated()) {
-    const currentUsername = req.user.username;
+// import the middleware to redirect if the user is not authenticated or logged in
+const redirectIfNotAuthenticatedMiddleware = require("./middleware/redirectIfNotAuthenticatedMiddleware");
 
-    if (admin_list.includes(currentUsername)) {
-      res.render("register");
-    } else {
-      res.render("error-unauthorized");
-    };
-  } else {
-    res.redirect("/login");
-  }
-  
-});
 
-// post register information and redirects to the homepage when successfully registered
-// I need to add a validation which loops through the user collection and sees if there is a duplicate eamil address registered already
-app.post("/register", function(req, res) {
 
-  if (req.isAuthenticated()) {
-    const currentUsername = req.user.username;
-    
-    if (admin_list.includes(currentUsername)) {
-      User.register({username: req.body.username}, req.body.password, function(err, user) {
-        if (err) {
-          res.render("error-user-already-registered");
-        } else {
-          // find the id of registered username and store it in UserName collection with firstname and lastname
-          User.findOne({username: req.body.username}, function(err, user) {
-            const user_id = user._id;
-          });
-    
-          UserName.create({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            user_id: user._id
-          })
-    
-          passport.authenticate("local")(req, res, function() {
-            res.redirect("/");
-          });
-        };
-      });
-    } else {
-      res.redirect("/error-unauthorized");
-    };
-  } else {
-    res.redirect("/login");
-  };
-});
+// REGISTRATION SECTION
+// import the middleware to validate if the current user is administrator
+const validateAdminRoleMiddleware = require("./middleware/validateAdminRoleMiddleware");
+const registerController = require("./controllers/register");
+// if the current user is administrator, render the register page. If not, redner the error page
+app.get("/register", [redirectIfNotAuthenticatedMiddleware, validateAdminRoleMiddleware], registerController);
 
+const registerUserController = require("./controllers/registerUser");
+const validateRegistrationMiddleware = require("./middleware/validateRegistrationMiddleware");
+app.post("/register", [redirectIfNotAuthenticatedMiddleware, validateAdminRoleMiddleware, validateRegistrationMiddleware], registerUserController);
+
+
+
+// import a middleware to redirect to the homepage if authenticated
+const redirectIfAuthenticatedMiddleware = require("./middleware/redirectIfAuthenticatedMiddleware");
+
+
+
+// LOGIN SECTION
 // render a homepage when the user is already logged in and tries to go to the login page
-app.get("/login", function(req, res) {
-  if (req.isAuthenticated()) {
-    res.redirect("/");
-  } else {
-    res.render("login");
-  };
-});
+const loginController = require("./controllers/login");
+app.get("/login", redirectIfAuthenticatedMiddleware, loginController);
 
-app.post('/login', passport.authenticate('local', {
-  failureRedirect: '/login',
-  successRedirect: '/'
-}), (err, req, res, next) => {
-  if (err) next(err);
-});
-
-// log out
-app.get("/logout", function(req, res) {
-  req.logout();
-  res.redirect("/login");
-})
+// import the loginUser controller to authenticate and login the user
+const loginUserController = require("./controllers/loginUser");
+app.post('/login', redirectIfAuthenticatedMiddleware, loginUserController);
 
 
+
+// LOGOUT SECTION
+// import the logout controller to destroy session and logout the user
+const logoutUserController = require("./controllers/logoutUser");
+app.get("/logout", logoutUserController);
+
+
+
+
+
+
+
+
+
+// import JS functions to use them in the server side
 require("./public/javascript/helpers")();
 
 // render a homepage with order information sorted by shipping date (oldest to newest)
@@ -208,7 +174,7 @@ app.get("/", function(req, res){
 
 // render a request page
 app.get("/request", function(req, res){
-  if (req.isAuthenticated()) {
+  if (req.session.passport) {
     Destination.find({}, function(err, destinations) {
       Customer.find({}, function(err, customers) {
         if (!err) {
@@ -458,7 +424,7 @@ app.get("/modify/:_id", function(req, res) {
   res.setHeader("Cache-Control", "private, no-cache, no-store, must-revalidate");
   const orderId = ObjectID(req.params._id);
 
-  if (req.isAuthenticated) {
+  if (req.isAuthenticated && req.session.passport) {
     Customer.find({}, function(err, customers) {
       Destination.find({}, function(err, destinations) {
         Request.findById(orderId, function(err, request) {
