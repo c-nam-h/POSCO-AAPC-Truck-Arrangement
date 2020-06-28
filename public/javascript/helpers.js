@@ -14,13 +14,6 @@ module.exports = function() {
     return n.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  this.nocache = function(req, res, next) {
-    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-    res.header('Expires', '-1');
-    res.header('Pragma', 'no-cache');
-    next();
-  }
-
   this.compare_name = function(a, b) {
     var nameA = a.customer.toUpperCase(); // ignore upper and lowercase
     var nameB = b.customer.toUpperCase(); // ignore upper and lowercase
@@ -33,7 +26,7 @@ module.exports = function() {
   
     // if the name is the same
     return 0;
-  }
+  };
 };
 
 
