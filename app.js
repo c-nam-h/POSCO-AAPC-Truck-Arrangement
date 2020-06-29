@@ -65,6 +65,7 @@ let admin_list = ["admin@poscoaapc.com", "jburnett@poscoaapc.com", "isabell.terr
 
 // declare a global variable to distinguish which userId is logged in
 global.currentUserId = null;
+
 const assignLoggedInUserIdMiddleware = require("./middleware/assignLoggedInUserIdMiddleware");
 app.use("*", assignLoggedInUserIdMiddleware); // specify with the wildcard that on all requests, this middleware should be executed
 
@@ -81,11 +82,13 @@ const redirectIfNotAuthenticatedMiddleware = require("./middleware/redirectIfNot
 // REGISTRATION SECTION
 const validateAdminMiddleware = require("./middleware/validateAdminMiddleware");
 const registerController = require("./controllers/register");
+
 // if the current user is administrator, render the register page. If not, redner the error page
 app.get("/register", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], registerController);
 
 const registerUserController = require("./controllers/registerUser");
 const validateRegistrationMiddleware = require("./middleware/validateRegistrationMiddleware");
+
 // if the logged-in user is admin, then it will register a new user
 app.post("/register", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware, validateRegistrationMiddleware], registerUserController);
 
@@ -118,8 +121,9 @@ app.get("/logout", logoutUserController);
 require("./public/javascript/helpers")();
 
 
-// HOMEPAGE SECTION
+// HOMEPAGE SECTION - WHERE USERS CAN SEE THEIR REQUESTS
 const homepageController = require("./controllers/homepage");
+
 // render a homepage with order information sorted by shipping date (oldest to newest)
 app.get("/", redirectIfNotAuthenticatedMiddleware, homepageController);
 
@@ -152,184 +156,23 @@ app.get("/", redirectIfNotAuthenticatedMiddleware, homepageController);
 // });
 
 
+// REQUEST SECTION - WHERE USERS MAKE REQUESTS FOR TRUCKS
+const requestController = require("./controllers/request");
+// render a request page if the user is logged in
+app.get("/request", redirectIfNotAuthenticatedMiddleware, requestController);
 
-// render a request page
-app.get("/request", function(req, res){
-  if (req.session.passport) {
-    Destination.find({}, function(err, destinations) {
-      Customer.find({}, function(err, customers) {
-        if (!err) {
-          res.render("request", {
-            err: null,
-            shipFromId: null,
-            shipFromAddressId: null,
-            shipToId: null,
-            shipToAddressId: null,
-            weightKg: null,
-            bolNo: null,
-            truckType: null,
-            shippingDate: null,
-            deliveryDate: null,
-            specialNote: null,
-            destinations: destinations,
-            customers: customers.sort(compare_name)
-          });
-        };
-      });
-    });
-  } else {
-    res.redirect("/login");
-  };
-});
+// import the middleware to validate that delivery date is equal to or later than shipping date
+const validateDeliveryDateMiddleware = require("./middleware/validateDeliveryDateMiddleware");
+// import the middleware to check if there is a duplicate BOL No already registered in the db
+const checkDuplicateBolNoMiddleware = require("./middleware/checkDuplicateBolNoMiddleware");
+const requestTruckController = require("./controllers/requestTruck");
+app.post("/request", [redirectIfNotAuthenticatedMiddleware, validateDeliveryDateMiddleware, checkDuplicateBolNoMiddleware]
+, requestTruckController);
 
 
 
 
-app.post("/request", function(req, res){
 
-  if (req.isAuthenticated()) {
-    //date validation - if delivery date is earlier than shipping date, then a user will be asked to revise those dates
-    if (req.body.shippingDate > req.body.deliveryDate) {
-      Destination.find({}, function(err, destinations) {
-        Customer.find({}, function(err, customers) {
-          if (!err) {
-            res.render("request", {
-              err: "A delivery date cannot be earlier than shipping date! Please check your delivery date and submit again.",
-              shipFromId: req.body.shipFrom,
-              shipFromAddressId: req.body.shipFromAddress,
-              shipToId: req.body.shipTo,
-              shipToAddressId: req.body.shipToAddress,
-              weightKg: req.body.weightKg,
-              bolNo: req.body.bolNo,
-              truckType: req.body.truckOptions,
-              shippingDate: null,
-              deliveryDate: null,
-              specialNote: req.body.specialNote,
-              destinations: destinations,
-              customers: customers
-            });
-          };
-        });
-      });
-    } else {
-      Request.findOne({bolNo: req.body.bolNo}, function(err, request) {
-        if (request) {
-          Destination.find({}, function(err, destinations) {
-            Customer.find({}, function(err, customers) {
-              if (!err) {
-                res.render("request", {
-                  err: "There is already an order for your BOL NO, " + req.body.bolNo + ". Please check again.",
-                  shipFromId: req.body.shipFrom,
-                  shipFromAddressId: req.body.shipFromAddress,
-                  shipToId: req.body.shipTo,
-                  shipToAddressId: req.body.shipToAddress,
-                  weightKg: req.body.weightKg,
-                  bolNo: null,
-                  truckType: req.body.truckOptions,
-                  shippingDate: req.body.shippingDate,
-                  deliveryDate: req.body.deliveryDate,
-                  specialNote: req.body.specialNote,
-                  destinations: destinations,
-                  customers: customers
-                });
-              };
-            });
-          });        
-        } else {
-          let shipFrom = {
-            shipFromCustomer: ""
-          };
-  
-          let shipFromAddress = {
-            destination: "",
-            streetAddress: "",
-            city: "",
-            state: "",
-            zipcode: "",
-            country: ""
-          }
-  
-          let shipTo = {
-            shipToCustomer: ""
-          };
-  
-          let shipToAddress = {
-            destination: "",
-            streetAddress: "",
-            city: "",
-            state: "",
-            zipcode: "",
-            country: ""
-          }
-  
-  
-          Customer.findOne({_id: ObjectID(req.body.shipFrom)}, function(err, customer) {
-            shipFrom["shipFromCustomer"] = customer.customer;
-            Destination.findOne({_id: ObjectID(req.body.shipFromAddress)}, function(err, destination) {
-              shipFromAddress["destination"] = destination.destination;
-              shipFromAddress["streetAddress"] = destination.streetAddress;
-              shipFromAddress["city"] = destination.city;
-              shipFromAddress["state"] = destination.state;
-              shipFromAddress["zipcode"] = destination.zipcode;
-              shipFromAddress["country"] = destination.country;
-              Customer.findOne({_id: ObjectID(req.body.shipTo)}, function(err, customer) {
-                shipTo["shipToCustomer"] = customer.customer;
-                Destination.findOne({_id: ObjectID(req.body.shipToAddress)}, function(err, destination) {
-                  shipToAddress["destination"] = destination.destination;
-                  shipToAddress["streetAddress"] = destination.streetAddress;
-                  shipToAddress["city"] = destination.city;
-                  shipToAddress["state"] = destination.state;
-                  shipToAddress["zipcode"] = destination.zipcode;
-                  shipToAddress["country"] = destination.country;
-                  UserName.findOne({user_id: ObjectID(req.user._id)}, function(err, userName) {
-                    const fullname = userName.firstName + " " + userName.lastName;
-  
-                    const request = new Request({
-                      shipFrom: shipFrom["shipFromCustomer"],
-                      shipFromDestination: shipFromAddress["destination"],
-                      shipFromStreetAddress: shipFromAddress["streetAddress"],
-                      shipFromCity: shipFromAddress["city"],
-                      shipFromState: shipFromAddress["state"],
-                      shipFromZipcode: shipFromAddress["zipcode"],
-                      shipFromCountry: shipFromAddress["country"],
-                      shipTo: shipTo["shipToCustomer"],
-                      shipToDestination: shipToAddress["destination"],
-                      shipToStreetAddress: shipToAddress["streetAddress"],
-                      shipToCity: shipToAddress["city"],
-                      shipToState: shipToAddress["state"],
-                      shipToZipcode: shipToAddress["zipcode"],
-                      shipToCountry: shipToAddress["country"],
-                      weightKg: req.body.weightKg,
-                      weightLb: Math.round(req.body.weightKg * 2.204623, 0),
-                      bolNo: req.body.bolNo,
-                      truckType: req.body.truckOptions,
-                      shippingDate: req.body.shippingDate,
-                      deliveryDate: req.body.deliveryDate,
-                      specialNote: req.body.specialNote,
-                      requestedBy: fullname,
-                      user_id: req.user._id
-                    });
-  
-                    request.save(function(err, request) {
-                      Freight.create({
-                        request_id: request._id
-                      });
-                      res.redirect("/");
-                    });
-                  });              
-                });
-              });
-            });
-          });
-  
-          
-        };
-      });
-    };
-  } else {
-    res.redirect("/login");
-  }; 
-});
 
 // delete selected row or rows in request and freight collections and redirect to the homepage
 // I need to add a warning message to confirm whether the user really wants to perform delete function
