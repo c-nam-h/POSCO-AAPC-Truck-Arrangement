@@ -51,6 +51,7 @@ const UserName = require("./models/Username"); // created this model because pas
 const Destination = require("./models/Destination");
 const Customer = require("./models/Customer");
 const Carrier = require("./models/Carrier");
+const UserRole = require("./models/UserRole");
 
 passport.use(User.createStrategy());
 
@@ -62,7 +63,7 @@ let admin_list = ["admin@poscoaapc.com", "jburnett@poscoaapc.com", "isabell.terr
 
 
 
-// declare a global variable to distinguish which use is logged in
+// declare a global variable to distinguish which user is logged in
 global.currentUsername = null;
 const assignLoggedInUsernameMiddleware = require("./middleware/assignLoggedInUsernameMiddleware");
 app.use("*", assignLoggedInUsernameMiddleware); // specify with the wildcard that on all requests, this middleware should be executed
@@ -73,16 +74,21 @@ const redirectIfNotAuthenticatedMiddleware = require("./middleware/redirectIfNot
 
 
 
+// declare a global variable to distinguish what user-role the logged-in user has
+global.userRole = null;
+
+
+
 // REGISTRATION SECTION
-// import the middleware to validate if the current user is administrator
-const validateAdminRoleMiddleware = require("./middleware/validateAdminRoleMiddleware");
+const validateAdminMiddleware = require("./middleware/validateAdminMiddleware");
 const registerController = require("./controllers/register");
 // if the current user is administrator, render the register page. If not, redner the error page
-app.get("/register", [redirectIfNotAuthenticatedMiddleware, validateAdminRoleMiddleware], registerController);
+app.get("/register", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], registerController);
 
 const registerUserController = require("./controllers/registerUser");
 const validateRegistrationMiddleware = require("./middleware/validateRegistrationMiddleware");
-app.post("/register", [redirectIfNotAuthenticatedMiddleware, validateAdminRoleMiddleware, validateRegistrationMiddleware], registerUserController);
+// if the logged-in user is admin, then it will register a new user
+app.post("/register", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware, validateRegistrationMiddleware], registerUserController);
 
 
 
@@ -119,6 +125,10 @@ app.get("/", function(req, res){
   if (req.isAuthenticated()) {
     const currentUsername = req.user.username;
     const currentUserId = req.user._id;
+
+    UserRole.findOne({user_id: req.user._id}, function(err, role) {
+      userRole = role.user_role;
+    })
 
     if (admin_list.includes(currentUsername)) {
       Request.find({}, function(err, requests) {
