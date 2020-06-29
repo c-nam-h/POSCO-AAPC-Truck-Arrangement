@@ -581,6 +581,11 @@ app.post("/add-carrier", function(req, res) {
 });
 
 
+// go through all the routes and if it can't find one that matches, it will render error-404 page
+app.use(function(req, res) {
+  res.render("error-404");
+});
+
 
 let port = process.env.PORT;
 if (port == null || port == "") {
