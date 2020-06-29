@@ -1,7 +1,7 @@
 const passport = require("passport");
 const User = require("../models/User");
 const UserName = require("../models/Username");
-
+const UserRole = require("../models/UserRole");
 
 module.exports = function(req, res) {
     User.register({username: req.body.username}, req.body.password, function(err, user) {
@@ -12,7 +12,10 @@ module.exports = function(req, res) {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           user_id: user._id
-        })
+        });
+        UserRole.create({
+          user_id: user._id
+        });
       });
   
       passport.authenticate("local")(req, res, function() {

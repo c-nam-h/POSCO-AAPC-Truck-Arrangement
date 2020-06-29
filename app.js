@@ -109,15 +109,11 @@ app.get("/logout", logoutUserController);
 
 
 
-
-
-
-
-
-
 // import JS functions to use them in the server side
 require("./public/javascript/helpers")();
 
+
+// HOMEPAGE SECTION
 // render a homepage with order information sorted by shipping date (oldest to newest)
 app.get("/", function(req, res){
   if (req.isAuthenticated()) {
