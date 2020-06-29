@@ -171,9 +171,6 @@ app.post("/request", [redirectIfNotAuthenticatedMiddleware, validateDeliveryDate
 
 
 
-
-
-
 // DELETE REQUEST SECTION - WHERE ONLY ADMIN IS ALLOWED TO DELETE A SELECTED REQUEST
 // only admin can delete a selected request in Request and Freight collections and redirect to the homepage
 const deleteRequestController = require("./controllers/deleteRequest");
@@ -181,47 +178,15 @@ app.get("/delete-request/:_id", [redirectIfNotAuthenticatedMiddleware, validateA
 
 
 
+// CONFIRM/CANCEL SHIPPING SECTION - WHERE ONLY ADMIN IS ALLOWED TO CHANGE SHIPPING STATUS
 // confirm the shipping and change the shipping status to "Shipped"
-app.get("/confirm-shipping/:_id", function(req, res) {
-
-  if (req.isAuthenticated()) {
-    const selectedOrderId = req.params._id;
-    const currentUsername = req.user.username;
-    if (admin_list.includes(currentUsername)) {
-      Request.findByIdAndUpdate(selectedOrderId, {status: "Shipped"}, function(err, request) {
-        if (err) {
-          res.render("error-404");
-        }
-      });
-      res.redirect("/");
-    } else {
-      res.render("error-unauthorized");
-    }
-  } else {
-    res.redirect("/login");
-  };  
-})
+const confirmShippingController = require("./controllers/confirmShipping");
+app.get("/confirm-shipping/:_id", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], confirmShippingController);
 
 // confirm the shipping and change the shipping status to "Not Shipped"
-app.get("/cancel-shipping/:_id", function(req, res) {
-  
-  if (req.isAuthenticated()) {
-    const selectedOrderId = req.params._id;
-    const currentUsername = req.user.username;
-    if (admin_list.includes(currentUsername)) {
-      Request.findByIdAndUpdate(selectedOrderId, {status: "Not Shipped"}, function(err, request) {
-        if (err) {
-          res.render("error-404");
-        };
-      });
-      res.redirect("/");
-    } else {
-      res.render("error-unauthorized");
-    }
-  } else {
-    res.redirect("/login");
-  };  
-})
+const cancelShippingController = require("./controllers/cancelShipping");
+app.get("/cancel-shipping/:_id", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], cancelShippingController);
+
 
 
 // render modify.ejs and shows a selected BOL number's information - dynamic
