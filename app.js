@@ -174,29 +174,10 @@ app.post("/request", [redirectIfNotAuthenticatedMiddleware, validateDeliveryDate
 
 
 
-// delete selected row or rows in request and freight collections and redirect to the homepage
-// I need to add a warning message to confirm whether the user really wants to perform delete function
-app.get("/delete-order/:_id", function(req, res) {
-  const selectedOrderId = req.params._id;
-
-  if (req.isAuthenticated()) {
-    Request.findByIdAndDelete(selectedOrderId, function(err) {
-      if (err) {
-        res.render("error-404");
-      }
-    });
-  
-    Freight.deleteOne({request_id: selectedOrderId}, function(err) {
-      if (err) {
-        res.render("error-404");
-      }
-    });
-
-    res.redirect("/");
-  } else {
-    res.redirect("/login");
-  };
-});
+// DELETE REQUEST SECTION - WHERE ONLY ADMIN IS ALLOWED TO DELETE A SELECTED REQUEST
+// only admin can delete a selected request in Request and Freight collections and redirect to the homepage
+const deleteRequestController = require("./controllers/deleteRequest");
+app.get("/delete-request/:_id", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], deleteRequestController);
 
 
 
