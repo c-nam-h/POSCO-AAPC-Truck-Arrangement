@@ -68,14 +68,13 @@ global.currentUsername = null;
 const assignLoggedInUsernameMiddleware = require("./middleware/assignLoggedInUsernameMiddleware");
 app.use("*", assignLoggedInUsernameMiddleware); // specify with the wildcard that on all requests, this middleware should be executed
 
-
-// import the middleware to redirect if the user is not authenticated or logged in
-const redirectIfNotAuthenticatedMiddleware = require("./middleware/redirectIfNotAuthenticatedMiddleware");
-
-
-
 // declare a global variable to distinguish what user-role the logged-in user has
 global.userRole = null;
+
+
+
+// import the middleware to redirect to the login page if the user is not authenticated or logged in
+const redirectIfNotAuthenticatedMiddleware = require("./middleware/redirectIfNotAuthenticatedMiddleware");
 
 
 
@@ -120,33 +119,9 @@ require("./public/javascript/helpers")();
 
 
 // HOMEPAGE SECTION
+const homepageController = require("./controllers/homepage");
 // render a homepage with order information sorted by shipping date (oldest to newest)
-app.get("/", function(req, res){
-  if (req.isAuthenticated()) {
-    const currentUsername = req.user.username;
-    const currentUserId = req.user._id;
-
-    UserRole.findOne({user_id: req.user._id}, function(err, role) {
-      userRole = role.user_role;
-    })
-
-    if (admin_list.includes(currentUsername)) {
-      Request.find({}, function(err, requests) {
-        res.render("home-for-admin", {
-          requests: requests.sort(compare_date)
-        });
-      });
-    } else {
-      Request.find({user_id: currentUserId}, function(err, requests) {
-        res.render("home-for-regular-users", {
-          requests: requests.sort(compare_date)
-        });
-      });
-    };
-  } else {
-    res.redirect("/login");
-  };
-});
+app.get("/", redirectIfNotAuthenticatedMiddleware, homepageController);
 
 
 
