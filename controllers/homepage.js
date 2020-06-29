@@ -8,13 +8,13 @@ module.exports = function(req, res, next) {
 
       if (userRole === "admin") {
         Request.find({}, function(err, requests) {
-          res.render("home-for-admin", {
+          res.render("homepage", {
             requests: requests.sort(compare_date)
           });
         });
       } else {
         Request.find({user_id: currentUserId}, function(err, requests) {
-          res.render("home-for-regular-users", {
+          res.render("homepage", {
             requests: requests.sort(compare_date)
           });
         });
