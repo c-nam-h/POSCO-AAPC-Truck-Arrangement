@@ -2,7 +2,7 @@
     <div class="container">
       <a class="navbar-brand" href="/">TRUCK ARRANGEMENT</a>
   
-      <% if (currentUsername) { %>
+      <% if (currentUserId) { %>
         <form action="/search" method="post" class="form-inline" style="width: 30%; margin-right: auto;">
           <input class="search-box" type="search" placeholder="Search BOL No" aria-label="Search" name="search" required>
           <button class="search-btn" type="submit">Search</button>

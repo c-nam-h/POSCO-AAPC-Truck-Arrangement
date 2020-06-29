@@ -63,10 +63,10 @@ let admin_list = ["admin@poscoaapc.com", "jburnett@poscoaapc.com", "isabell.terr
 
 
 
-// declare a global variable to distinguish which user is logged in
-global.currentUsername = null;
-const assignLoggedInUsernameMiddleware = require("./middleware/assignLoggedInUsernameMiddleware");
-app.use("*", assignLoggedInUsernameMiddleware); // specify with the wildcard that on all requests, this middleware should be executed
+// declare a global variable to distinguish which userId is logged in
+global.currentUserId = null;
+const assignLoggedInUserIdMiddleware = require("./middleware/assignLoggedInUserIdMiddleware");
+app.use("*", assignLoggedInUserIdMiddleware); // specify with the wildcard that on all requests, this middleware should be executed
 
 // declare a global variable to distinguish what user-role the logged-in user has
 global.userRole = null;

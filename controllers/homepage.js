@@ -2,8 +2,6 @@ const Request = require("../models/Request");
 const UserRole = require("../models/UserRole");
 
 module.exports = function(req, res, next) {
-    const currentUserId = req.user._id;
-
     // assign the current user's role to the global variable
     UserRole.findOne({user_id: req.user._id}, function(err, role) {
       userRole = role.user_role;
