@@ -189,162 +189,18 @@ app.get("/cancel-shipping/:_id", [redirectIfNotAuthenticatedMiddleware, validate
 
 
 
-// render modify.ejs and shows a selected BOL number's information - dynamic
-app.get("/modify/:_id", function(req, res) {
-  res.setHeader("Cache-Control", "private, no-cache, no-store, must-revalidate");
-  const orderId = ObjectID(req.params._id);
-
-  if (req.isAuthenticated && req.session.passport) {
-    Customer.find({}, function(err, customers) {
-      Destination.find({}, function(err, destinations) {
-        Request.findById(orderId, function(err, request) {
-          res.render("modify", {
-            customers: customers,
-            destinations: destinations,
-            selectedRequest: request,
-            err: null
-          });
-        });
-      });
-    });
-  } else {
-    res.redirect("/login");
-  };
-});
+// MODIFY REQUEST SECTION - WHERE USERS CAN MODIFY EXISITING REQUESTS
+const modifyController = require("./controllers/modify");
+app.get("/modify/:_id", redirectIfNotAuthenticatedMiddleware, modifyController);
 
 
 // update a request information with the selected ID -- still need to modify the code to validate whether a revised BOL No already exists in the database or not.
 // If a revised BOL No already exists in the database, then it should give a warning message that the user cannot use the new BOL No -- WIP
-app.post("/modify/:_id", function(req, res) {
-  const orderId = req.params._id;
-
-  if (req.isAuthenticated()) {
-    if (req.body.shippingDate > req.body.deliveryDate) {
-      Customer.find({}, function(err, customers) {
-        Destination.find({}, function(err, destinations) {
-          Request.findById(orderId, function(err, request) {
-            res.render("modify", {
-              customers: customers,
-              destinations: destinations,
-              selectedRequest: request,
-              err: "A delivery date cannot be earlier than shipping date!"
-            });
-          });
-        });
-      });
-    } else {
-      const modifiedBolNo = req.body.bolNo;
-  
-      Request.find({bolNo: modifiedBolNo}, function(err, requests) {
-        let count = 0;
-        let id = "";
-  
-        requests.forEach(function(request) {
-          count++;
-          id = ObjectID(request._id);
-        });
-  
-        if (count === 0 || (count === 1 && id.equals(orderId))) {
-          let shipFrom = {
-            shipFromCustomer: ""
-          };
-  
-          let shipFromAddress = {
-            destination: "",
-            streetAddress: "",
-            city: "",
-            state: "",
-            zipcode: "",
-            country: ""
-          }
-  
-          let shipTo = {
-            shipToCustomer: ""
-          };
-  
-          let shipToAddress = {
-            destination: "",
-            streetAddress: "",
-            city: "",
-            state: "",
-            zipcode: "",
-            country: ""
-          }
-  
-  
-          Customer.findOne({_id: ObjectID(req.body.shipFrom)}, function(err, customer) {
-            shipFrom["shipFromCustomer"] = customer.customer;
-            Destination.findOne({_id: ObjectID(req.body.shipFromAddress)}, function(err, destination) {
-              shipFromAddress["destination"] = destination.destination;
-              shipFromAddress["streetAddress"] = destination.streetAddress;
-              shipFromAddress["city"] = destination.city;
-              shipFromAddress["state"] = destination.state;
-              shipFromAddress["zipcode"] = destination.zipcode;
-              shipFromAddress["country"] = destination.country;
-              Customer.findOne({_id: ObjectID(req.body.shipTo)}, function(err, customer) {
-                shipTo["shipToCustomer"] = customer.customer;
-                Destination.findOne({_id: ObjectID(req.body.shipToAddress)}, function(err, destination) {
-                  shipToAddress["destination"] = destination.destination;
-                  shipToAddress["streetAddress"] = destination.streetAddress;
-                  shipToAddress["city"] = destination.city;
-                  shipToAddress["state"] = destination.state;
-                  shipToAddress["zipcode"] = destination.zipcode;
-                  shipToAddress["country"] = destination.country;
-                  UserName.findOne({user_id: ObjectID(req.user._id)}, function(err, userName) {
-                    const fullname = userName.firstName + " " + userName.lastName;
-  
-                    Request.findByIdAndUpdate(orderId, {
-                      shipFrom: shipFrom["shipFromCustomer"],
-                      shipFromDestination: shipFromAddress["destination"],
-                      shipFromStreetAddress: shipFromAddress["streetAddress"],
-                      shipFromCity: shipFromAddress["city"],
-                      shipFromState: shipFromAddress["state"],
-                      shipFromZipcode: shipFromAddress["zipcode"],
-                      shipFromCountry: shipFromAddress["country"],
-                      shipTo: shipTo["shipToCustomer"],
-                      shipToDestination: shipToAddress["destination"],
-                      shipToStreetAddress: shipToAddress["streetAddress"],
-                      shipToCity: shipToAddress["city"],
-                      shipToState: shipToAddress["state"],
-                      shipToZipcode: shipToAddress["zipcode"],
-                      shipToCountry: shipToAddress["country"],
-                      weightKg: req.body.weightKg,
-                      weightLb: Math.round(req.body.weightKg * 2.204623, 0),
-                      bolNo: req.body.bolNo,
-                      truckType: req.body.truckOptions,
-                      shippingDate: req.body.shippingDate,
-                      deliveryDate: req.body.deliveryDate,
-                      specialNote: req.body.specialNote,
-                      requestedBy: fullname
-                    }, function(err, request) {
-                      console.log(err);
-                    });
-                    res.redirect("/");
-                  });              
-                });
-              });
-            });
-          });
-        } else {
-          Customer.find({}, function(err, customers) {
-            Destination.find({}, function(err, destinations) {
-              Request.findById(orderId, function(err, request) {
-                res.render("modify", {
-                  customers: customers,
-                  destinations: destinations,
-                  selectedRequest: request,
-                  err: "Your BOL NO '" + modifiedBolNo + "' already exists in the database. Please check again and enter BOL No."
-                });
-              });
-            });
-          });
-        };
-      });
-    };
-  } else {
-    res.redirect("/login");
-  };  
-});
+const validateDeliveryDateInModifyMiddleware = require("./middleware/validateDeliveryDateInModifyMiddleware");
+const countAndFindDuplicateBolNoMiddleware = require("./middleware/countAndFindDuplicateBolNoMiddleware");
+const modifyRequestController = require("./controllers/modifyRequest");
+app.post("/modify/:_id", [redirectIfNotAuthenticatedMiddleware, validateDeliveryDateInModifyMiddleware, countAndFindDuplicateBolNoMiddleware]
+, modifyRequestController);
 
 
 app.get("/freight-report", function(req, res) {
