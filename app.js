@@ -171,10 +171,10 @@ app.post("/request", [redirectIfNotAuthenticatedMiddleware, validateDeliveryDate
 
 
 
-// DELETE REQUEST SECTION - WHERE ONLY ADMIN IS ALLOWED TO DELETE A SELECTED REQUEST
-// only admin can delete a selected request in Request and Freight collections and redirect to the homepage
+// DELETE REQUEST SECTION - WHERE USERS CAN DELETE A SELECTED REQUEST AT A TIME
+// delete a selected request in Request and Freight collections and redirect to the homepage
 const deleteRequestController = require("./controllers/deleteRequest");
-app.get("/delete-request/:_id", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], deleteRequestController);
+app.get("/delete-request/:_id", redirectIfNotAuthenticatedMiddleware, deleteRequestController);
 
 
 
