@@ -222,6 +222,8 @@ const searchController = require("./controllers/search");
 app.post("/search", redirectIfNotAuthenticatedMiddleware, searchController);
 
 
+
+// WIP
 app.get("/destination", function(req, res) {
   if (req.isAuthenticated()) {
     res.redirect("/");
@@ -231,22 +233,11 @@ app.get("/destination", function(req, res) {
 });
 
 
-app.get("/carrier", function(req, res) {
-  if (req.isAuthenticated()) {
-    const currentUsername = req.user.username;
-    if (admin_list.includes(currentUsername)) {
-      Carrier.find({}, function(err, carriers) {
-        res.render("carrier", {
-          carriers
-        });
-      });
-    } else {
-      res.redirect("/");
-    };
-  } else {
-    res.redirect("/login");
-  };
-});
+
+// CARRIER SECTION - WHERE ONLY ADMIN CAN SEE A LIST OF CARRIERS
+const carrierController = require("./controllers/carrier");
+app.get("/carrier", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], carrierController);
+
 
 app.post("/delete-carrier", function(req, res) {
   const selectedCarrierId = req.body.checkbox;
