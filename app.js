@@ -208,100 +208,18 @@ const freightReportController = require("./controllers/freightReport");
 app.get("/freight-report", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], freightReportController);
 
 
-app.get("/assign-carrier-and-freight/:_id", function(req, res) {
 
-  if (req.isAuthenticated) {
-    const selectedOrderId = req.params._id;
-    const currentUsername = req.user.username;
-    if (admin_list.includes(currentUsername)) {
-      Request.findById(selectedOrderId, function(err, request) {
-        Freight.findOne({request_id: selectedOrderId}, function(err, freight) {
-          Carrier.find({}, function(err, carriers) {
-            res.render("assign-carrier-freight", {
-              _id: request._id,
-              shipFrom: request.shipFrom,
-              shipFromAddress: request.shipFromStreetAddress + ", " + request.shipFromCity + " " + request.shipFromState + ", " + request.shipFromZipcode + ", " + request.shipFromCountry,
-              shipTo: request.shipTo,
-              shipToAddress: request.shipToStreetAddress + ", " + request.shipToCity + " " + request.shipToState + ", " + request.shipToZipcode + ", " + request.shipToCountry,
-              weightKg: request.weightKg,
-              bolNo: request.bolNo,
-              truckType: request.truckType,
-              shippingDate: request.shippingDate,
-              deliveryDate: request.deliveryDate,
-              specialNote: request.specialNote,
-              carriers: carriers,
-              selectedCarrier: freight.carrier,
-              freight: freight.freight,
-              err: null
-            });
-          });
-        });
-      });
-    } else {
-      res.render("error-unauthorized");
-    };
-  } else {
-    res.redirect("/login");
-  };
-});
+// ASSIGN CARRIER AND FREIGHT SECTION - WHERE ONLY ADMIN CAN ASSIGN CARRIER AND FREIGHT TO REQUESTS
+const assignCarrierAndFreightController = require("./controllers/assignCarrierAndFreight");
+app.get("/assign-carrier-and-freight/:_id", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], assignCarrierAndFreightController);
 
-app.post("/assign-carrier-and-freight/:_id", function(req, res) {
-
-  if (req.isAuthenticated()) {
-    const selectedOrderId = req.params._id;
-    const currentUsername = req.user.username;
-    if (admin_list.includes(currentUsername)) {
-      Freight.updateOne({request_id: selectedOrderId}, {
-        carrier: req.body.carrier,
-        freight: req.body.freight
-      }, function(err) {
-        if (err) {
-          res.render("error-404");
-        };
-      });
-      res.redirect("/");
-    } else {
-      res.render("error-unauthorized");
-    };    
-  } else {
-    res.redirect("/login");
-  };
-});
+const assignCarrierAndFreightToRequestController = require("./controllers/assignCarrierAndFreightToRequest");
+app.post("/assign-carrier-and-freight/:_id", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], assignCarrierAndFreightToRequestController);
 
 
-app.post("/search", function(req, res) {
-  if (req.isAuthenticated()) {
-    const searchedBolNo = req.body.search;
-    const currentUsername = req.user.username;
-    const currentUserId = req.user._id;
-  
-    Request.findOne({bolNo: searchedBolNo}, function(err, request) {
-      if (request) {
-        if (admin_list.includes(currentUsername)) {
-          res.render("search-for-admin", {
-            request
-          });
-        } else if (request.user_id.equals(currentUserId)) {
-            res.render("search-for-regular-users", {
-              request
-            });
-        } else {
-          res.render("search-for-regular-users", {
-            request: null,
-            err: "You are not authorized to see someone else's order for " + searchedBolNo + ". Please check and try again."
-          });
-        };
-      } else {
-        res.render("search-for-regular-users", {
-          request: null,
-          err: "There is no order for " + searchedBolNo + ". Please check and try again."
-        });
-      };
-    });
-  } else {
-    res.redirect("/login");
-  }
-});
+// SEARCH SECTION - WHERE USERS CAN SEARCH A REQUEST
+const searchController = require("./controllers/search");
+app.post("/search", redirectIfNotAuthenticatedMiddleware, searchController);
 
 
 app.get("/destination", function(req, res) {
