@@ -193,7 +193,6 @@ app.get("/cancel-shipping/:_id", [redirectIfNotAuthenticatedMiddleware, validate
 const modifyController = require("./controllers/modify");
 app.get("/modify/:_id", redirectIfNotAuthenticatedMiddleware, modifyController);
 
-
 // update a request information with the selected ID -- still need to modify the code to validate whether a revised BOL No already exists in the database or not.
 // If a revised BOL No already exists in the database, then it should give a warning message that the user cannot use the new BOL No -- WIP
 const validateDeliveryDateInModifyMiddleware = require("./middleware/validateDeliveryDateInModifyMiddleware");
@@ -203,30 +202,10 @@ app.post("/modify/:_id", [redirectIfNotAuthenticatedMiddleware, validateDelivery
 , modifyRequestController);
 
 
-app.get("/freight-report", function(req, res) {
 
-  if (req.isAuthenticated()) {
-    const currentUsername = req.user.username;
-    if (admin_list.includes(currentUsername)) {
-      Freight.find({}, function(err, freights) {
-        Request.find({}, function(err, requests) {
-          if (!err) {
-            res.render("freight-report", {
-              requests: requests,
-              freights: freights
-            });
-          } else {
-            handleError(err);
-          };
-        });
-      });
-    } else {
-      res.redirect("/");  
-    };
-  } else {
-    res.redirect("/login");
-  };
-});
+// FREIGHT REPORT SECTION - WHERE ONLY ADMIN CAN SEE CARRIER AND FREIGHT INFORMATION FOR EACH REQUEST
+const freightReportController = require("./controllers/freightReport");
+app.get("/freight-report", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], freightReportController);
 
 
 app.get("/assign-carrier-and-freight/:_id", function(req, res) {
