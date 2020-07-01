@@ -27,7 +27,7 @@
       </thead>
 
     <tbody>
-      <% requests.sort(compare_date).forEach(function(request) { %>
+      <% requests.forEach(function(request) { %>
         <% freights.forEach(function(freight) { %>
           <% if (request._id.equals(freight.request_id)) { %>
             <tr>
