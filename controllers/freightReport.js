@@ -7,7 +7,7 @@ module.exports = async function(req, res) {
     const requests = await Request.find({});
 
     res.render("freight-report", {
-        requests: requests,
+        requests: requests.sort(compare_shippingDate).reverse(),
         freights: freights
     });
 };

@@ -5,6 +5,7 @@ module.exports = async function(req, res) {
   // assign the current user's role to the global variable
   await UserRole.findOne({user_id: req.user._id}, function(err, role) {
     userRole = role.user_role;
+    console.log(userRole);
 
     if (userRole === "admin") {
       Request.find({}, function(err, requests) {

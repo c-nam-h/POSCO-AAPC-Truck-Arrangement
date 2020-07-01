@@ -10,6 +10,16 @@ module.exports = function() {
     };
   };
 
+  this.compare_shippingDate = function(a, b) {
+    if (a.shippingDate < b.shippingDate) {
+      return -1;
+    } else if (a.shippingDate > b.shippingDate) {
+      return 1;
+    } else {
+      return 0;
+    };
+  };
+
   this.numberWithCommas = function(n) {
     return n.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
   };

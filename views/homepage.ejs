@@ -4,7 +4,7 @@
 <body>
   <div class="container">
     <div class="title">
-      <h2 class="homepage-title-heading">Your Orders</h1>
+      <h2 class="homepage-title-heading">Your Requests</h1>
     </div>
 
     <div class="a-request-group">
@@ -16,7 +16,7 @@
                 <div class="a-fixed-right-grid-col a-col-left" style="padding-right: 0%; float: left;">
                   <div class="a-column38">
                     <div>
-                      <span class="a-request-header-label">ORDER PLACED</span>
+                      <span class="a-request-header-label">DATE POSTED</span>
                     </div>
                     <div>
                       <span><%= requests[i].datePosted.toDateString() %></span>
@@ -34,16 +34,16 @@
 
                   <div class="a-columne23">
                     <div>
-                      <span class="a-request-header-label">ORDER STATUS</span>
+                      <span class="a-request-header-label">SHIPPING STATUS</span>
                     </div>
                     <div>
-                      <span class="order-status"><%= requests[i].status %></span>
+                      <span class="request-status"><%= requests[i].status %></span>
                     </div>
                   </div>
                 </div>
 
                 <div style="width: 220px; margin-right: -220px; float: left;">
-                  <span><a href="/modify/<%= requests[i]._id %>" class="modify-order-btn">Modify Order</a></span>
+                  <span><a href="/modify/<%= requests[i]._id %>" class="modify-request-btn">Modify Request</a></span>
                 </div>
 
               </div>
@@ -105,9 +105,9 @@
                 <div class="a-fixed-right-grid-col a-col-right" style="width: 220px; margin-right: -220px; float: left;">
                   <div class="a-row">
                     <div class="a-button-stack">
-                      <span><a onclick="return confirm('Are you sure you want to delete this request?')" href="/delete-request/<%= requests[i]._id %>" class="delete-request-btn">Delete Order</a></span>
+                      <span><a onclick="return confirm('Are you sure you want to delete this request?')" href="/delete-request/<%= requests[i]._id %>" class="delete-request-btn">Delete Request</a></span>
                       <% if (userRole === "admin") { %>
-                        <span></span><a href="/assign-carrier-and-freight/<%= requests[i]._id %>" class="assign-carrier-and-freight-btn">Assign Carrier and Freight</a></span>
+                        <span><a href="/assign-carrier-and-freight/<%= requests[i]._id %>" class="assign-carrier-and-freight-btn">Assign Carrier and Freight</a></span>
                         <% if (requests[i].status === "Not Shipped") { %>
                           <span><a href="/confirm-shipping/<%= requests[i]._id %>" onclick="return confirm('Are you sure you want to confirm shipping?')" class="confirm-shipping-btn">Confirm Shipping</a></span>
                         <% } else { %>

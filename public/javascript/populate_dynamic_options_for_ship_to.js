@@ -41,7 +41,7 @@ selectShipTo.addEventListener("change", function() {
         selectShipToAddress.options.remove(0);
     }
 
-    let option = new Option("Select Ship To Address", "Select Ship To Address");
+    let option = new Option("Select Ship To Address", "");
     selectShipToAddress.appendChild(option);
     
 

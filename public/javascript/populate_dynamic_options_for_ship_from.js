@@ -40,8 +40,8 @@ selectShipFrom.addEventListener("change", function() {
     while (selectShipFromAddress.length > 0) {
         selectShipFromAddress.options.remove(0);
     }
-
-    let option = new Option("Select Ship From Address", "Select Ship From Address");
+    
+    let option = new Option("Select Ship From Address", "");
     selectShipFromAddress.appendChild(option);
     
 
