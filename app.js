@@ -128,7 +128,7 @@ const homepageController = require("./controllers/homepage");
 app.get("/", redirectIfNotAuthenticatedMiddleware, homepageController);
 
 
-
+//WIP
 // app.get("/register-destination", function(req, res) {
 //   if (req.isAuthenticated()) {
 //     res.render("destination");
@@ -224,13 +224,13 @@ app.post("/search", redirectIfNotAuthenticatedMiddleware, searchController);
 
 
 // WIP
-app.get("/destination", function(req, res) {
-  if (req.isAuthenticated()) {
-    res.redirect("/");
-  } else {
-    res.redirect("/login");
-  };
-});
+// app.get("/destination", function(req, res) {
+//   if (req.isAuthenticated()) {
+//     res.redirect("/");
+//   } else {
+//     res.redirect("/login");
+//   };
+// });
 
 
 
@@ -238,56 +238,19 @@ app.get("/destination", function(req, res) {
 const carrierController = require("./controllers/carrier");
 app.get("/carrier", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], carrierController);
 
+// Admin can access to the carrier page
+const addCarrierPageController = require("./controllers/addCarrierPage");
+app.get("/add-carrier", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], addCarrierPageController);
 
-app.post("/delete-carrier", function(req, res) {
-  const selectedCarrierId = req.body.checkbox;
-
-  if (req.isAuthenticated()) {
-    const currentUsername = req.user.username;
-    if (admin_list.includes(currentUsername)) {
-      Carrier.deleteMany({_id: selectedCarrierId}, function(err) {
-        console.log(err);
-      });
-      res.redirect("/carrier");
-    } else {
-      res.render("error-unauthorized");
-    };
-  } else {
-    res.redirect("/login");
-  };  
-});
+// Admin can add carriers one at a time
+const addCarrierController = require("./controllers/addCarrier");
+app.post("/add-carrier", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], addCarrierController);
 
 
-app.get("/add-carrier", function(req, res) {
-  if (req.isAuthenticated()) {
-    const currentUsername = req.user.username;
-    if (admin_list.includes(currentUsername)) {
-      res.render("add-carrier");
-    } else {
-      res.redirect("/");
-    };
-  } else {
-    res.redirect("/login");
-  };
-});
+// Admin can delete multiple selected carriers
+const deleteCarrierController = require("./controllers/deleteCarrier");
+app.post("/delete-carrier", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], deleteCarrierController);
 
-app.post("/add-carrier", function(req, res) {
-  const newCarrier = req.body.carrierName;
-  
-  if (req.isAuthenticated()) {
-    const currentUsername = req.user.username;
-    if (admin_list.includes(currentUsername)) {
-      Carrier.create({
-        carrierName: newCarrier
-      });
-      res.redirect("/carrier");
-    } else {
-      res.render("error-unauthorized");
-    };
-  } else {
-    res.redirect("/login");
-  };
-});
 
 
 // go through all the routes and if it can't find one that matches, it will render error-404 page
