@@ -1,9 +1,9 @@
 
 module.exports = function() {
   this.compare_date = function(a, b) {
-    if (a.shippingDate < b.shippingDate) {
+    if (a.datePosted < b.datePosted) {
       return -1;
-    } else if (a.shippingDate > b.shippingDate) {
+    } else if (a.datePosted > b.datePosted) {
       return 1;
     } else {
       return 0;
