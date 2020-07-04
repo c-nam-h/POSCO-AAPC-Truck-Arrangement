@@ -59,7 +59,12 @@
                   <div class="a-column38">
                     <h5 class="a-column-header">Ship From</h5>
                     <ul class="displayAddressUL">
-                      <li class="displayAddressLI"><%= requests[i].shipFrom %></li>
+                      <% if (requests[i].shipFrom !== requests[i].shipFromDestination) { %>
+                        <li class="displayAddressLI"><%= requests[i].shipFrom %></li>
+                        <li class="displayAddressLI"><%= requests[i].shipFromDestination %></li>
+                      <% } else { %>
+                        <li class="displayAddressLI"><%= requests[i].shipFrom %></li>
+                      <% } %>
                       <li class="displayAddressLI"><%= requests[i].shipFromStreetAddress %></li>
                       <li class="displayAddressLI"><%= requests[i].shipFromCity %>, <%= requests[i].shipFromState %>, <%= requests[i].shipFromZipcode%></li>
                       <li class="displayAddressLI"><%= requests[i].shipFromCountry %></li>
@@ -69,7 +74,13 @@
                   <div class="a-column38">
                     <h5 class="a-column-header">Ship To</h5>
                     <ul class="displayAddressUL">
-                      <li class="displayAddressLI"><%= requests[i].shipTo %></li>
+                      <% if (requests[i].shipTo !== requests[i].shipToDestination) { %>
+                        <li class="displayAddressLI"><%= requests[i].shipTo %></li>
+                        <li class="displayAddressLI"><%= requests[i].shipToDestination %></li>
+                      <% } else { %>
+                        <li class="displayAddressLI"><%= requests[i].shipTo %></li>
+                      <% } %>
+                      
                       <li class="displayAddressLI"><%= requests[i].shipToStreetAddress %></li>
                       <li class="displayAddressLI"><%= requests[i].shipToCity %>, <%= requests[i].shipToState %>, <%= requests[i].shipToZipcode%></li>
                       <li class="displayAddressLI"><%= requests[i].shipToCountry %></li>
