@@ -129,33 +129,6 @@ const homepageController = require("./controllers/homepage");
 app.get("/", redirectIfNotAuthenticatedMiddleware, homepageController);
 
 
-//WIP
-// app.get("/register-destination", function(req, res) {
-//   if (req.isAuthenticated()) {
-//     res.render("destination");
-//   } else {
-//     res.redirect("/login");
-//   }
-// });
-
-
-
-// app.post("/register-destination", function(req, res) {
-//   Customer.findOne({customer: req.body.customer}, "_id", function(err, customer) {
-//     Destination.create({
-//       customer_id: customer,
-//       destination: req.body.destination,
-//       streetAddress: req.body.streetAddress,
-//       city: req.body.city,
-//       state: req.body.state,
-//       zipcode: req.body.zipcode,
-//       country: req.body.country
-//     });
-//   });
-  
-//   res.redirect("/");
-// });
-
 
 // REQUEST SECTION - WHERE USERS MAKE REQUESTS FOR TRUCKS
 const requestController = require("./controllers/request");
@@ -224,14 +197,29 @@ app.post("/search", redirectIfNotAuthenticatedMiddleware, searchController);
 
 
 
-// WIP
-// app.get("/destination", function(req, res) {
-//   if (req.isAuthenticated()) {
-//     res.redirect("/");
-//   } else {
-//     res.redirect("/login");
-//   };
-// });
+// DESTINATION SECTION - WHERE USERS CAN ADD NEW DESTINATIONS OR DELETE OR UPDATE EXISTING DESTINATIONS
+const destinationController = require("./controllers/destination");
+app.get("/destination", redirectIfNotAuthenticatedMiddleware, destinationController);
+
+// add a new destination
+const addDestinationController = require("./controllers/addDestination");
+app.get("/add-destination", redirectIfNotAuthenticatedMiddleware, addDestinationController);
+
+const addNewDestinationController = require("./controllers/addNewDestination");
+app.post("/add-destination", redirectIfNotAuthenticatedMiddleware, addNewDestinationController);
+
+// delete a selected destination
+const deleteDestinationController = require("./controllers/deleteDestination");
+app.post("/delete-destination", redirectIfNotAuthenticatedMiddleware, deleteDestinationController);
+
+// update a selected destination
+const updateDestinationController = require("./controllers/updateDestination");
+app.get("/update-destination/:_id", redirectIfNotAuthenticatedMiddleware, updateDestinationController);
+
+const updateExistingDestinationController = require("./controllers/updateExistingDestination");
+app.post("/update-destination/:_id", redirectIfNotAuthenticatedMiddleware, updateExistingDestinationController);
+
+
 
 
 

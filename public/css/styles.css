@@ -331,9 +331,9 @@ h5 {
   margin-bottom: 8px;
 }
 
-.carrier-add-btn {
+.carrier-btn {
   float: right;
-  background: #f6f6f6;
+  background: #fff;
   width: 100px;
   height: 33px;
   padding: 6px 12px;
@@ -364,4 +364,34 @@ h5 {
   border: 1px solid;
   border-color: #ccc;
   border-radius: 4px;
+}
+
+.customer-li {
+ list-style: none;
+ padding-left: 0;
+ display: inline-block;
+}
+
+#destination-hr {
+  margin-top: 0;
+}
+
+.destination-btn {
+  float: right;
+  background: #fff;
+  width: 100px;
+  height: 33px;
+  padding: 6px 12px;
+  font-size: 13px;
+  text-align: center;
+  color: black;
+  border: 1px solid;
+  border-color: #ccc;
+  border-radius: 4px;
+  margin-top: 2px;
+  margin-left: 5px;
+}
+
+.destination-form {
+  display: inline;
 }

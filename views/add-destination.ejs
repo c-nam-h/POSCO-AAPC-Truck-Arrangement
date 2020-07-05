@@ -1,0 +1,79 @@
+<%- include("partials/header"); -%>
+<%- include("partials/navbar"); -%>
+
+<body>
+  <div class="container">
+    <% if (err) { %>
+      <div class="alert alert-warning alert-dismissible" role="alert">
+        <button class="close" data-dismiss="alert" aria-label="Close" type="button"><span aria-hidden="true">&times;</span></button>
+        <strong>Warning!</strong> <%= err %>
+      </div>
+    <% } %>
+
+    <div class="title">
+      <h2 class="title-heading">Add a Destination</h1>
+      <p>Please enter a new destination and submit</p>
+    </div>
+
+    <form action="/add-destination" method="post">
+      <div class="row">
+        <div class="col-md-5">
+          <label for="selectCustomer">Customer</label>
+          <select id="selectCustomer" class="form-control" name="customer" required>
+            <option value="">Select Customer</option>
+            <% customers.forEach(function(customer) { %>
+                <option value="<%= customer._id %>"><%= customer.customer %></option>
+            <% }) %>  
+          </select>
+        </div>
+
+        <div class="col-md-7">
+          <label for="inputDestination">Destination</label>
+          <input id="inputDestination" class="form-control" type="text" name="destination" required>
+        </div>
+      </div>
+
+      <div class="row">
+          <div class="col-md-5">
+            <label for="inputStreetAddress">Street Address</label>
+            <input id="inputStreetAddress" class="form-control" name="streetAddress" type="text" required>
+          </div>
+          <div class="col-md-2">
+            <label for="inputCity">City</label>
+            <input id="inputCity" class="form-control" name="city" type="text" required>
+          </div>
+          <div class="col-md-1">
+            <label for="inputState">State</label>
+            <input id="inputState" class="form-control" name="state" type="text" required>
+          </div>
+          <div class="col-md-2">
+            <label for="inputZipcode">Zipcode</label>
+            <input id="inputZipcode" class="form-control" name="zipcode" type="text" required>
+          </div>
+          <div class="col-md-2">
+            <label for="inputCountry">Country</label>
+            <input id="inputCountry" class="form-control" name="country" type="text" required>
+          </div>
+      </div>
+
+
+      <div class="row">
+        <div class=" col-md-12">
+          <button onclick="return confirm('Are you sure you want to add a new destination?')" class="btn btn-lg btn-primary btn-block" id="request-submit-btn" type="submit" name="button" value="submit">Submit</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <%- include("partials/footer"); -%>
+  <%- include("partials/scripts"); -%>
+  <script src="/javascript/populate_dynamic_options_for_ship_from.js"></script>
+  <script src="/javascript/populate_dynamic_options_for_ship_to.js"></script>
+
+</body>
+
+</html>
+
+
+

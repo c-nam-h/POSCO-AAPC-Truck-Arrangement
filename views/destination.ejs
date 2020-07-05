@@ -4,68 +4,54 @@
 <body>
   <div class="container">
     <div class="title">
-      <h2 class="title-heading">Register a Destination</h2>
-      <p>Please enter destination information below and submit</p>
+        <h2 class="title-heading" style="display: inline;">Destination</h2>
+        <form action="/delete-destination" method="post" class="destination-form" id="destination-form">        
+          <button class="destination-btn" name="button" value="delete" onclick="return confirm('Are you sure you want to delete the selected carriers?')">Delete</button>
+        </form>
+        <a href="/add-destination" class="destination-btn">Add</a>
     </div>
-  
-    <form class="" action="/register-destination" method="post">
+    <p>Please Select a Customer to add, update or delete destination & address</p>
 
-      <div class="row">
-        <div class="form-group col-md-6">
-          <label for="selectShippingFrom">Customer</label>
-          <select id="selectShippingFrom" class="form-control" name="customer" required>
-            <option value=""></option>
-            <option value="LG">LG</option>
-            <option value="ArcelorMittal">ArcelorMittal</option>
-            <option value="3">Marelli</option>
-          </select>
-        </div>
-        <div class="form-group col-md-6">
-          <label for="inputDestination">Destination</label>
-          <input id="inputDestination" class="form-control" name="destination" type="text" required>
-        </div>
+    
+    <div class="row">
+      <div class="col-md-4">
+        <label>Customer</label>
+      </div>
+      <div class="col-md-8">
+        <label>Destination: Address</label>
+      </div>
+    </div>
+
+    <hr id="destination-hr">
+    
+    <% customers.forEach(function(customer) { %>
+    <div class="row">
+      <div class=" col-md-4">
+        <ul class="customer-li">
+          <li name="customer"><%= customer.customer %></li>
+        </ul>
       </div>
 
-      <div class="row">
-        <div class="form-group col-md-4">
-            <label for="inputStreetAddress">Street Address</label>
-            <input id="inputStreetAddress" class="form-control" name="streetAddress" type="text" required>
-        </div>
-          <div class="form-group col-md-3">
-            <label for="inputCity">City</label>
-            <input id="inputCity" class="form-control" name="city" type="text" required>
-          </div>
-          <div class="form-group col-md-1">
-            <label for="selectState">State</label>
-            <select id="selectState" class="form-control" name="state" required>
-                <option value=""></option>
-                <option value="TN">TN</option>
-                <option value="AL">AL</option>
-                <option value="FL">FL</option>
-              </select>
-          </div>
-          <div class="form-group col-md-2">
-            <label for="inputZipcode">Zipcode</label>
-            <input id="inputZipcode" class="form-control" name="zipcode" type="text" required>
-          </div>
-          <div class="form-group col-md-2">
-            <label for="inputZipcode">Country</label>
-            <input id="inputZipcode" class="form-control" name="country" type="text" required>
-          </div>
+      <div class="col-md-8">
+          <% destinations.forEach(function(destination) { %>
+            <% if (customer._id.equals(destination.customer_id)) { %>
+              <% if (destination.destination === "NA") { %>
+                <p>No Destination/Address</p>
+              <% } else { %>
+                <input type="radio" name="destination" value="<%= destination._id %>" form="destination-form"> <a href="/update-destination/<%= destination._id %>"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></a><br>
+              <% } %>
+            <% } %>
+          <% }) %>
+        </select>
       </div>
-
-      <div class="row">
-        <div class="form-group col-md-12">
-          <button class="btn btn-lg btn-primary btn-block" type="submit" name="button" value="submit">Submit</button>
-        </div>
-      </div>
-
-    </form>
-
+    </div>
+    <hr>
+    <% }); %>
 </div>
 
 <%- include("partials/footer"); -%>
 <%- include("partials/scripts"); -%>
+
 </body>
 
 </html>
