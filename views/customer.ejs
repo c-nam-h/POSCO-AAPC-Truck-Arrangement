@@ -1,0 +1,38 @@
+<%- include("partials/header"); -%>
+<%- include("partials/navbar"); -%>
+
+<body>
+    <div class="container">
+        <div class="title">
+            <h2 class="customer-title-heading">Customer List</h2>
+            <form action="/delete-customer" method="post" id="customer-form" class="customer-form">
+                <button class="customer-btn" name="button" value="delete" type="submit" onclick="return confirm('Are you sure you want to delete the selected customers?')">Delete</button>
+            </form>
+            <a class="customer-btn" href="/add-customer">Add</a>
+        </div>
+
+        <br>
+
+        <table class="table table-hover text-center">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" onClick="toggle(this)"></th>
+                    <th>Customers</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% customers.forEach(function(customer) { %>
+                    <tr>
+                        <th><input type="checkbox" name="checkbox" form="customer-form" value="<%= customer._id %>"></th>
+                        <td><%= customer.customer %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <%- include("partials/footer"); -%>
+    <%- include("partials/scripts"); -%>    
+</body>
+
+</html>

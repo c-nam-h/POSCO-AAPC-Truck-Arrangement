@@ -4,6 +4,6 @@ module.exports = async function(req, res) {
     const carriers = await Carrier.find({});
 
     res.render("carrier", {
-        carriers
+        carriers: carriers.sort(compare_carrierName)
     });
 };

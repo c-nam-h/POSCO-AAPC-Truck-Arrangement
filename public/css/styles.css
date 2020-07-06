@@ -163,6 +163,11 @@ a:hover {
   display: inline;
 }
 
+.customer-title-heading {
+  margin-bottom: 1rem;
+  display: inline;
+}
+
 
 form label {
   font-weight: bold;
@@ -347,7 +352,27 @@ h5 {
   margin-left: 5px;
 }
 
+.customer-btn {
+  float: right;
+  background: #fff;
+  width: 100px;
+  height: 33px;
+  padding: 6px 12px;
+  font-size: 13px;
+  text-align: center;
+  color: black;
+  border: 1px solid;
+  border-color: #ccc;
+  border-radius: 4px;
+  margin-top: 2px;
+  margin-left: 5px;
+}
+
 .carrier-form {
+  display: inline;
+}
+
+.customer-form {
   display: inline;
 }
 

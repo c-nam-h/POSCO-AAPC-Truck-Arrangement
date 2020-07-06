@@ -25,18 +25,17 @@ module.exports = function() {
   };
 
   this.compare_name = function(a, b) {
-    var nameA = a.customer.toUpperCase(); // ignore upper and lowercase
-    var nameB = b.customer.toUpperCase(); // ignore upper and lowercase
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
-  
-    // if the name is the same
-    return 0;
+    var nameA = a.customer
+    var nameB = b.customer
+    return ("" + nameA).localeCompare(nameB);
   };
+
+  this.compare_carrierName = function(a, b) {
+    var nameA = a.carrierName
+    var nameB = b.carrierName
+    return ("" + nameA).localeCompare(nameB);
+  };
+
 };
 
 
@@ -48,10 +47,6 @@ function toggle(source) {
     checkboxes[i].checked = source.checked;
   };
 };
-
-
-
-
 
 
 // // override the default error message and customize it for the BOL No input tag when the user does not enter data with the correct input pattern

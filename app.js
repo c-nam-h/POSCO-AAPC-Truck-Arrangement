@@ -222,7 +222,6 @@ app.post("/update-destination/:_id", redirectIfNotAuthenticatedMiddleware, updat
 
 
 
-
 // CARRIER SECTION - WHERE ONLY ADMIN CAN SEE A LIST OF CARRIERS
 const carrierController = require("./controllers/carrier");
 app.get("/carrier", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], carrierController);
@@ -240,6 +239,22 @@ app.post("/add-carrier", [redirectIfNotAuthenticatedMiddleware, validateAdminMid
 const deleteCarrierController = require("./controllers/deleteCarrier");
 app.post("/delete-carrier", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], deleteCarrierController);
 
+
+
+// CUSTOMER SECTION - WHERE USERS CAN ADD/DELETE A LIST OF CUSTOMERS
+const customerController = require("./controllers/customer");
+app.get("/customer", redirectIfNotAuthenticatedMiddleware, customerController);
+
+// add a new customer
+const addCustomerController = require("./controllers/addCustomer");
+app.get("/add-customer", redirectIfNotAuthenticatedMiddleware, addCustomerController);
+
+const addNewCustomerController = require("./controllers/addNewCustomer");
+app.post("/add-customer", redirectIfNotAuthenticatedMiddleware, addNewCustomerController);
+
+// delete existing customers
+const deleteCustomerController = require("./controllers/deleteCustomer");
+app.post("/delete-customer", redirectIfNotAuthenticatedMiddleware, deleteCustomerController);
 
 
 // go through all the routes and if it can't find one that matches, it will render error-404 page
