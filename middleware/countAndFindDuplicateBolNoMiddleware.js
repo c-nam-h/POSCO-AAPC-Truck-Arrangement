@@ -20,13 +20,15 @@ module.exports = async function(req, res, next) {
     const destinations = await Destination.find({});
     const request = await Request.findById(requestId);
 
-    if (!(count === 0 || (count === 1 && id.equals(requestId)))) {
-        return res.render("modify", {
-            customers: customers,
-            destinations: destinations,
-            selectedRequest: request,
-            err: "Your BOL NO '" + modifiedBolNo + "' already exists in the database. Please check again and enter a different BOL No."
-          });
-    };
+    if (req.body.bolNo !== "") {
+        if (!(count === 0 || (count === 1 && id.equals(requestId)))) {
+            return res.render("modify", {
+                customers: customers,
+                destinations: destinations,
+                selectedRequest: request,
+                err: "Your BOL NO '" + modifiedBolNo + "' already exists in the database. Please check again and enter a different BOL No."
+              });
+        };
+    }
     next();
 };

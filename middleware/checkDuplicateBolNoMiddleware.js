@@ -8,7 +8,7 @@ module.exports = async function(req, res, next) {
     const customers = await Customer.find({});
     const request = await Request.findOne({bolNo: req.body.bolNo});
 
-    if (request) {
+    if (request && req.body.bolNo !== "") {
         return res.render("request", {
             err: "There is already an order for your BOL NO, " + req.body.bolNo + ". Please check again.",
             shipFromId: req.body.shipFrom,
