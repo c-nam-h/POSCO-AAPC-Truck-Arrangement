@@ -11,7 +11,7 @@
     <% } %>
 
     <div class="title">
-      <h2 class="title-heading">Modify Your Request</h1>
+      <h2 class="title-heading">Modify Your Request</h2>
       <p>Please update your load information below and submit</p>
     </div>
 
@@ -19,7 +19,7 @@
 
       <div class="row">
         <div class="col-md-5">
-          <label for="selectShipFrom">Ship From</label>
+          <label for="selectShipFrom">Ship From*</label>
           <select id="selectShipFrom" class="form-control" name="shipFrom" required>
             <option value="">Select Where To Ship From</option>
             <% customers.forEach(function(customer) { %>
@@ -32,7 +32,7 @@
           </select>
         </div>
         <div class="col-md-7">
-          <label for="selectShipFromAddress">Ship From Address</label>
+          <label for="selectShipFromAddress">Ship From Address*</label>
           <select id="selectShipFromAddress" class="form-control" name="shipFromAddress" required>
             <option value="">Select Ship From Address</option>
             <% destinations.forEach(function(destination) { %>
@@ -48,7 +48,7 @@
 
       <div class="row">
         <div class="col-md-5">
-          <label for="selectShipTo">Ship To</label>
+          <label for="selectShipTo">Ship To*</label>
           <select id="selectShipTo" class="form-control" name="shipTo" required>
             <option value="">Select Where To Ship To</option>
             <% customers.forEach(function(customer) { %>
@@ -61,7 +61,7 @@
           </select>
         </div>
         <div class="col-md-7">
-          <label for="selectShipToAddress">Ship To Address</label>
+          <label for="selectShipToAddress">Ship To Address*</label>
           <select id="selectShipToAddress" class="form-control" name="shipToAddress" required>
             <option value="">Select Ship To Address</option>
             <% destinations.forEach(function(destination) { %>
@@ -77,7 +77,7 @@
 
       <div class="row">
         <div class="col-md-2">
-          <label for="inputKg">Weight(kg)</label>
+          <label for="inputKg">Weight(kg)*</label>
           <input class="form-control" id="inputKg" type="text" name="weightKg" pattern="[0-9]{1,5}" value="<%= selectedRequest.weightKg %>" required>
         </div>
 
@@ -125,7 +125,7 @@
         </div>
 
         <div class="col-md-2">
-          <label for="comboLoad">Is It a Combo Load?</label>
+          <label for="comboLoad">Is It a Combo Load?*</label>
           <% if (selectedRequest.comboLoad === "Yes") { %>
           <div>
             <div class="form-check radio-inline">
@@ -178,12 +178,12 @@
 
       <div class="row">
         <div class="col-md-6">
-          <label for="inputShippingDate">Shipping Date</label>
+          <label for="inputShippingDate">Shipping Date*</label>
           <input class="form-control" id="inputShippingDate datepicker" type="date" name="shippingDate" value="<%= selectedRequest.shippingDate %>" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
         </div>
 
         <div class="col-md-6">
-          <label for="inputDeliveryDate">Delivery Date</label>
+          <label for="inputDeliveryDate">Delivery Date*</label>
           <input class="form-control" id="inputDeliveryDate" type="date" name="deliveryDate" value="<%= selectedRequest.deliveryDate %>" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
         </div>
       </div>

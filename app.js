@@ -128,7 +128,8 @@ const homepageController = require("./controllers/homepage");
 // render a homepage with order information sorted by shipping date (oldest to newest)
 app.get("/", redirectIfNotAuthenticatedMiddleware, homepageController);
 
-
+const homepageShippingStatusFilteredController = require("./controllers/homepageShippingStatusFiltered");
+app.get("/filter/:status", redirectIfNotAuthenticatedMiddleware, homepageShippingStatusFilteredController);
 
 // REQUEST SECTION - WHERE USERS MAKE REQUESTS FOR TRUCKS
 const requestController = require("./controllers/request");
@@ -255,6 +256,7 @@ app.post("/add-customer", redirectIfNotAuthenticatedMiddleware, addNewCustomerCo
 // delete existing customers
 const deleteCustomerController = require("./controllers/deleteCustomer");
 app.post("/delete-customer", redirectIfNotAuthenticatedMiddleware, deleteCustomerController);
+
 
 
 // go through all the routes and if it can't find one that matches, it will render error-404 page

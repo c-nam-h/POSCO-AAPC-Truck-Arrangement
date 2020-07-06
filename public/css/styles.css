@@ -152,6 +152,7 @@ a:hover {
 
 .homepage-title-heading {
   margin-bottom: 1rem;
+  display: inline-block;
 }
 
 .title-heading {
@@ -419,4 +420,23 @@ h5 {
 
 .destination-form {
   display: inline;
+}
+
+.filter {
+  font-size: 13px;
+}
+
+.dropdown-div {
+  display: inline;
+}
+
+.filter-button {
+  font-size: 13px;
+  color: black;
+  margin-bottom: 15px;
+  float: right;
+  background: #fff;
+  border: 1px solid;
+  border-color: #ccc;
+  border-radius: 4px;
 }
