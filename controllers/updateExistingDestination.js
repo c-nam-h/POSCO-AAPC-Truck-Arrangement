@@ -5,6 +5,7 @@ module.exports = async function(req, res) {
 
     await Destination.findByIdAndUpdate(selectedDestinationId, {
         destination: req.body.destination,
+        streetAddress: req.body.streetAddress,
         city: req.body.city,
         state: req.body.state,
         zipcode: req.body.zipcode,

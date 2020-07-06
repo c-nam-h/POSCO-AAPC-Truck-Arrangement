@@ -50,6 +50,10 @@ function toggle(source) {
 };
 
 
+
+
+
+
 // // override the default error message and customize it for the BOL No input tag when the user does not enter data with the correct input pattern
 // var bolNo = document.getElementById("bolNo");
 

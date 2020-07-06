@@ -13,6 +13,8 @@ module.exports = function(req, res){
                 shipToAddressId: null,
                 weightKg: null,
                 bolNo: null,
+                comboLoad: null,
+                comboBolNo: null,
                 truckType: null,
                 shippingDate: null,
                 deliveryDate: null,

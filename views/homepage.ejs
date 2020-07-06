@@ -88,11 +88,21 @@
                   </div>
 
                   <div class="a-column23">
-                    <h5 class="a-column-header">Load Summary</h5>
+                    <% if (requests[i].comboLoad === "Yes") { %>
+                      <h5 class="a-column-header">Load Summary (Combo Load)</h5>  
+                    <% } else { %>
+                      <h5 class="a-column-header">Load Summary</h5>
+                    <% } %>
                     <div style="overflow: hidden;">
                       <div class="a-column46">BOL No:</div>
                       <div class="a-column53"><%= requests[i].bolNo %></div>
                     </div>
+                    <% if (requests[i].comboLoad === "Yes") { %>
+                      <div style="overflow: hidden;">
+                        <div class="a-column46">Combo BOL No:</div>
+                        <div class="a-column53"><%= requests[i].comboBolNo %></div>
+                      </div>
+                    <% } %>
                     <div style="overflow: hidden;">
                       <div class="a-column46">Weight:</div>
                       <div class="a-column53"><%= numberWithCommas(requests[i].weightKg) %>kg / <%= numberWithCommas(requests[i].weightLb) %>lb</div>
@@ -109,6 +119,7 @@
                       <div class="a-column46">Delivery Date:</div>
                       <div class="a-column53"><%= requests[i].deliveryDate %></div>
                     </div>
+                    
                   </div>
 
                 </div>

@@ -21,7 +21,18 @@ const requestSchema = new Schema({
   shipToCountry: String,
   weightKg: Number,
   weightLb: Number,
-  bolNo: String,
+  bolNo: {
+    type: String,
+    default: "TBD"
+  },
+  comboLoad: {
+    type: String,
+    default: null
+  },
+  comboBolNo: {
+    type: String,
+    default: "N/A"
+  },
   truckType: String,
   shippingDate: String,
   deliveryDate: String,

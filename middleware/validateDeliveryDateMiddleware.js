@@ -15,6 +15,8 @@ module.exports = async function(req, res, next) {
             shipToAddressId: req.body.shipToAddress,
             weightKg: req.body.weightKg,
             bolNo: req.body.bolNo,
+            comboLoad: req.body.comboLoad,
+            comboBolNo: req.body.comboBolNo,
             truckType: req.body.truckOptions,
             shippingDate: null,
             deliveryDate: null,

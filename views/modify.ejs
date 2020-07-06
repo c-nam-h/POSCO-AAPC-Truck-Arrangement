@@ -76,53 +76,104 @@
       </div>
 
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-2">
           <label for="inputKg">Weight(kg)</label>
           <input class="form-control" id="inputKg" type="text" name="weightKg" pattern="[0-9]{1,5}" value="<%= selectedRequest.weightKg %>" required>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label for="inputBolNo">BOL No</label>
-          <input class="form-control" id="inputBolNo" type="text" name="bolNo" value="<%= selectedRequest.bolNo %>" pattern="[A-Z]{1}[0-9]{11}|[A-Z]{3}[0-9]{11}" placeholder="Arrangement #" required>
+          <input class="form-control" id="inputBolNo" type="text" name="bolNo" value="<%= selectedRequest.bolNo %>" pattern="[A-Z]{1}[0-9]{11}|[A-Z]{3}[0-9]{11}" placeholder="Arrangement #">
         </div>
 
-        <div class="col-md-4">
-          <label for="inputTruck">Truck Type</label>
+        <div class="col-md-2">
+          <label>Truck Type</label>
           <% if (selectedRequest.truckType === "Flatbed") { %>
-          <div class="">
+          <div>
             <div class="form-check radio-inline">
-              <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="flatbed" value="Flatbed" checked required>
-              <label class="form-check-label" for="inputTruck">Flatbed</label>
+              <input class="form-check-input" id="flatbed" type="radio" name="truckOptions" value="Flatbed" checked required>
+              <label class="form-check-label" for="flatbed">Flatbed</label>
             </div>
             <div class="form-check radio-inline">
-              <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="van" value="Van" required>
-              <label class="form-check-label" for="inputTruck">Van</label>
+              <input class="form-check-input" id="van" type="radio" name="truckOptions"  value="Van" required>
+              <label class="form-check-label" for="van">Van</label>
             </div>
           </div>
           <% } else if (selectedRequest.truckType === "Van") { %>
-          <div class="">
+          <div>
             <div class="form-check radio-inline">
-              <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="flatbed" value="Flatbed" required>
-              <label class="form-check-label" for="inputTruck">Flatbed</label>
+              <input class="form-check-input" id="flatbed" type="radio" name="truckOptions" value="Flatbed" required>
+              <label class="form-check-label" for="flatbed">Flatbed</label>
             </div>
             <div class="form-check radio-inline">
-              <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="van" value="Van" checked required>
-              <label class="form-check-label" for="inputTruck">Van</label>
+              <input class="form-check-input" id="van" type="radio" name="truckOptions" value="Van" checked required>
+              <label class="form-check-label" for="van">Van</label>
             </div>
           </div>
           <% } else { %>
-            <div class="">
+            <div>
               <div class="form-check radio-inline">
-                <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="flatbed" value="Flatbed" required>
-                <label class="form-check-label" for="inputTruck">Flatbed</label>
+                <input class="form-check-input" id="flatbed" type="radio" name="truckOptions" value="Flatbed" required>
+                <label class="form-check-label" for="flatbed">Flatbed</label>
               </div>
               <div class="form-check radio-inline">
-                <input class="form-check-input truck-type" id="inputTruck" type="radio" name="truckOptions" id="van" value="Van" required>
-                <label class="form-check-label" for="inputTruck">Van</label>
+                <input class="form-check-input" id="van" type="radio" name="truckOptions" value="Van" required>
+                <label class="form-check-label" for="van">Van</label>
               </div>
             </div>
           <% } %>
         </div>
+
+        <div class="col-md-2">
+          <label for="comboLoad">Is It a Combo Load?</label>
+          <% if (selectedRequest.comboLoad === "Yes") { %>
+          <div>
+            <div class="form-check radio-inline">
+              <input class="form-check-input" id="comboLoadYes" onClick="changeComboDivDisplayAttribute()" type="radio" name="comboLoad" value="Yes" checked required>
+              <label class="form-check-label" for="comboLoadYes">Yes</label>
+            </div>
+            <div class="form-check radio-inline">
+              <input class="form-check-input" id="comboLoadNo" onClick="changeComboDivDisplayAttribute()" type="radio" name="comboLoad" value="No" required>
+              <label class="form-check-label" for="comboLoadNo">No</label>
+            </div>
+          </div>
+          <% } else if (selectedRequest.comboLoad === "No") { %>
+          <div>
+            <div class="form-check radio-inline">
+              <input class="form-check-input" id="comboLoadYes" onClick="changeComboDivDisplayAttribute()" type="radio" name="comboLoad" value="Yes" required>
+              <label class="form-check-label" for="comboLoadYes">Yes</label>
+            </div>
+            <div class="form-check radio-inline">
+              <input class="form-check-input" id="comboLoadNo" onClick="changeComboDivDisplayAttribute()" type="radio" name="comboLoad" value="No" checked required>
+              <label class="form-check-label" for="comboLoadNo">No</label>
+            </div>
+          </div>
+          <% } else { %>
+            <div>
+              <div class="form-check radio-inline">
+                <input class="form-check-input" id="comboLoadYes" onClick="changeComboDivDisplayAttribute()" type="radio" name="comboLoad" value="Yes" required>
+                <label class="form-check-label" for="comboLoadYes">Yes</label>
+              </div>
+              <div class="form-check radio-inline">
+                <input class="form-check-input" id="comboLoadNo" onClick="changeComboDivDisplayAttribute()" type="radio" name="comboLoad" value="No" required>
+                <label class="form-check-label" for="comboLoadNo">No</label>
+              </div>
+            </div>
+          <% } %>
+        </div>
+  
+        <% if (selectedRequest.comboLoad === "Yes") { %>
+          <div class="col-md-3" id="comboBolDiv">
+            <label for="inputComboBolNo">Combo BOL No (Fill Only If Combo Load)</label>
+            <input class="form-control" id="inputComboBolNo" type="text" name="comboBolNo" value="<%= selectedRequest.comboBolNo %>" pattern="[A-Z]{1}[0-9]{11}|[A-Z]{3}[0-9]{11}" placeholder="Arrangement #">
+          </div>
+        <% } else { %> 
+          <div class="col-md-3" style="display: none;" id="comboBolDiv">
+            <label for="inputComboBolNo">Combo BOL No (Fill Only If Combo Load)</label>
+            <input class="form-control" id="inputComboBolNo" type="text" name="comboBolNo" value="<%= selectedRequest.comboBolNo %>" pattern="[A-Z]{1}[0-9]{11}|[A-Z]{3}[0-9]{11}" placeholder="Arrangement #">
+          </div>
+        <% } %>
+        
       </div>
 
       <div class="row">

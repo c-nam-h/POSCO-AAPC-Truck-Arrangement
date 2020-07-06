@@ -61,6 +61,8 @@ module.exports = async function(req, res) {
         weightKg: req.body.weightKg,
         weightLb: Math.round(req.body.weightKg * 2.204623, 0),
         bolNo: req.body.bolNo,
+        comboLoad: req.body.comboLoad,
+        comboBolNo: req.body.comboBolNo,
         truckType: req.body.truckOptions,
         shippingDate: req.body.shippingDate,
         deliveryDate: req.body.deliveryDate,
