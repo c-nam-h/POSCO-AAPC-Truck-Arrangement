@@ -35,11 +35,7 @@
       <div class="col-md-8">
           <% destinations.forEach(function(destination) { %>
             <% if (customer._id.equals(destination.customer_id)) { %>
-              <% if (destination.destination === "NA") { %>
-                <p>No Destination/Address</p>
-              <% } else { %>
-                <input type="radio" name="destination" value="<%= destination._id %>" form="destination-form"> <a href="/update-destination/<%= destination._id %>"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></a><br>
-              <% } %>
+              <input type="radio" name="destination" value="<%= destination._id %>" form="destination-form"> <a href="/update-destination/<%= destination._id %>"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></a><br>
             <% } %>
           <% }) %>
         </select>
