@@ -16,14 +16,14 @@
         <table class="table table-hover text-center">
             <thead>
                 <tr>
-                    <th><input type="checkbox" onClick="toggle(this)"></th>
+                    <th></th>
                     <th>Customers</th>
                 </tr>
             </thead>
             <tbody>
                 <% customers.forEach(function(customer) { %>
                     <tr>
-                        <th><input type="checkbox" name="checkbox" form="customer-form" value="<%= customer._id %>"></th>
+                        <th><input type="radio" name="customer" form="customer-form" value="<%= customer._id %>"></th>
                         <td><%= customer.customer %></td>
                     </tr>
                 <% }); %>
