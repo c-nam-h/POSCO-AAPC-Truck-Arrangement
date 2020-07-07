@@ -78,12 +78,12 @@
       <div class="row">
         <div class="col-md-2">
           <label for="inputKg">Weight(kg)*</label>
-          <input class="form-control" id="inputKg" type="text" name="weightKg" pattern="[0-9]{1,5}" value="<%= selectedRequest.weightKg %>" required>
+          <input class="form-control" id="inputKg" type="text" name="weightKg" pattern="[0-9]{1,5}" value="<%= selectedRequest.weightKg %>" title="Only numbers are allowed" required>
         </div>
 
         <div class="col-md-3">
           <label for="inputBolNo">BOL No</label>
-          <input class="form-control" id="inputBolNo" type="text" name="bolNo" value="<%= selectedRequest.bolNo %>" pattern="[A-Z]{1}[0-9]{11}|[A-Z]{3}[0-9]{11}" placeholder="Arrangement #">
+          <input class="form-control" id="inputBolNo" type="text" name="bolNo" value="<%= selectedRequest.bolNo %>" pattern="[A-Z]{1}[0-9]{11}|[A-Z]{3}[0-9]{11}|[A-Z]{2}[0-9]{12}" placeholder="Arrangement #" title="Ex) F12345678901, APC12345678901 or ST123456789012">
         </div>
 
         <div class="col-md-2">

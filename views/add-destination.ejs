@@ -44,11 +44,11 @@
           </div>
           <div class="col-md-1">
             <label for="inputState">State</label>
-            <input id="inputState" class="form-control" name="state" type="text" required>
+            <input id="inputState" class="form-control" name="state" type="text" pattern="[A-Z]{2}" title="Ex) AL, TN, FL, etc" required>
           </div>
           <div class="col-md-2">
             <label for="inputZipcode">Zipcode</label>
-            <input id="inputZipcode" class="form-control" name="zipcode" type="text" required>
+            <input id="inputZipcode" class="form-control" name="zipcode" type="text" pattern="[0-9]{5}" title="Ex) 35111, 47408, etc" required>
           </div>
           <div class="col-md-2">
             <label for="inputCountry">Country</label>
