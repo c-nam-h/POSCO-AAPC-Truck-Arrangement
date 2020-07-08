@@ -43,7 +43,7 @@ app.use(passport.session());
 
 mongoose.connect("mongodb+srv://" + process.env.USERNAME + ":" + process.env.PASSWORD + "@posco-aapc-logistics-l3bdr.mongodb.net/truckRequestDB?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 // mongoose.connect("mongodb://localhost/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
-
+ 
 // require each model
 const Request = require("./models/Request");
 const Freight = require("./models/Freight");
@@ -256,6 +256,17 @@ app.post("/add-customer", redirectIfNotAuthenticatedMiddleware, addNewCustomerCo
 // delete existing customers
 const deleteCustomerController = require("./controllers/deleteCustomer");
 app.post("/delete-customer", redirectIfNotAuthenticatedMiddleware, deleteCustomerController);
+
+
+
+// CHANGE PASSWORD SECTION - WHERE USERS CAN CHANGE THEIR LOGIN PASSWORD
+const changePasswordController = require("./controllers/changePassword");
+app.get("/change-password", redirectIfNotAuthenticatedMiddleware, changePasswordController);
+
+const compareCurrentAndNewPasswordMiddleware = require("./middleware/compareCurrentAndNewPasswordsMiddleware");
+const confirmNewPasswordMiddleware = require("./middleware/confirmNewPasswordMiddleware");
+const setNewPasswordController = require("./controllers/setNewPassword");
+app.post("/change-password", [redirectIfNotAuthenticatedMiddleware, compareCurrentAndNewPasswordMiddleware, confirmNewPasswordMiddleware], setNewPasswordController);
 
 
 

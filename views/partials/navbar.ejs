@@ -3,10 +3,13 @@
       <a class="navbar-brand" href="/">TRUCK ARRANGEMENT</a>
   
       <% if (currentUserId) { %>
-        <form action="/search" method="post" class="form-inline" style="width: 30%; margin-right: auto;">
-          <input class="search-box" type="search" placeholder="Search BOL No" aria-label="Search" name="search" required>
-          <button class="search-btn" type="submit">Search</button>
-        </form>
+        <div style="margin-right: auto;">
+          <form class="form-inline my-2 my-lg-0" action="/search" method="post">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search BOL No" aria-label="Search" name="search" required>
+            <button class="btn search-btn my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </div>
+        
   
         <div class="justify-content-end" id="navbarNavDropdown">
           <ul class="navbar-nav">
@@ -27,6 +30,9 @@
                 <a class="nav-link" href="/freight-report">REPORT</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="/change-password">PASSWORD</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="/logout">LOGOUT</a>
               </li>
             <% } else if (userRole === "user") { %>
@@ -38,6 +44,9 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/destination">DESTINATION</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/change-password">CHANGE PASSWORD</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/logout">LOGOUT</a>

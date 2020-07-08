@@ -101,22 +101,13 @@ label.form-check-label {
   z-index: 2;
 }
 
-.search-box {
-  padding: 8px 8px 8px 8px;
-  border: 1px solid;
-  border-radius: 4px 0 0 4px;
-  border-color: #ccc;
-  width: 80%;
-}
-
 .search-btn {
-  padding: 8px;
+  padding: 6px;
   border: 1px solid;
   border-color: #ccc;
-  border-radius: 0 4px 4px 0;
-  margin-left: -1px;
+  border-radius: 4px;
+  margin-left: -6px;
   font-size: 13px;
-  float: right;
   background-color: #f8f9fa!important;
 }
 
