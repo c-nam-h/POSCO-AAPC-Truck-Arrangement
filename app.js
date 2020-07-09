@@ -33,7 +33,6 @@ const _ = require("lodash");
 
 const mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false); // opt in to using the MongoDB driver's findOneAndUpdate() function
-const ObjectID = require("mongodb").ObjectID;
 
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
@@ -41,8 +40,8 @@ const passportLocalMongoose = require("passport-local-mongoose");
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb+srv://" + process.env.USERNAME + ":" + process.env.PASSWORD + "@posco-aapc-logistics-l3bdr.mongodb.net/truckRequestDB?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
-// mongoose.connect("mongodb://localhost/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+// mongoose.connect("mongodb+srv://" + process.env.USERNAME + ":" + process.env.PASSWORD + "@posco-aapc-logistics-l3bdr.mongodb.net/truckRequestDB?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+mongoose.connect("mongodb://localhost/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
  
 // require each model
 const Request = require("./models/Request");
@@ -58,11 +57,6 @@ passport.use(User.createStrategy());
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-// the email addresses in the list below will be able to see the entire website, whereas other users are limited to only certain parts of the website.
-let admin_list = ["admin@poscoaapc.com", "jburnett@poscoaapc.com", "isabell.terry@poscoaapc.com", "dglover@poscoaapc.com"];
-
-
 
 // declare a global variable to distinguish which userId is logged in
 global.currentUserId = null;
