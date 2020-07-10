@@ -1,37 +1,45 @@
 const Request = require("../models/Request");
 const UserRole = require("../models/UserRole");
-const getMondaySunday = require("../public/javascript/getMondaySunday");
+const getMonday = require("../public/javascript/getMonday");
+const moment = require("moment-timezone");
+const now = moment().tz("America/Chicago");
 
 module.exports = async function(req, res) {
-  // assign the current user's role to the global variable
+  // declare a variable for Monday and set the hours to 0
+  // this will allow the app to search for all requests regardless of hours of shipping dates
+  const monday = new Date(new Date(getMonday[0], getMonday[1], getMonday[2]).setUTCHours(0, 0, 0, 0));
 
-  const monday = new Date(getMondaySunday[0]);
-  const sunday = new Date(getMondaySunday[1]);
-  
+  console.log("monday",monday);
+
+  // assign user role to the global variable
   const selectedUserRole = await UserRole.findOne({user_id: req.user._id});
   userRole = selectedUserRole.user_role;
   
-  const allRequests = await Request.find({});
-  const filteredRequests = [];
+  const allRequests = await Request.find({}); // find all requests
+  const filteredRequests = []; // declare an empty array to store current week's 
 
+  // search for requests that have shipping dates equal to or greater than this week's monday
   allRequests.forEach(function(request) {
     const shippingDate = new Date(request.shippingDate);
-    console.log(shippingDate);
-    if (monday <= shippingDate && shippingDate <= sunday) {
+    if (monday <= shippingDate) {
       filteredRequests.push(request);
     }
   })
-  console.log(filteredRequests);
-  console.log(filteredRequests.length);
+
   const userRequests = await Request.find({user_id: currentUserId});
+
+  // assign monday and sunday to the global variables later
+  // to keep CST timezone and prevent UTC time from automatically changing it
+  global.monday = new Date(getMonday[0], getMonday[1], getMonday[2]);
+  console.log("global monday", monday);
 
   if (userRole === "admin") {
     res.render("homepage", {
-      requests: filteredRequests.sort(compare_date).reverse()
+      requests: filteredRequests.sort(compare_shippingDate).reverse()
     });
   } else {
     res.render("homepage", {
-      requests: userRequests.sort(compare_date).reverse()
+      requests: userRequests.sort(compare_shippingDate).reverse()
     });
   };  
 }

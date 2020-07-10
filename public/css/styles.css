@@ -111,6 +111,23 @@ label.form-check-label {
   background-color: #f8f9fa!important;
 }
 
+.date-search-btn {
+  padding: 7px;
+  border: 1px solid;
+  border-color: #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+  background-color: #f8f9fa!important;
+}
+
+.date-picker {
+  padding: 6px;
+  border: 1px solid;
+  border-color: #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
 .form-signin input[type="text"] {
   margin-bottom: 5px;
 }
@@ -143,7 +160,6 @@ a:hover {
 
 .homepage-title-heading {
   margin-bottom: 1rem;
-  display: inline-block;
 }
 
 .title-heading {
