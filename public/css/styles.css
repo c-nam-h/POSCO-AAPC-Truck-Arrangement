@@ -128,6 +128,15 @@ label.form-check-label {
   font-size: 13px;
 }
 
+.search-ship-to-customer {
+  padding: 6px 6px 9px 6px;
+  width: 65%;
+  border: 1px solid;
+  border-color: #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
 .form-signin input[type="text"] {
   margin-bottom: 5px;
 }
@@ -440,7 +449,7 @@ h5 {
 .filter-button {
   font-size: 13px;
   color: black;
-  margin-bottom: 15px;
+  margin-top: 22px;
   float: right;
   background: #fff;
   border: 1px solid;

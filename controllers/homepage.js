@@ -1,7 +1,9 @@
 const Request = require("../models/Request");
 const UserRole = require("../models/UserRole");
+const Custmoer = require("../models/Customer");
 const getMonday = require("../public/javascript/getMonday");
 const moment = require("moment-timezone");
+const Customer = require("../models/Customer");
 const now = moment().tz("America/Chicago");
 
 module.exports = async function(req, res) {
@@ -36,14 +38,19 @@ module.exports = async function(req, res) {
   // find all requests that are equal or greater than the date of this week's Monday for User
   const userRequests = await Request.find({user_id: req.user._id, shippingDate: {$gte: dateOfMonday}});
 
+  // find all customers and pass them to the homepage for search use
+  const customers = await Customer.find({});
+
 
   if (userRole === "admin") {
     res.render("homepage", {
-      requests: filteredRequests.sort(compare_shippingDate).reverse()
+      requests: filteredRequests.sort(compare_shippingDate).reverse(),
+      customers: customers.sort(compare_name)
     });
   } else {
     res.render("homepage", {
-      requests: userRequests.sort(compare_shippingDate).reverse()
+      requests: userRequests.sort(compare_shippingDate).reverse(),
+      customers: customers.sort(compare_name)
     });
   };  
 }

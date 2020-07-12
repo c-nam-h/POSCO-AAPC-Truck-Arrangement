@@ -122,14 +122,15 @@ const homepageController = require("./controllers/homepage");
 // render a homepage with order information sorted by shipping date (oldest to newest)
 app.get("/", redirectIfNotAuthenticatedMiddleware, homepageController);
 
-const homepageShippingStatusFilteredController = require("./controllers/homepageShippingStatusFiltered");
-app.get("/filter/:status", redirectIfNotAuthenticatedMiddleware, homepageShippingStatusFilteredController);
+const filterHomepageShippingStatusController = require("./controllers/filterHomepageShippingStatus");
+app.get("/filter/:status", redirectIfNotAuthenticatedMiddleware, filterHomepageShippingStatusController);
 
 
 
 // search through given start and end shipping dates and show requests that only fall into those dates
-const filterShippingDateController = require("./controllers/filterShippingDate");
-app.post("/search-shipping-date", redirectIfNotAuthenticatedMiddleware, filterShippingDateController);
+const filterRequestsController = require("./controllers/filterRequests");
+app.post("/filter-requests", redirectIfNotAuthenticatedMiddleware, filterRequestsController);
+
 
 
 // REQUEST SECTION - WHERE USERS MAKE REQUESTS FOR TRUCKS
@@ -194,8 +195,8 @@ app.post("/assign-carrier-and-freight/:_id", [redirectIfNotAuthenticatedMiddlewa
 
 
 // SEARCH SECTION - WHERE USERS CAN SEARCH A REQUEST
-const searchController = require("./controllers/search");
-app.post("/search", redirectIfNotAuthenticatedMiddleware, searchController);
+const searchBolNoController = require("./controllers/searchBolNo");
+app.post("/search", redirectIfNotAuthenticatedMiddleware, searchBolNoController);
 
 
 
