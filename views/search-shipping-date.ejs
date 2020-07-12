@@ -5,10 +5,10 @@
   <div class="container">
     <div class="title">
       <div style="display: inline-block;">
-        <h2 class="homepage-title-heading">All Requests</h2>
+        <h2 class="homepage-title-heading">Search By Shipping Date</h2>
       </div>
       <div style="display: inline-block;">
-        <h5>(From <%= monday.toDateString() %> ~ To Current)</h5>
+        <h5>(From <%= startShippingDate %> ~ To <%= endShippingDate %>)</h5>
       </div>
     </div>
 
@@ -19,7 +19,7 @@
           <br>
           <input class="date-picker" id="inputStartShippingDate" type="date" name="startShippingDate" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
           <input class="date-picker" id="inputEndShippingDate" type="date" name="endShippingDate" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
-          <button class="btn date-search-btn" id="request-submit-btn" type="submit">Search</button>
+          <button class="btn date-search-btn" id="request-submit-btn" type="submit" name="button" value="search">Search</button>
         </form>
       </div>
       <div class="dropdown dropdown-div">

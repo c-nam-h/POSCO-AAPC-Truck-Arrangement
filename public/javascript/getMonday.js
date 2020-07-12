@@ -7,9 +7,11 @@ function getMonday(today) {
     const monday = today.date(dateDifference)
 
     const mondayYear = today.year(); // get the current year
-    const mondayMonth = today.month(); // get the current mmonth - months are 0 - 11
-    const mondayDate = dateDifference; // get the date of this week's monday
+    let mondayMonth = today.month(); // get the current mmonth - months are 0 - 11
+    let mondayDate = dateDifference; // get the date of this week's monday
     
+    
+
     return [mondayYear, mondayMonth, mondayDate, monday];
 }
 

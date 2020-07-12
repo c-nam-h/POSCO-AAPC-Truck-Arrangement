@@ -125,6 +125,13 @@ app.get("/", redirectIfNotAuthenticatedMiddleware, homepageController);
 const homepageShippingStatusFilteredController = require("./controllers/homepageShippingStatusFiltered");
 app.get("/filter/:status", redirectIfNotAuthenticatedMiddleware, homepageShippingStatusFilteredController);
 
+
+
+// search through given start and end shipping dates and show requests that only fall into those dates
+const filterShippingDateController = require("./controllers/filterShippingDate");
+app.post("/search-shipping-date", redirectIfNotAuthenticatedMiddleware, filterShippingDateController);
+
+
 // REQUEST SECTION - WHERE USERS MAKE REQUESTS FOR TRUCKS
 const requestController = require("./controllers/request");
 // render a request page if the user is logged in
@@ -260,6 +267,7 @@ app.get("/change-password", redirectIfNotAuthenticatedMiddleware, changePassword
 const compareCurrentAndNewPasswordMiddleware = require("./middleware/compareCurrentAndNewPasswordsMiddleware");
 const confirmNewPasswordMiddleware = require("./middleware/confirmNewPasswordMiddleware");
 const setNewPasswordController = require("./controllers/setNewPassword");
+const { endsWith, filter } = require("lodash");
 app.post("/change-password", [redirectIfNotAuthenticatedMiddleware, compareCurrentAndNewPasswordMiddleware, confirmNewPasswordMiddleware], setNewPasswordController);
 
 
