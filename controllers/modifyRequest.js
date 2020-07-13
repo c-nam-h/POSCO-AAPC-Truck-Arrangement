@@ -40,6 +40,8 @@ module.exports = async function(req, res) {
     const username_id = await UserName.findOne({user_id: req.user._id});
     const fullname = await username_id.firstName + " " + username_id.lastName;
 
+    console.log(req.body)
+
     await Request.findByIdAndUpdate(requestId, {
         shipFrom: shipFrom["shipFromCustomer"],
         shipFromDestination: shipFromAddress["destination"],
@@ -63,8 +65,7 @@ module.exports = async function(req, res) {
         truckType: req.body.truckOptions,
         shippingDate: req.body.shippingDate,
         deliveryDate: req.body.deliveryDate,
-        specialNote: req.body.specialNote,
-        requestedBy: fullname
+        specialNote: req.body.specialNote
       }, function(err, request) {
           console.log(err);
       });

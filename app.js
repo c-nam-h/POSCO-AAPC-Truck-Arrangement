@@ -145,7 +145,7 @@ app.post("/request", [redirectIfNotAuthenticatedMiddleware, validateDeliveryDate
 
 
 // check who submitted the selected request
-const checkSubmittedUserIdMiddleware = require("./middleware/checkSubmittedUserId");
+const checkSubmittedUserIdMiddleware = require("./middleware/checkSubmittedUserIdMiddleware");
 
 // DELETE REQUEST SECTION - WHERE USERS CAN DELETE A SELECTED REQUEST AT A TIME
 // delete a selected request in Request and Freight collections and redirect to the homepage
@@ -174,7 +174,7 @@ app.get("/modify/:_id", [redirectIfNotAuthenticatedMiddleware, checkSubmittedUse
 const validateDeliveryDateInModifyMiddleware = require("./middleware/validateDeliveryDateInModifyMiddleware");
 const countAndFindDuplicateBolNoMiddleware = require("./middleware/countAndFindDuplicateBolNoMiddleware");
 const modifyRequestController = require("./controllers/modifyRequest");
-app.post("/modify/:_id", [redirectIfNotAuthenticatedMiddleware, validateDeliveryDateInModifyMiddleware, countAndFindDuplicateBolNoMiddleware]
+app.post("/modify/:_id", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware, validateDeliveryDateInModifyMiddleware, countAndFindDuplicateBolNoMiddleware]
 , modifyRequestController);
 
 
