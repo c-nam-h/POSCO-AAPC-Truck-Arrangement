@@ -215,6 +215,10 @@ h5 {
   margin-top: -1px;
 }
 
+a {
+  font-size: 13px;
+}
+
 .a-request-inner {
   padding: 14px 18px;
   position: relative;
