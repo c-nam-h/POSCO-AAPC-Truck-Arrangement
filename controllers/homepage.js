@@ -35,22 +35,11 @@ module.exports = async function(req, res) {
   // find all requests that are equal or greater than the date of this week's Monday for Admin
   const filteredRequests = await Request.find({shippingDate: {$gte: dateOfMonday}}); 
 
-  // find all requests that are equal or greater than the date of this week's Monday for User
-  const userRequests = await Request.find({user_id: req.user._id, shippingDate: {$gte: dateOfMonday}});
-
   // find all customers and pass them to the homepage for search use
   const customers = await Customer.find({});
 
-
-  if (userRole === "admin") {
-    res.render("homepage", {
-      requests: filteredRequests.sort(compare_shippingDate).reverse(),
-      customers: customers.sort(compare_name)
-    });
-  } else {
-    res.render("homepage", {
-      requests: userRequests.sort(compare_shippingDate).reverse(),
-      customers: customers.sort(compare_name)
-    });
-  };  
+  res.render("homepage", {
+    requests: filteredRequests.sort(compare_shippingDate).reverse(),
+    customers: customers.sort(compare_name)
+  });
 }

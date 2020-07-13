@@ -68,7 +68,8 @@ module.exports = async function(req, res) {
         deliveryDate: req.body.deliveryDate,
         specialNote: req.body.specialNote,
         requestedBy: fullname,
-        user_id: req.user._id
+        user_id: req.user._id,
+        username: req.user.username,
       });
 
       request.save(function(err, request) {

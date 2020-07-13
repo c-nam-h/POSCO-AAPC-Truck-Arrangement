@@ -58,8 +58,9 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// declare a global variable to distinguish which userId is logged in
+// declare global variables to distinguish who is logged in
 global.currentUserId = null;
+global.currentUsername = null;
 
 const assignLoggedInUserIdMiddleware = require("./middleware/assignLoggedInUserIdMiddleware");
 app.use("*", assignLoggedInUserIdMiddleware); // specify with the wildcard that on all requests, this middleware should be executed
@@ -147,11 +148,13 @@ app.post("/request", [redirectIfNotAuthenticatedMiddleware, validateDeliveryDate
 , requestTruckController);
 
 
+// check who submitted the selected request
+const checkSubmittedUserIdMiddleware = require("./middleware/checkSubmittedUserId");
 
 // DELETE REQUEST SECTION - WHERE USERS CAN DELETE A SELECTED REQUEST AT A TIME
 // delete a selected request in Request and Freight collections and redirect to the homepage
 const deleteRequestController = require("./controllers/deleteRequest");
-app.get("/delete-request/:_id", redirectIfNotAuthenticatedMiddleware, deleteRequestController);
+app.get("/delete-request/:_id", [redirectIfNotAuthenticatedMiddleware, checkSubmittedUserIdMiddleware], deleteRequestController);
 
 
 
@@ -168,7 +171,7 @@ app.get("/cancel-shipping/:_id", [redirectIfNotAuthenticatedMiddleware, validate
 
 // MODIFY REQUEST SECTION - WHERE USERS CAN MODIFY EXISITING REQUESTS
 const modifyController = require("./controllers/modify");
-app.get("/modify/:_id", redirectIfNotAuthenticatedMiddleware, modifyController);
+app.get("/modify/:_id", [redirectIfNotAuthenticatedMiddleware, checkSubmittedUserIdMiddleware], modifyController);
 
 // update a request information with the selected ID -- still need to modify the code to validate whether a revised BOL No already exists in the database or not.
 // If a revised BOL No already exists in the database, then it should give a warning message that the user cannot use the new BOL No -- WIP

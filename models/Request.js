@@ -27,7 +27,7 @@ const requestSchema = new Schema({
   },
   comboLoad: {
     type: String,
-    default: null
+    default: "No"
   },
   comboBolNo: {
     type: String,
@@ -46,7 +46,14 @@ const requestSchema = new Schema({
     default: now
   },
   requestedBy: String,
-  user_id: Schema.Types.ObjectId
+  user_id: {
+    type: Schema.Types.ObjectId,
+    ref: "User"
+  },
+  username: {
+    type: String,
+    ref: "User"
+  }
 });
   
 const Request = new mongoose.model("Request", requestSchema);
