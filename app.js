@@ -174,7 +174,7 @@ app.get("/modify/:_id", [redirectIfNotAuthenticatedMiddleware, checkSubmittedUse
 const validateDeliveryDateInModifyMiddleware = require("./middleware/validateDeliveryDateInModifyMiddleware");
 const countAndFindDuplicateBolNoMiddleware = require("./middleware/countAndFindDuplicateBolNoMiddleware");
 const modifyRequestController = require("./controllers/modifyRequest");
-app.post("/modify/:_id", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware, validateDeliveryDateInModifyMiddleware, countAndFindDuplicateBolNoMiddleware]
+app.post("/modify/:_id", [redirectIfNotAuthenticatedMiddleware, checkSubmittedUserIdMiddleware, validateDeliveryDateInModifyMiddleware, countAndFindDuplicateBolNoMiddleware]
 , modifyRequestController);
 
 

@@ -5,6 +5,8 @@ module.exports = async function (req, res, next) {
     const selectedRequest = await Request.findById(selectedRequestId);
     const submittedUsername = selectedRequest.username;
 
+    console.log(selectedRequest.user_id, currentUserId);
+    console.log(submittedUsername, currentUsername);
 
     if (userRole === "user") {
         if (selectedRequest.user_id.equals(currentUserId) || submittedUsername === currentUsername) {
