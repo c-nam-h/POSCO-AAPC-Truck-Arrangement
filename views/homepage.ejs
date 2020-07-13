@@ -36,160 +36,168 @@
           Shipping Status
         </button>
         <div class="dropdown-menu dropdown-menu-right filter" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item filter" href="/filter/not-shipped">Not Shipped</a>
-          <a class="dropdown-item filter" href="/filter/shipped">Shipped</a>
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('all')">All</button>
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('notShipped')">Not Shipped</button>
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('shipped')">Shipped</button>
         </div>
       </div>
     </div>
     
     <div class="a-request-group">
       <% for (var i = 0; i < requests.length; i++) { %>
-        <div class="a-request-header">
-          <div class="a-request-inner">
-            <div class="a-fixed-right-grid">
-              <div class="a-fixed-right-grid-inner" style="overflow: hidden;">
-                <div class="a-fixed-right-grid-col a-col-left" style="padding-right: 0%; float: left;">
-                  <div class="a-column38">
-                    <div>
-                      <span class="a-request-header-label">DATE POSTED</span>
-                    </div>
-                    <div>
-                      <span><%= requests[i].datePosted.toDateString() %></span>
-                    </div>
-                  </div>
-
-                  <div class="a-column38">
-                    <div>
-                      <span class="a-request-header-label">REQUESTED BY</span>
-                    </div>
-                    <div>
-                      <span><%= requests[i].requestedBy %></span>
-                    </div>
-                  </div>
-
-                  <div class="a-columne23">
-                    <div>
-                      <span class="a-request-header-label">SHIPPING STATUS</span>
-                    </div>
-                    <div>
-                      <span class="request-status"><%= requests[i].status %></span>
-                    </div>
-                  </div>
-                </div>
-
-                <div style="width: 220px; margin-right: -220px; float: left;">
-                  <span><a href="/modify/<%= requests[i]._id %>" class="modify-request-btn">Modify Request</a></span>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
+        <% if (requests[i].status === "Shipped") { %>
+          <div class="single-request shipped">
+        <% } else { %>
+          <div class="single-request notShipped">
+        <% } %>
         
-        <div class="a-request">
-          <div class="a-request-inner">
-            <div class="a-fixed-right-grid">
-              <div class="a-fixed-right-grid-inner" style="overflow: hidden;">
-                <div class="a-fixed-right-grid-col a-col-left">
-                  <div class="a-column38">
-                    <h5 class="a-column-header">Ship From</h5>
-                    <ul class="displayAddressUL">
-                      <% if (requests[i].shipFrom !== requests[i].shipFromDestination) { %>
-                        <li class="displayAddressLI"><%= requests[i].shipFrom %></li>
-                        <li class="displayAddressLI"><%= requests[i].shipFromDestination %></li>
-                      <% } else { %>
-                        <li class="displayAddressLI"><%= requests[i].shipFrom %></li>
-                      <% } %>
-                      <li class="displayAddressLI"><%= requests[i].shipFromStreetAddress %></li>
-                      <li class="displayAddressLI"><%= requests[i].shipFromCity %>, <%= requests[i].shipFromState %>, <%= requests[i].shipFromZipcode%></li>
-                      <li class="displayAddressLI"><%= requests[i].shipFromCountry %></li>
-                    </ul>
-                  </div>
-
-                  <div class="a-column38">
-                    <h5 class="a-column-header">Ship To</h5>
-                    <ul class="displayAddressUL">
-                      <% if (requests[i].shipTo !== requests[i].shipToDestination) { %>
-                        <li class="displayAddressLI"><%= requests[i].shipTo %></li>
-                        <li class="displayAddressLI"><%= requests[i].shipToDestination %></li>
-                      <% } else { %>
-                        <li class="displayAddressLI"><%= requests[i].shipTo %></li>
-                      <% } %>
-                      
-                      <li class="displayAddressLI"><%= requests[i].shipToStreetAddress %></li>
-                      <li class="displayAddressLI"><%= requests[i].shipToCity %>, <%= requests[i].shipToState %>, <%= requests[i].shipToZipcode%></li>
-                      <li class="displayAddressLI"><%= requests[i].shipToCountry %></li>
-                    </ul>
-                  </div>
-
-                  <div class="a-column23">
-                    <% if (requests[i].comboLoad === "Yes") { %>
-                      <h5 class="a-column-header">Load Summary (Combo Load)</h5>  
-                    <% } else { %>
-                      <h5 class="a-column-header">Load Summary</h5>
-                    <% } %>
-                    <div style="overflow: hidden;">
-                      <div class="a-column46">BOL No:</div>
-                      <div class="a-column53"><%= requests[i].bolNo %></div>
-                    </div>
-                    <% if (requests[i].comboLoad === "Yes") { %>
-                      <div style="overflow: hidden;">
-                        <div class="a-column46">Combo BOL No:</div>
-                        <div class="a-column53"><%= requests[i].comboBolNo %></div>
+          <div class="a-request-header">
+            <div class="a-request-inner">
+              <div class="a-fixed-right-grid">
+                <div class="a-fixed-right-grid-inner" style="overflow: hidden;">
+                  <div class="a-fixed-right-grid-col a-col-left" style="padding-right: 0%; float: left;">
+                    <div class="a-column38">
+                      <div>
+                        <span class="a-request-header-label">DATE POSTED</span>
                       </div>
-                    <% } %>
-                    <div style="overflow: hidden;">
-                      <div class="a-column46">Weight:</div>
-                      <div class="a-column53"><%= numberWithCommas(requests[i].weightKg) %>kg / <%= numberWithCommas(requests[i].weightLb) %>lb</div>
+                      <div>
+                        <span><%= requests[i].datePosted.toDateString() %></span>
+                      </div>
                     </div>
-                    <div style="overflow: hidden;">
-                      <div class="a-column46">Truck Type:</div>
-                      <div class="a-column53"><%= requests[i].truckType %></div>
+
+                    <div class="a-column38">
+                      <div>
+                        <span class="a-request-header-label">REQUESTED BY</span>
+                      </div>
+                      <div>
+                        <span><%= requests[i].requestedBy %></span>
+                      </div>
                     </div>
-                    <div style="overflow: hidden;">
-                      <div class="a-column46">Shipping Date:</div>
-                      <div class="a-column53"><%= requests[i].shippingDate %></div>
+
+                    <div class="a-columne23">
+                      <div>
+                        <span class="a-request-header-label">SHIPPING STATUS</span>
+                      </div>
+                      <div>
+                        <span class="request-status"><%= requests[i].status %></span>
+                      </div>
                     </div>
-                    <div style="overflow: hidden;">
-                      <div class="a-column46">Delivery Date:</div>
-                      <div class="a-column53"><%= requests[i].deliveryDate %></div>
-                    </div>
-                    
+                  </div>
+
+                  <div style="width: 220px; margin-right: -220px; float: left;">
+                    <span><a href="/modify/<%= requests[i]._id %>" class="modify-request-btn">Modify Request</a></span>
                   </div>
 
                 </div>
-
-                <div class="a-fixed-right-grid-col a-col-right" style="width: 220px; margin-right: -220px; float: left;">
-                  <div class="a-row">
-                    <div class="a-button-stack">
-                      <span><a onclick="return confirm('Are you sure you want to delete this request?')" href="/delete-request/<%= requests[i]._id %>" class="delete-request-btn">Delete Request</a></span>
-                      <% if (userRole === "admin") { %>
-                        <span><a href="/assign-carrier-and-freight/<%= requests[i]._id %>" class="assign-carrier-and-freight-btn">Assign Carrier and Freight</a></span>
-                        <% if (requests[i].status === "Not Shipped") { %>
-                          <span><a href="/confirm-shipping/<%= requests[i]._id %>" onclick="return confirm('Are you sure you want to confirm shipping?')" class="confirm-shipping-btn">Confirm Shipping</a></span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="a-request">
+            <div class="a-request-inner">
+              <div class="a-fixed-right-grid">
+                <div class="a-fixed-right-grid-inner" style="overflow: hidden;">
+                  <div class="a-fixed-right-grid-col a-col-left">
+                    <div class="a-column38">
+                      <h5 class="a-column-header">Ship From</h5>
+                      <ul class="displayAddressUL">
+                        <% if (requests[i].shipFrom !== requests[i].shipFromDestination) { %>
+                          <li class="displayAddressLI"><%= requests[i].shipFrom %></li>
+                          <li class="displayAddressLI"><%= requests[i].shipFromDestination %></li>
                         <% } else { %>
-                          <span><a href="/cancel-shipping/<%= requests[i]._id %>" onclick="return confirm('Are you sure you want to cancel shipping?')" class="cancel-shipping-btn">Cancel Shipping</a></span>
+                          <li class="displayAddressLI"><%= requests[i].shipFrom %></li>
                         <% } %>
+                        <li class="displayAddressLI"><%= requests[i].shipFromStreetAddress %></li>
+                        <li class="displayAddressLI"><%= requests[i].shipFromCity %>, <%= requests[i].shipFromState %>, <%= requests[i].shipFromZipcode%></li>
+                        <li class="displayAddressLI"><%= requests[i].shipFromCountry %></li>
+                      </ul>
+                    </div>
+
+                    <div class="a-column38">
+                      <h5 class="a-column-header">Ship To</h5>
+                      <ul class="displayAddressUL">
+                        <% if (requests[i].shipTo !== requests[i].shipToDestination) { %>
+                          <li class="displayAddressLI"><%= requests[i].shipTo %></li>
+                          <li class="displayAddressLI"><%= requests[i].shipToDestination %></li>
+                        <% } else { %>
+                          <li class="displayAddressLI"><%= requests[i].shipTo %></li>
+                        <% } %>
+                        
+                        <li class="displayAddressLI"><%= requests[i].shipToStreetAddress %></li>
+                        <li class="displayAddressLI"><%= requests[i].shipToCity %>, <%= requests[i].shipToState %>, <%= requests[i].shipToZipcode%></li>
+                        <li class="displayAddressLI"><%= requests[i].shipToCountry %></li>
+                      </ul>
+                    </div>
+
+                    <div class="a-column23">
+                      <% if (requests[i].comboLoad === "Yes") { %>
+                        <h5 class="a-column-header">Load Summary (Combo Load)</h5>  
+                      <% } else { %>
+                        <h5 class="a-column-header">Load Summary</h5>
                       <% } %>
+                      <div style="overflow: hidden;">
+                        <div class="a-column46">BOL No:</div>
+                        <div class="a-column53"><%= requests[i].bolNo %></div>
+                      </div>
+                      <% if (requests[i].comboLoad === "Yes") { %>
+                        <div style="overflow: hidden;">
+                          <div class="a-column46">Combo BOL No:</div>
+                          <div class="a-column53"><%= requests[i].comboBolNo %></div>
+                        </div>
+                      <% } %>
+                      <div style="overflow: hidden;">
+                        <div class="a-column46">Weight:</div>
+                        <div class="a-column53"><%= numberWithCommas(requests[i].weightKg) %>kg / <%= numberWithCommas(requests[i].weightLb) %>lb</div>
+                      </div>
+                      <div style="overflow: hidden;">
+                        <div class="a-column46">Truck Type:</div>
+                        <div class="a-column53"><%= requests[i].truckType %></div>
+                      </div>
+                      <div style="overflow: hidden;">
+                        <div class="a-column46">Shipping Date:</div>
+                        <div class="a-column53"><%= requests[i].shippingDate %></div>
+                      </div>
+                      <div style="overflow: hidden;">
+                        <div class="a-column46">Delivery Date:</div>
+                        <div class="a-column53"><%= requests[i].deliveryDate %></div>
+                      </div>
+                      
+                    </div>
+
+                  </div>
+
+                  <div class="a-fixed-right-grid-col a-col-right" style="width: 220px; margin-right: -220px; float: left;">
+                    <div class="a-row">
+                      <div class="a-button-stack">
+                        <span><a onclick="return confirm('Are you sure you want to delete this request?')" href="/delete-request/<%= requests[i]._id %>" class="delete-request-btn">Delete Request</a></span>
+                        <% if (userRole === "admin") { %>
+                          <span><a href="/assign-carrier-and-freight/<%= requests[i]._id %>" class="assign-carrier-and-freight-btn">Assign Carrier and Freight</a></span>
+                          <% if (requests[i].status === "Not Shipped") { %>
+                            <span><a href="/confirm-shipping/<%= requests[i]._id %>" onclick="return confirm('Are you sure you want to confirm shipping?')" class="confirm-shipping-btn">Confirm Shipping</a></span>
+                          <% } else { %>
+                            <span><a href="/cancel-shipping/<%= requests[i]._id %>" onclick="return confirm('Are you sure you want to cancel shipping?')" class="cancel-shipping-btn">Cancel Shipping</a></span>
+                          <% } %>
+                        <% } %>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="a-special-note">
-          <div class="a-request-inner">
-            <div class="a-row">
-              <% if (requests[i].specialNote) { %>
-                <h5 class="a-column-header">Special Note</h5>
-              <div><%= requests[i].specialNote %></div>
-              <% } %>
+          <div class="a-special-note">
+            <div class="a-request-inner">
+              <div class="a-row">
+                <% if (requests[i].specialNote) { %>
+                  <h5 class="a-column-header">Special Note</h5>
+                <div><%= requests[i].specialNote %></div>
+                <% } %>
+              </div>
             </div>
           </div>
+          <br>
         </div>
-        <br>
       <% } %>
     </div>
   </div>

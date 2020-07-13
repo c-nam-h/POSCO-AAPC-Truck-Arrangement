@@ -123,10 +123,6 @@ const homepageController = require("./controllers/homepage");
 // render a homepage with order information sorted by shipping date (oldest to newest)
 app.get("/", redirectIfNotAuthenticatedMiddleware, homepageController);
 
-const filterHomepageShippingStatusController = require("./controllers/filterHomepageShippingStatus");
-app.get("/filter/:status", redirectIfNotAuthenticatedMiddleware, filterHomepageShippingStatusController);
-
-
 
 // search through given start and end shipping dates and show requests that only fall into those dates
 const filterRequestsController = require("./controllers/filterRequests");

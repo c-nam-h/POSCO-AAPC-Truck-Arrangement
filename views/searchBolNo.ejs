@@ -29,10 +29,27 @@
           </div>
         </form>
       </div>
+      
+      <div class="dropdown dropdown-div">
+        <button class="btn btn-secondary dropdown-toggle filter-button" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Shipping Status
+        </button>
+        <div class="dropdown-menu dropdown-menu-right filter" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('all')">All</button>
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('notShipped')">Not Shipped</button>
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('shipped')">Shipped</button>
+        </div>
+      </div>
     </div>
 
     <% if (request) { %>
       <div class="a-request-group">
+        <% if (request.status === "Shipped") { %>
+          <div class="single-request shipped">
+        <% } else { %>
+          <div class="single-request notShipped">
+        <% } %>
+        
         <div class="a-request-header">
           <div class="a-request-inner">
             <div class="a-fixed-right-grid">
@@ -157,6 +174,7 @@
           </div>
         </div>
         <br>
+      </div>
       </div>
     <% } else { %>
       <div class="alert alert-warning alert-dismissible" role="alert">

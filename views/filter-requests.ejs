@@ -41,14 +41,21 @@
           Shipping Status
         </button>
         <div class="dropdown-menu dropdown-menu-right filter" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item filter" href="/filter/not-shipped">Not Shipped</a>
-          <a class="dropdown-item filter" href="/filter/shipped">Shipped</a>
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('all')">All</button>
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('notShipped')">Not Shipped</button>
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('shipped')">Shipped</button>
         </div>
       </div>
     </div>
     
     <div class="a-request-group">
       <% for (var i = 0; i < requests.length; i++) { %>
+        <% if (requests[i].status === "Shipped") { %>
+          <div class="single-request shipped">
+        <% } else { %>
+          <div class="single-request notShipped">
+        <% } %>
+
         <div class="a-request-header">
           <div class="a-request-inner">
             <div class="a-fixed-right-grid">
@@ -195,6 +202,7 @@
           </div>
         </div>
         <br>
+      </div>
       <% } %>
     </div>
   </div>

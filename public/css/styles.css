@@ -196,6 +196,14 @@ h5 {
   font-weight: 700;
 }
 
+.single-request {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
 .a-request {
   border-radius: 0;
   border: 1px solid #ddd;
