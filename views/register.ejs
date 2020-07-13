@@ -2,6 +2,19 @@
 <%- include("partials/navbar"); -%>
 
 <body class="form-group text-center">
+  <% if (message) { %>
+    <div class="alert alert-success alert-dismissible" role="alert">
+      <button class="close" data-dismiss="alert" aria-label="Close" type="button"><span aria-hidden="true">&times;</span></button>
+      <strong>Success!</strong> <%= message %>
+    </div>
+  <% } %>
+  <% if (err) { %>
+    <div class="alert alert-warning alert-dismissible" role="alert">
+      <button class="close" data-dismiss="alert" aria-label="Close" type="button"><span aria-hidden="true">&times;</span></button>
+      <strong>Warning!</strong> <%= err %>
+    </div>
+<% } %>
+
   <form class="form-signin" action="/register" method="post">
     <div class="text-center">
       <img class="login-logo" src="/img/logo.png">

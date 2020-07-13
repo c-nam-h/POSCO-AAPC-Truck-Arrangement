@@ -18,8 +18,12 @@ module.exports = function(req, res) {
         });
       });
   
-      passport.authenticate("local")(req, res, function() {
-        res.redirect("/");
-      });
+      res.render("register", {
+        message: req.body.username + " is successfully registered.",
+        err: null
+      })
+      // passport.authenticate("local")(req, res, function() {
+      //   res.redirect("/");
+      // });
     });
   }

@@ -4,7 +4,10 @@ module.exports = function(req, res, next) {
     User.register({username: req.body.username}, req.body.password, function(err, user) {
         if (err) {
             console.log(err);
-            res.render("error-user-already-registered");
+            return res.render("register", {
+                err: req.body.username + " is already registered. Please try again.",
+                message: null
+            })
         }
         next();
     });

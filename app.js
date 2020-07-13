@@ -83,10 +83,10 @@ const registerController = require("./controllers/register");
 app.get("/register", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], registerController);
 
 const registerUserController = require("./controllers/registerUser");
-const validateRegistrationMiddleware = require("./middleware/validateRegistrationMiddleware");
+const checkDuplicateRegistrationMiddleware = require("./middleware/checkDuplicateRegistrationMiddleware");
 
 // if the logged-in user is admin, then it will register a new user
-app.post("/register", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware, validateRegistrationMiddleware], registerUserController);
+app.post("/register", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware, checkDuplicateRegistrationMiddleware], registerUserController);
 
 
 
