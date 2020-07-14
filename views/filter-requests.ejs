@@ -6,9 +6,9 @@
     <div class="title">
         <h2 style="margin-bottom: 0px;">Search Results</h2>
         <% if (selectedShipToCustomer !== "") { %>
-          <p>Shipping Date: From <%= startShippingDate %> To <%= endShippingDate %>, Customer: <%= selectedShipToCustomer.customer %></p>
+          <p><strong>Shipping Date:</strong> From <%= startShippingDate %> To <%= endShippingDate %>, <strong>Customer:</strong> <%= selectedShipToCustomer.customer %></p>
         <% } else { %>
-          <p>Shipping Date: From <%= startShippingDate %> To <%= endShippingDate %>, Customer: All</p>
+          <p><strong>Shipping Date:</strong> From <%= startShippingDate %> To <%= endShippingDate %>, <strong>Customer:</strong> All</p>
         <% } %>
         
     </div>
