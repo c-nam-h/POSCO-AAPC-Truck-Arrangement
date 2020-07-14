@@ -23,7 +23,11 @@
             <option value="">Select Where To Ship From</option>
             <% if (!shipFromId) { %>
               <% customers.forEach(function(customer) { %>
-                <option value="<%= customer._id %>"><%= customer.customer %></option>
+                <% if (customer.customer === "POSCO AAPC") { %>
+                  <option value="<%= customer._id %>" selected><%= customer.customer %></option>
+                <% } else { %>
+                  <option value="<%= customer._id %>"><%= customer.customer %></option>
+                <% } %>
               <% }) %>  
             <% } else { %>
               <% customers.forEach(function(customer) { %>
@@ -43,7 +47,11 @@
             <option value="">Select Ship From Address</option>
             <% if (!shipFromAddressId) { %>
               <% destinations.forEach(function(destination) { %>
-                <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+                <% if (destination.destination === "POSCO AAPC #1") { %>
+                  <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;" selected><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+                <% } else { %>
+                  <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+                <% } %>
               <% }) %>
             <% } else { %>
               <% destinations.forEach(function(destination) { %>
@@ -66,7 +74,7 @@
             <% if (!shipToId) { %>
               <% customers.forEach(function(customer) { %>
                 <option value="<%= customer._id %>"><%= customer.customer %></option>
-              <% }) %>  
+              <% }) %>
             <% } else { %>
               <% customers.forEach(function(customer) { %>
                 <% if (customer._id.equals(shipToId)) { %>
@@ -108,7 +116,7 @@
 
         <div class="col-md-3">
           <label for="inputBolNo">BOL No</label>
-          <input class="form-control" id="inputBolNo" type="text" name="bolNo" value="<%= bolNo %>" pattern="[A-Z]{1}[0-9]{11}|[A-Z]{3}[0-9]{11}|[A-Z]{2}[0-9]{12}" placeholder="Arrangement #" title="Ex) F12345678901, APC12345678901 or ST123456789012">
+          <input class="form-control" id="inputBolNo" type="text" name="bolNo" value="<%= bolNo %>" pattern="[A-Z]{1}[0-9]{11}|[A-Z]{3}[0-9]{11}|[A-Z]{2}[0-9]{12}|Return" placeholder="Arrangement #" title="Ex) F12345678901, APC12345678901, ST123456789012 or Return">
         </div>
         
         <div class="col-md-2">
