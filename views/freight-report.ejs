@@ -6,13 +6,24 @@
     <div class="title">
       <h2 class="homepage-title-heading" style="display: inline;">Freight Report</h2>
       <button class="export-csv-btn" onclick="exportTableToCSV('freight_report.csv')" name="button">Export to CSV File</button>
+      <div class="dropdown dropdown-div">
+        <button class="btn btn-secondary dropdown-toggle filter-button-report" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Shipping Status
+        </button>
+        <div class="dropdown-menu dropdown-menu-right filter" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('all')">All</button>
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('notShipped')">Not Shipped</button>
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('shipped')">Shipped</button>
+        </div>
+      </div>
     </div>
 
+    
     <br>
 
     <table class="table table-hover text-center">
       <thead>
-        <tr>
+        <tr class="shipped notShipped">
           <th class="text-center"><input type="checkbox" onClick="toggle(this)" hover="Select"></th>
           <th class="text-center">Shipping Date</th>
           <th class="text-center">BOL No</th>
@@ -30,18 +41,33 @@
       <% requests.forEach(function(request) { %>
         <% freights.forEach(function(freight) { %>
           <% if (request._id.equals(freight.request_id)) { %>
-            <tr>
-              <th class="text-center"><input type="checkbox" name="checkbox" value="<%=request._id%>" form="delete-form"></th>
-              <td><%= request.shippingDate %></td>
-              <td><%= request.bolNo %></td>
-              <td><%= request.shipFromCity %> <%= request.shipFromState %></td>
-              <td><%= request.shipToCity %> <%= request.shipToState %></td>
-              <td><%= request.weightKg %></td>
-              <td><%= request.weightLb %></td>
-              <td><%= request.status %></td>
-              <td><%= freight.carrier %></td>
-              <td>$<%= freight.freight.toFixed(2) %></td>
-            </tr>
+            <% if (request.status === "Shipped") { %>
+              <tr class="shipped">
+                <th class="text-center"><input type="checkbox" name="checkbox" value="<%=request._id%>" form="delete-form"></th>
+                <td><%= request.shippingDate %></td>
+                <td><%= request.bolNo %></td>
+                <td><%= request.shipFromCity %> <%= request.shipFromState %></td>
+                <td><%= request.shipToCity %> <%= request.shipToState %></td>
+                <td><%= request.weightKg %></td>
+                <td><%= request.weightLb %></td>
+                <td><%= request.status %></td>
+                <td><%= freight.carrier %></td>
+                <td>$<%= freight.freight.toFixed(2) %></td>
+              </tr>
+            <% } else { %>
+              <tr class="notShipped">
+                <th class="text-center"><input type="checkbox" name="checkbox" value="<%=request._id%>" form="delete-form"></th>
+                <td><%= request.shippingDate %></td>
+                <td><%= request.bolNo %></td>
+                <td><%= request.shipFromCity %> <%= request.shipFromState %></td>
+                <td><%= request.shipToCity %> <%= request.shipToState %></td>
+                <td><%= request.weightKg %></td>
+                <td><%= request.weightLb %></td>
+                <td><%= request.status %></td>
+                <td><%= freight.carrier %></td>
+                <td>$<%= freight.freight.toFixed(2) %></td>
+              </tr>
+            <% } %>
           <% } %>
         <% }) %>
       <% }) %>
@@ -52,6 +78,7 @@
 
 <%- include("partials/footer"); -%>
 <%- include("partials/scripts"); -%>
+<script src="/javascript/shippingStatusFilterReport.js"></script>
 </body>
 
 </html>

@@ -204,6 +204,10 @@ h5 {
   display: block;
 }
 
+.show-tr {
+  display: table-row;
+}
+
 .a-request {
   border-radius: 0;
   border: 1px solid #ddd;
@@ -467,4 +471,23 @@ a {
   border: 1px solid;
   border-color: #ccc;
   border-radius: 4px;
+}
+
+.filter-button-report {
+  font-size: 13px;
+  color: black;
+  float: right;
+  margin-right: 10px;
+  background: #fff;
+  border: 1px solid;
+  border-color: #ccc;
+  border-radius: 4px;
+}
+
+table {
+  font-size: 11px;
+}
+
+tr {
+  display: none;
 }
