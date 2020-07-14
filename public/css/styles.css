@@ -204,6 +204,10 @@ h5 {
   display: block;
 }
 
+.tr {
+  display: none;
+}
+
 .show-tr {
   display: table-row;
 }
@@ -488,6 +492,3 @@ table {
   font-size: 11px;
 }
 
-tr {
-  display: none;
-}

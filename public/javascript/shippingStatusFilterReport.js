@@ -1,7 +1,7 @@
 shippingStatusFilter("all");
 
 function shippingStatusFilter(status) {
-    let requests = document.getElementsByTagName("tr");
+    let requests = document.getElementsByClassName("tr");
     
     if (status === "all") {
         status = "";
