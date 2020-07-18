@@ -419,7 +419,6 @@ a {
   width: 180px;
   height: 33px;
   padding: 6px 12px;
-  float: right;
   font-size: 13px;
   text-align: center;
   color: black;
@@ -492,3 +491,21 @@ table {
   font-size: 11px;
 }
 
+.parentCell{ 
+  position: relative; 
+} 
+.tooltip{ 
+  display: none; 
+  position: absolute;  
+  z-index: 100; 
+  border: 1px; 
+  background-color: white; 
+  border: 1px solid green; 
+  padding: 3px; 
+  color: green;  
+  top: 20px;  
+  left: 20px; 
+} 
+.parentCell:hover span.tooltip{ 
+  display:block; 
+} 

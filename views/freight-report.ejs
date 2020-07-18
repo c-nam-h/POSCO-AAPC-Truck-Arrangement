@@ -4,10 +4,28 @@
 <body>
   <div class="container">
     <div class="title">
-      <h2 class="homepage-title-heading" style="display: inline;">Freight Report</h2>
-      <button class="export-csv-btn" onclick="exportTableToCSV('freight_report.csv')" name="button">Export to CSV File</button>
-      <div class="dropdown dropdown-div">
-        <button class="btn btn-secondary dropdown-toggle filter-button-report" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <h2 style="margin-bottom: 0px;">Freight Report</h2>
+      <p><strong>Shipping Date:</strong> From <%= monday.toDateString() %>, <strong>Customer:</strong> All</p>
+    </div>
+
+    <div style="margin-bottom: 1rem">
+      <div style="display: inline-block;">
+        <form action="/filter-requests" method="post">
+          <div style="display: inline-block;">
+            <label>Shipping Date</label>
+            <br>
+            <input class="date-picker" type="date" name="startShippingDate" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
+            <input class="date-picker" type="date" name="endShippingDate" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
+          </div>
+              <button class="btn date-search-btn" id="request-submit-btn" type="submit">Search</button>
+        </form>
+      </div>
+      <div style="display: inline-block; float: right; margin: 22px 0 0 5px;">
+        <button class="export-csv-btn" onclick="exportTableToCSV('freight_report.csv')" name="button">Export to CSV File</button>
+      </div>
+      
+      <div class="dropdown dropdown-div">        
+        <button class="btn btn-secondary dropdown-toggle filter-button" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Shipping Status
         </button>
         <div class="dropdown-menu dropdown-menu-right filter" aria-labelledby="dropdownMenuButton">
@@ -18,13 +36,9 @@
       </div>
     </div>
 
-    
-    <br>
-
     <table class="table table-hover text-center">
       <thead>
         <tr class="tr shipped notShipped">
-          <th class="text-center"><input type="checkbox" onClick="toggle(this)" hover="Select"></th>
           <th class="text-center">Shipping Date</th>
           <th class="text-center">BOL No</th>
           <th class="text-center">Ship From</th>
@@ -38,40 +52,76 @@
       </thead>
 
     <tbody>
-      <% requests.forEach(function(request) { %>
+      <% for (var i = 0; i < requests.length; i++) { %>
         <% freights.forEach(function(freight) { %>
-          <% if (request._id.equals(freight.request_id)) { %>
-            <% if (request.status === "Shipped") { %>
+          <% if (requests[i]._id.equals(freight.request_id)) { %>
+            <% if (requests[i].status === "Shipped") { %>
               <tr class="tr shipped">
-                <th class="text-center"><input type="checkbox" name="checkbox" value="<%=request._id%>" form="delete-form"></th>
-                <td><%= request.shippingDate %></td>
-                <td><%= request.bolNo %></td>
-                <td><%= request.shipFromCity %> <%= request.shipFromState %></td>
-                <td><%= request.shipToCity %> <%= request.shipToState %></td>
-                <td><%= request.weightKg %></td>
-                <td><%= request.weightLb %></td>
-                <td><%= request.status %></td>
+                <td><%= requests[i].shippingDate %></td>
+                <td title="Requested by: <%= requests[i].requestedBy %>"><a href="#" data-toggle="modal" data-target="#exampleModal<%= [i] %>"><%= requests[i].bolNo %></a></td>
+                <td><%= requests[i].shipFromCity %> <%= requests[i].shipFromState %></td>
+                <td><%= requests[i].shipToCity %> <%= requests[i].shipToState %></td>
+                <td><%= requests[i].weightKg %></td>
+                <td><%= requests[i].weightLb %></td>
+                <td><%= requests[i].status %></td>
                 <td><%= freight.carrier %></td>
                 <td>$<%= freight.freight.toFixed(2) %></td>
               </tr>
             <% } else { %>
               <tr class="tr notShipped">
-                <th class="text-center"><input type="checkbox" name="checkbox" value="<%=request._id%>" form="delete-form"></th>
-                <td><%= request.shippingDate %></td>
-                <td><%= request.bolNo %></td>
-                <td><%= request.shipFromCity %> <%= request.shipFromState %></td>
-                <td><%= request.shipToCity %> <%= request.shipToState %></td>
-                <td><%= request.weightKg %></td>
-                <td><%= request.weightLb %></td>
-                <td><%= request.status %></td>
+                <td><%= requests[i].shippingDate %></td>
+                <td title="Requested by: <%= requests[i].requestedBy %>"><a href="#" data-toggle="modal" data-target="#exampleModal<%= [i] %>"><%= requests[i].bolNo %></a></td>
+                <td><%= requests[i].shipFromCity %> <%= requests[i].shipFromState %></td>
+                <td><%= requests[i].shipToCity %> <%= requests[i].shipToState %></td>
+                <td><%= requests[i].weightKg %></td>
+                <td><%= requests[i].weightLb %></td>
+                <td><%= requests[i].status %></td>
                 <td><%= freight.carrier %></td>
                 <td>$<%= freight.freight.toFixed(2) %></td>
               </tr>
             <% } %>
+            <div class="modal fade" id="exampleModal<%= [i] %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Customer: <%= requests[i].shipTo %>
+                      <br>
+                      Requsted By: <%= requests[i].requestedBy %>
+                      </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form id="freight-form" action="/assign-carrier-and-freight/<%= requests[i]._id %>" method="post">
+                        <label for="selectCarrier"><strong>Carrier</strong></label>
+                        <select class="form-control" name="carrier" id="selectCarrier">
+                          <option value="">Select Carrier</option>
+                          <% carriers.forEach(function(carrier) { %>
+                            <% if (freight.carrier === carrier.carrierName) { %>
+                              <option value="<%= carrier.carrierName %>" selected><%= carrier.carrierName %></option>
+                            <% } else { %>
+                              <option value="<%= carrier.carrierName %>"><%= carrier.carrierName %></option>
+                            <% } %>
+                          <% }) %>
+                        </select>
+                        <br>
+                        <label for="inputFreight"><strong>Freight ($/Truck)</strong></label>
+                        <input class="form-control" id="inputFreight" type="text" name="freight" value="<%= freight.freight %>" pattern="[0-9]{0,9}.[0-9]{0,2}" title="Please enter up to 2 decimal places: $123 or $123.45" required>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary" form="freight-form" name="button" value="report">Save changes</button>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
           <% } %>
         <% }) %>
-      <% }) %>
-
+      <% } %>
+      
     </tbody>
   </table>
 </div>
