@@ -5,12 +5,12 @@
   <div class="container">
     <div class="title">
       <h2 style="margin-bottom: 0px;">Freight Report</h2>
-      <p><strong>Shipping Date:</strong> From <%= firstdayOfMonth.toDateString() %></p>
+      <p><strong>Shipping Date:</strong> From <%= startShippingDate %> To <%= endShippingDate %></p>
     </div>
 
     <div style="margin-bottom: 1rem">
       <div style="display: inline-block;">
-        <form action="/freight-report/filter-requests-by-shipping-dates" method="post">
+        <form action="/freight-report/filter-requests" method="post">
           <div style="display: inline-block;">
             <label>Shipping Date</label>
             <br>

@@ -14,7 +14,8 @@ module.exports = async function(req, res) {
   let date = getMonday[2];
 
   global.monday = new Date(new Date(year, month, date).setUTCHours(0, 0, 0, 0));
-
+  global.firstdayOfMonth = new Date(new Date(year, month, 1).setUTCHours(0, 0, 0, 0));
+  
   // assign user role to the global variable
   const selectedUserRole = await UserRole.findOne({user_id: req.user._id});
   userRole = selectedUserRole.user_role;

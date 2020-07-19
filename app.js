@@ -40,8 +40,8 @@ const passportLocalMongoose = require("passport-local-mongoose");
 app.use(passport.initialize());
 app.use(passport.session());
 
-// mongoose.connect("mongodb+srv://" + process.env.USERNAME + ":" + process.env.PASSWORD + "@posco-aapc-logistics-l3bdr.mongodb.net/truckRequestDB?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
-mongoose.connect("mongodb://localhost/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+mongoose.connect("mongodb+srv://" + process.env.USERNAME + ":" + process.env.PASSWORD + "@posco-aapc-logistics-l3bdr.mongodb.net/truckRequestDB?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+// mongoose.connect("mongodb://localhost/truckRequestDB", {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
  
 // require each model
 const Request = require("./models/Request");
@@ -182,6 +182,11 @@ app.post("/modify/:_id", [redirectIfNotAuthenticatedMiddleware, checkSubmittedUs
 // FREIGHT REPORT SECTION - WHERE ONLY ADMIN CAN SEE CARRIER AND FREIGHT INFORMATION FOR EACH REQUEST
 const freightReportController = require("./controllers/freightReport");
 app.get("/freight-report", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], freightReportController);
+
+// search through given start and end shipping dates and show requests that only fall into those dates
+const filterRequestsInFreightReportController = require("./controllers/filterRequestsInFreightReport");
+app.post("/freight-report/filter-requests-by-shipping-dates", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], filterRequestsInFreightReportController);
+
 
 
 
