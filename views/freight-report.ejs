@@ -81,6 +81,7 @@
               </tr>
             <% } %>
             <div class="modal fade" id="exampleModal<%= [i] %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <form action="/assign-carrier-and-freight/<%= requests[i]._id %>" method="post">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -93,7 +94,6 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                      <form id="freight-form" action="/assign-carrier-and-freight/<%= requests[i]._id %>" method="post">
                         <label for="selectCarrier"><strong>Carrier</strong></label>
                         <select class="form-control" name="carrier" id="selectCarrier">
                           <option value="">Select Carrier</option>
@@ -108,15 +108,14 @@
                         <br>
                         <label for="inputFreight"><strong>Freight ($/Truck)</strong></label>
                         <input class="form-control" id="inputFreight" type="text" name="freight" value="<%= freight.freight %>" pattern="[0-9]{0,9}.[0-9]{0,2}" title="Please enter up to 2 decimal places: $123 or $123.45" required>
-                      </form>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary" form="freight-form" name="button" value="report">Save changes</button>
+                      <button type="submit" class="btn btn-primary" name="button" value="report">Save changes</button>
                     </div>
                   </div>
                 </div>
-
+              </form>
             </div>
           <% } %>
         <% }) %>

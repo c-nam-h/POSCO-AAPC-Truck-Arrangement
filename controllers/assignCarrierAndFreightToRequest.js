@@ -4,6 +4,7 @@ const Freight = require("../models/Freight");
 module.exports = async function(req, res) {
     const selectedRequestId = req.params._id;
     const button = req.body.button;
+    console.log(req.body);
 
     await Freight.updateOne({request_id: selectedRequestId}, {
         carrier: req.body.carrier,
