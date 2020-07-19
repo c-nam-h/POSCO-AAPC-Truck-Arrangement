@@ -10,7 +10,7 @@
 
     <div style="margin-bottom: 1rem">
       <div style="display: inline-block;">
-        <form action="/freight-report/filter-requests" method="post">
+        <form action="/freight-report/filter-requests-by-shipping-dates" method="post">
           <div style="display: inline-block;">
             <label>Shipping Date</label>
             <br>
@@ -21,8 +21,15 @@
         </form>
       </div>
       <div style="display: inline-block; float: right; margin: 22px 0 0 5px;">
-        <button class="export-csv-btn" onclick="exportTableToCSV('freight_report.csv')" name="button">Export to CSV File</button>
+        <button class="export-csv-btn" onclick="exportTableToCSV('freight_report.csv')" name="button">CSV File</button>
       </div>
+
+      <form action="/modify-shipping-status" method="post" id="shipping-status-modify-form" style="display: inline-block; float: right; margin: 22px 0 0 5px;">
+        <div>
+          <button class="export-csv-btn" name="button" value="confirm">Confirm</button>
+          <button class="export-csv-btn" name="button" value="cancel">Cancel</button>
+        </div>
+      </form>
       
       <div class="dropdown dropdown-div">        
         <button class="btn btn-secondary dropdown-toggle filter-button" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -39,6 +46,7 @@
     <table class="table table-hover text-center">
       <thead>
         <tr class="tr shipped notShipped">
+          <th class="text-center"><input type="checkbox" onClick="toggle(this)" hover="Select"></th>
           <th class="text-center">Shipping Date</th>
           <th class="text-center">BOL No</th>
           <th class="text-center">Ship From</th>
@@ -57,6 +65,7 @@
           <% if (requests[i]._id.equals(freight.request_id)) { %>
             <% if (requests[i].status === "Shipped") { %>
               <tr class="tr shipped">
+                <th class="text-center"><input type="checkbox" name="checkbox" value="<%=requests[i]._id%>" form="shipping-status-modify-form"></th>
                 <td><%= requests[i].shippingDate %></td>
                 <td title="Requested by: <%= requests[i].requestedBy %>"><a href="#" data-toggle="modal" data-target="#exampleModal<%= [i] %>"><%= requests[i].bolNo %></a></td>
                 <td><%= requests[i].shipFromCity %> <%= requests[i].shipFromState %></td>
@@ -69,6 +78,7 @@
               </tr>
             <% } else { %>
               <tr class="tr notShipped">
+                <th class="text-center"><input type="checkbox" name="checkbox" value="<%=requests[i]._id%>" form="shipping-status-modify-form"></th>
                 <td><%= requests[i].shippingDate %></td>
                 <td title="Requested by: <%= requests[i].requestedBy %>"><a href="#" data-toggle="modal" data-target="#exampleModal<%= [i] %>"><%= requests[i].bolNo %></a></td>
                 <td><%= requests[i].shipFromCity %> <%= requests[i].shipFromState %></td>
@@ -94,8 +104,8 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                        <label for="selectCarrier"><strong>Carrier</strong></label>
-                        <select class="form-control" name="carrier" id="selectCarrier">
+                        <label for="selectCarrier<%= [i] %>"><strong>Carrier</strong></label>
+                        <select class="form-control" name="carrier" id="selectCarrier<%= [i] %>">
                           <option value="">Select Carrier</option>
                           <% carriers.forEach(function(carrier) { %>
                             <% if (freight.carrier === carrier.carrierName) { %>
@@ -106,12 +116,12 @@
                           <% }) %>
                         </select>
                         <br>
-                        <label for="inputFreight"><strong>Freight ($/Truck)</strong></label>
-                        <input class="form-control" id="inputFreight" type="text" name="freight" value="<%= freight.freight %>" pattern="[0-9]{0,9}.[0-9]{0,2}" title="Please enter up to 2 decimal places: $123 or $123.45" required>
+                        <label for="inputFreight<%= [i] %>"><strong>Freight ($/Truck)</strong></label>
+                        <input class="form-control" id="inputFreight<%= [i] %>" type="text" name="freight" value="<%= freight.freight %>" pattern="[0-9]{0,9}.[0-9]{0,2}" title="Please enter up to 2 decimal places: $123 or $123.45" required>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary" name="button" value="report">Save changes</button>
+                      <button type="submit" class="btn btn-primary" name="button" value="report" onclick="return confirm('Are you sure to save changes?')">Save changes</button>
                     </div>
                   </div>
                 </div>

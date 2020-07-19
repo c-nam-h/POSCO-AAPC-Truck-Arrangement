@@ -187,6 +187,8 @@ app.get("/freight-report", [redirectIfNotAuthenticatedMiddleware, validateAdminM
 const filterRequestsInFreightReportController = require("./controllers/filterRequestsInFreightReport");
 app.post("/freight-report/filter-requests-by-shipping-dates", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], filterRequestsInFreightReportController);
 
+const modifyShippingStatusInReportController = require("./controllers/modifyShippingStatusInReport");
+app.post("/modify-shipping-status", [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware], modifyShippingStatusInReportController);
 
 
 
