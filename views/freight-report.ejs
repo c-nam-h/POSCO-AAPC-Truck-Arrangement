@@ -58,6 +58,7 @@
           <th class="text-center">Status</th>
           <th class="text-center">Carrier</th>
           <th class="text-center">Freight</th>
+          <th class="text-center">OTD</th>
         </tr>
       </thead>
 
@@ -79,6 +80,13 @@
                 <td><%= requests[i].status %></td>
                 <td><%= freight.carrier %></td>
                 <td>$<%= freight.freight.toFixed(2) %></td>
+                <% if (freight.onTimeDelivery === "Y") { %>
+                  <td><a href="/cancelOnTimeDelivery/<%= freight._id %>"><%= freight.onTimeDelivery %></a></td>
+                <% } else if (freight.onTimeDelivery === "N") { %>
+                  <td><a href="/confirmOnTimeDelivery/<%= freight._id %>"><%= freight.onTimeDelivery %></a></td>
+                <% } else { %>
+                  <td>TBD</td>
+                <% } %>
               </tr>
             <% } else { %>
               <tr class="tr notShipped">
@@ -94,6 +102,7 @@
                 <td><%= requests[i].status %></td>
                 <td><%= freight.carrier %></td>
                 <td>$<%= freight.freight.toFixed(2) %></td>
+                <td>TBD</td>
               </tr>
             <% } %>
             <div class="modal fade" id="exampleModal<%= [i] %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
