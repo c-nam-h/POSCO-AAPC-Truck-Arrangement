@@ -30,7 +30,7 @@
           </div>
         </form>
       </div>
-
+      
       <div class="dropdown dropdown-div">
         <button class="btn btn-secondary dropdown-toggle filter-button" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Shipping Status
@@ -107,7 +107,7 @@
                         <% } else { %>
                           <li class="displayAddressLI"><%= requests[i].shipFrom %></li>
                         <% } %>
-                        
+
                         <li class="displayAddressLI"><%= requests[i].shipFromStreetAddress %></li>
                         <li class="displayAddressLI"><%= requests[i].shipFromCity %>, <%= requests[i].shipFromState %>, <%= requests[i].shipFromZipcode%></li>
                         <li class="displayAddressLI"><%= requests[i].shipFromCountry %></li>
