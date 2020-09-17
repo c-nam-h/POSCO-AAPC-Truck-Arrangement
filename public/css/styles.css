@@ -505,7 +505,3 @@ table {
 .parentCell:hover span.tooltip {
   display: block;
 }
-
-.customer {
-  font-size: 4px;
-}

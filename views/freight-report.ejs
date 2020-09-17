@@ -42,112 +42,111 @@
         </div>
       </div>
     </div>
+      <table class="table table-hover text-center">
+        <thead>
+          <tr class="tr shipped notShipped">
+            <th class="text-center"><input type="checkbox" onClick="toggle(this)" hover="Select"></th>
+            <th class="text-center">Shipping Date</th>
+            <th class="text-center">Customer</th>
+            <th class="text-center">BOL No</th>
+            <th class="text-center">Ship From</th>
+            <th class="text-center">Delivery To</th>
+            <th class="text-center">Destination</th>
+            <th class="text-center">Weight(Kg)</th>
+            <th class="text-center">Weight(Lb)</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Carrier</th>
+            <th class="text-center">Freight</th>
+            <th class="text-center">OTD</th>
+          </tr>
+        </thead>
 
-    <table class="table table-hover text-center">
-      <thead>
-        <tr class="tr shipped notShipped">
-          <th class="text-center"><input type="checkbox" onClick="toggle(this)" hover="Select"></th>
-          <th class="text-center">Shipping Date</th>
-          <th class="text-center">Customer</th>
-          <th class="text-center">BOL No</th>
-          <th class="text-center">Ship From</th>
-          <th class="text-center">Delivery To</th>
-          <th class="text-center">Destination</th>
-          <th class="text-center">Weight(Kg)</th>
-          <th class="text-center">Weight(Lb)</th>
-          <th class="text-center">Status</th>
-          <th class="text-center">Carrier</th>
-          <th class="text-center">Freight</th>
-          <th class="text-center">OTD</th>
-        </tr>
-      </thead>
-
-    <tbody>
-      <% for (var i = 0; i < requests.length; i++) { %>
-        <% freights.forEach(function(freight) { %>
-          <% if (requests[i]._id.equals(freight.request_id)) { %>
-            <% if (requests[i].status === "Shipped") { %>
-              <tr class="tr shipped">
-                <th class="text-center"><input type="checkbox" name="checkbox" value="<%=requests[i]._id%>" form="shipping-status-modify-form"></th>
-                <td><%= requests[i].shippingDate %></td>
-                <td class="customer"><%= requests[i].shipTo %></td>
-                <td title="Requested by: <%= requests[i].requestedBy %>"><a href="#" data-toggle="modal" data-target="#exampleModal<%= [i] %>"><%= requests[i].bolNo %></a></td>
-                <td><%= requests[i].shipFromCity %> <%= requests[i].shipFromState %></td>
-                <td><%= requests[i].shipToCity %> <%= requests[i].shipToState %></td>
-                <td><%= requests[i].shipToDestination %></td>
-                <td><%= requests[i].weightKg %></td>
-                <td><%= requests[i].weightLb %></td>
-                <td><%= requests[i].status %></td>
-                <td><%= freight.carrier %></td>
-                <td>$<%= freight.freight.toFixed(2) %></td>
-                <% if (freight.onTimeDelivery === "Y") { %>
-                  <td><a href="/cancelOnTimeDelivery/<%= freight._id %>"><%= freight.onTimeDelivery %></a></td>
-                <% } else if (freight.onTimeDelivery === "N") { %>
-                  <td><a href="/confirmOnTimeDelivery/<%= freight._id %>"><%= freight.onTimeDelivery %></a></td>
-                <% } else { %>
+      <tbody>
+        <% for (var i = 0; i < requests.length; i++) { %>
+          <% freights.forEach(function(freight) { %>
+            <% if (requests[i]._id.equals(freight.request_id)) { %>
+              <% if (requests[i].status === "Shipped") { %>
+                <tr class="tr shipped">
+                  <th class="text-center"><input type="checkbox" name="checkbox" value="<%=requests[i]._id%>" form="shipping-status-modify-form"></th>
+                  <td><%= requests[i].shippingDate %></td>
+                  <td><%= requests[i].shipTo %></td>
+                  <td title="Requested by: <%= requests[i].requestedBy %>"><a href="#" data-toggle="modal" data-target="#exampleModal<%= [i] %>"><%= requests[i].bolNo %></a></td>
+                  <td><%= requests[i].shipFromCity %> <%= requests[i].shipFromState %></td>
+                  <td><%= requests[i].shipToCity %> <%= requests[i].shipToState %></td>
+                  <td><%= requests[i].shipToDestination %></td>
+                  <td><%= requests[i].weightKg %></td>
+                  <td><%= requests[i].weightLb %></td>
+                  <td><%= requests[i].status %></td>
+                  <td><%= freight.carrier %></td>
+                  <td>$<%= freight.freight.toFixed(2) %></td>
+                  <% if (freight.onTimeDelivery === "Y") { %>
+                    <td><a href="/cancelOnTimeDelivery/<%= freight._id %>"><%= freight.onTimeDelivery %></a></td>
+                  <% } else if (freight.onTimeDelivery === "N") { %>
+                    <td><a href="/confirmOnTimeDelivery/<%= freight._id %>"><%= freight.onTimeDelivery %></a></td>
+                  <% } else { %>
+                    <td>TBD</td>
+                  <% } %>
+                </tr>
+              <% } else { %>
+                <tr class="tr notShipped">
+                  <th class="text-center"><input type="checkbox" name="checkbox" value="<%=requests[i]._id%>" form="shipping-status-modify-form"></th>
+                  <td><%= requests[i].shippingDate %></td>
+                  <td><%= requests[i].shipTo %></td>
+                  <td title="Requested by: <%= requests[i].requestedBy %>"><a href="#" data-toggle="modal" data-target="#exampleModal<%= [i] %>"><%= requests[i].bolNo %></a></td>
+                  <td><%= requests[i].shipFromCity %> <%= requests[i].shipFromState %></td>
+                  <td><%= requests[i].shipToCity %> <%= requests[i].shipToState %></td>
+                  <td><%= requests[i].shipToDestination %></td>
+                  <td><%= requests[i].weightKg %></td>
+                  <td><%= requests[i].weightLb %></td>
+                  <td><%= requests[i].status %></td>
+                  <td><%= freight.carrier %></td>
+                  <td>$<%= freight.freight.toFixed(2) %></td>
                   <td>TBD</td>
-                <% } %>
-              </tr>
-            <% } else { %>
-              <tr class="tr notShipped">
-                <th class="text-center"><input type="checkbox" name="checkbox" value="<%=requests[i]._id%>" form="shipping-status-modify-form"></th>
-                <td><%= requests[i].shippingDate %></td>
-                <td class="customer"><%= requests[i].shipTo %></td>
-                <td title="Requested by: <%= requests[i].requestedBy %>"><a href="#" data-toggle="modal" data-target="#exampleModal<%= [i] %>"><%= requests[i].bolNo %></a></td>
-                <td><%= requests[i].shipFromCity %> <%= requests[i].shipFromState %></td>
-                <td><%= requests[i].shipToCity %> <%= requests[i].shipToState %></td>
-                <td><%= requests[i].shipToDestination %></td>
-                <td><%= requests[i].weightKg %></td>
-                <td><%= requests[i].weightLb %></td>
-                <td><%= requests[i].status %></td>
-                <td><%= freight.carrier %></td>
-                <td>$<%= freight.freight.toFixed(2) %></td>
-                <td>TBD</td>
-              </tr>
-            <% } %>
-            <div class="modal fade" id="exampleModal<%= [i] %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <form action="/assign-carrier-and-freight/<%= requests[i]._id %>" method="post">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">Customer: <%= requests[i].shipTo %>
-                      <br>
-                      Requsted By: <%= requests[i].requestedBy %>
-                      </h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                        <label for="selectCarrier<%= [i] %>"><strong>Carrier</strong></label>
-                        <select class="form-control" name="carrier" id="selectCarrier<%= [i] %>">
-                          <option value="">Select Carrier</option>
-                          <% carriers.forEach(function(carrier) { %>
-                            <% if (freight.carrier === carrier.carrierName) { %>
-                              <option value="<%= carrier.carrierName %>" selected><%= carrier.carrierName %></option>
-                            <% } else { %>
-                              <option value="<%= carrier.carrierName %>"><%= carrier.carrierName %></option>
-                            <% } %>
-                          <% }) %>
-                        </select>
+                </tr>
+              <% } %>
+              <div class="modal fade" id="exampleModal<%= [i] %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <form action="/assign-carrier-and-freight/<%= requests[i]._id %>" method="post">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Customer: <%= requests[i].shipTo %>
                         <br>
-                        <label for="inputFreight<%= [i] %>"><strong>Freight ($/Truck)</strong></label>
-                        <input class="form-control" id="inputFreight<%= [i] %>" type="text" name="freight" value="<%= freight.freight %>" pattern="[0-9]{0,9}.[0-9]{0,2}" title="Please enter up to 2 decimal places: $123 or $123.45" required>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary" name="button" value="report" onclick="return confirm('Are you sure to save changes?')">Save changes</button>
+                        Requsted By: <%= requests[i].requestedBy %>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                          <label for="selectCarrier<%= [i] %>"><strong>Carrier</strong></label>
+                          <select class="form-control" name="carrier" id="selectCarrier<%= [i] %>">
+                            <option value="">Select Carrier</option>
+                            <% carriers.forEach(function(carrier) { %>
+                              <% if (freight.carrier === carrier.carrierName) { %>
+                                <option value="<%= carrier.carrierName %>" selected><%= carrier.carrierName %></option>
+                              <% } else { %>
+                                <option value="<%= carrier.carrierName %>"><%= carrier.carrierName %></option>
+                              <% } %>
+                            <% }) %>
+                          </select>
+                          <br>
+                          <label for="inputFreight<%= [i] %>"><strong>Freight ($/Truck)</strong></label>
+                          <input class="form-control" id="inputFreight<%= [i] %>" type="text" name="freight" value="<%= freight.freight %>" pattern="[0-9]{0,9}.[0-9]{0,2}" title="Please enter up to 2 decimal places: $123 or $123.45" required>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" name="button" value="report" onclick="return confirm('Are you sure to save changes?')">Save changes</button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </form>
-            </div>
-          <% } %>
-        <% }) %>
-      <% } %>
-      
-    </tbody>
-  </table>
+                </form>
+              </div>
+            <% } %>
+          <% }) %>
+        <% } %>
+        
+      </tbody>
+      </table>
 </div>
 
 <%- include("partials/footer"); -%>
