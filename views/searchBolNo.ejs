@@ -20,7 +20,7 @@
               <label for="selectShipToCustomer">Ship To Customer</label>
               <br>
               <select id="selectShipToCustomer" class="search-ship-to-customer" name="shipToCustomer">
-                <option value="">Select</option>
+                <option value="">All</option>
                 <% customers.forEach(function(customer) { %>
                   <option value="<%= customer._id %>"><%= customer.customer %></option>
                 <% }) %>
