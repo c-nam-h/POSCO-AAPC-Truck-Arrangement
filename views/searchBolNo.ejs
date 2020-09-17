@@ -11,7 +11,7 @@
       <div style="display: inline-block;">
         <form action="/filter-requests" method="post">
           <div style="display: inline-block;">
-            <label>Shipping Date</label>
+            <label>Shipping Date*</label>
             <br>
             <input class="date-picker" type="date" name="startShippingDate" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
             <input class="date-picker" type="date" name="endShippingDate" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
@@ -100,7 +100,13 @@
                   <div class="a-column38">
                     <h5 class="a-column-header">Ship From</h5>
                     <ul class="displayAddressUL">
-                      <li class="displayAddressLI"><%= request.shipFrom %></li>
+                      <% if (request.shipFrom !== request.shipFromDestination) { %>
+                        <li class="displayAddressLI"><%= request.shipFrom %></li>
+                        <li class="displayAddressLI"><%= request.shipFromDestination %></li>
+                      <% } else { %>
+                        <li class="displayAddressLI"><%= request.shipFrom %></li>
+                      <% } %>
+
                       <li class="displayAddressLI"><%= request.shipFromStreetAddress %></li>
                       <li class="displayAddressLI"><%= request.shipFromCity %>, <%= request.shipFromState %>, <%= request.shipFromZipcode%></li>
                       <li class="displayAddressLI"><%= request.shipFromCountry %></li>
@@ -110,7 +116,13 @@
                   <div class="a-column38">
                     <h5 class="a-column-header">Ship To</h5>
                     <ul class="displayAddressUL">
-                      <li class="displayAddressLI"><%= request.shipTo %></li>
+                      <% if (request.shipTo !== request.shipToDestination) { %>
+                        <li class="displayAddressLI"><%= request.shipTo %></li>
+                        <li class="displayAddressLI"><%= request.shipToDestination %></li>
+                      <% } else { %>
+                        <li class="displayAddressLI"><%= request.shipTo %></li>
+                      <% } %>
+
                       <li class="displayAddressLI"><%= request.shipToStreetAddress %></li>
                       <li class="displayAddressLI"><%= request.shipToCity %>, <%= request.shipToState %>, <%= request.shipToZipcode%></li>
                       <li class="displayAddressLI"><%= request.shipToCountry %></li>

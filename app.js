@@ -382,7 +382,6 @@ app.get(
 const compareCurrentAndNewPasswordMiddleware = require("./middleware/compareCurrentAndNewPasswordsMiddleware");
 const confirmNewPasswordMiddleware = require("./middleware/confirmNewPasswordMiddleware");
 const setNewPasswordController = require("./controllers/setNewPassword");
-const { endsWith, filter } = require("lodash");
 app.post(
   "/change-password",
   [
