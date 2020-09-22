@@ -16,11 +16,8 @@ app.use(
   })
 );
 
-const deleteCacheMiddleware = require("./middleware/deleteCacheMiddleware");
-app.use(deleteCacheMiddleware);
-
-app.set("etag", false);
-app.disable("view cache");
+// app.set("etag", false);
+// app.disable("view cache");
 
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
@@ -113,6 +110,9 @@ app.post("/login", redirectIfAuthenticatedMiddleware, loginUserController);
 
 // LOGOUT SECTION
 // import the logout controller to destroy session and logout the user
+const deleteCacheMiddleware = require("./middleware/deleteCacheMiddleware");
+app.use(deleteCacheMiddleware);
+
 const logoutUserController = require("./controllers/logoutUser");
 app.get("/logout", logoutUserController);
 
@@ -391,6 +391,9 @@ app.post(
   ],
   setNewPasswordController
 );
+
+const myLoadPageController = require("./controllers/myLoadPage");
+app.get("/my-load", redirectIfNotAuthenticatedMiddleware, myLoadPageController);
 
 // go through all the routes and if it can't find one that matches, it will render error-404 page
 app.use(function (req, res) {

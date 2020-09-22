@@ -1,0 +1,98 @@
+<%- include("partials/header"); -%> <%- include("partials/navbar"); -%>
+
+<body>
+  <div class="container">
+    <div class="title">
+      <h2 style="margin-bottom: 0px">My Load</h2>
+      <p>
+        <strong>Shipping Date:</strong> From <%= firstdayOfMonth.toDateString() %>
+      </p>
+    </div>
+
+    <div>
+      <div class="dropdown dropdown-div">
+        <button class="btn btn-secondary dropdown-toggle filter-button" style="margin: 0 0 1rem 0;" type="button"
+          id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Shipping Status
+        </button>
+        <div class="dropdown-menu dropdown-menu-right filter" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('all')">
+            All
+          </button>
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('notShipped')">
+            Not Shipped
+          </button>
+          <button class="dropdown-item filter" onclick="shippingStatusFilter('shipped')">
+            Shipped
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <table class="table table-hover text-center">
+      <thead>
+        <tr class="tr shipped notShipped">
+          <th class="text-center">
+            <input type="checkbox" onClick="toggle(this)" hover="Select" />
+          </th>
+          <th class="text-center">Shipping Date</th>
+          <th class="text-center">Customer</th>
+          <th class="text-center">BOL No</th>
+          <th class="text-center">Ship From</th>
+          <th class="text-center">Delivery To</th>
+          <th class="text-center">Destination</th>
+          <th class="text-center">Weight(Kg)</th>
+          <th class="text-center">Weight(Lb)</th>
+          <th class="text-center">Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% for (var i = 0; i < requests.length; i++) { %>
+        <% if (requests[i].status === "Shipped") { %>
+        <tr class="tr shipped">
+          <th class="text-center">
+            <input type="checkbox" name="checkbox" value="<%=requests[i]._id%>" form="shipping-status-modify-form" />
+          </th>
+          <td><%= requests[i].shippingDate %></td>
+          <td><%= requests[i].shipTo %></td>
+          <td><%= requests[i].bolNo %></td>
+          <td>
+            <%= requests[i].shipFromCity %> <%= requests[i].shipFromState %>
+          </td>
+          <td><%= requests[i].shipToCity %> <%= requests[i].shipToState %></td>
+          <td><%= requests[i].shipToDestination %></td>
+          <td><%= requests[i].weightKg %></td>
+          <td><%= requests[i].weightLb %></td>
+          <td><%= requests[i].status %></td>
+        </tr>
+        <% } else { %>
+        <tr class="tr notShipped">
+          <th class="text-center">
+            <input type="checkbox" name="checkbox" value="<%=requests[i]._id%>" form="shipping-status-modify-form" />
+          </th>
+          <td><%= requests[i].shippingDate %></td>
+          <td><%= requests[i].shipTo %></td>
+          <td><%= requests[i].bolNo %></td>
+          <td>
+            <%= requests[i].shipFromCity %> <%= requests[i].shipFromState %>
+          </td>
+          <td><%= requests[i].shipToCity %> <%= requests[i].shipToState %></td>
+          <td><%= requests[i].shipToDestination %></td>
+          <td><%= requests[i].weightKg %></td>
+          <td><%= requests[i].weightLb %></td>
+          <td><%= requests[i].status %></td>
+        </tr>
+        <% } %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <%- include("partials/footer"); -%>
+  <%- include("partials/scripts"); -%>
+  <script src="/javascript/shippingStatusFilterReport.js"></script>
+
+</body>
+
+</html>

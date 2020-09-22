@@ -18,8 +18,8 @@ module.exports = async function (req, res) {
     );
   }
 
-  // backURL = req.headers.referer || '/freight-report';
+  backURL = req.headers.referer || "/freight-report";
 
-  // res.redirect(backURL);
-  res.redirect("/freight-report");
+  res.redirect(backURL);
+  // res.redirect("/freight-report");
 };

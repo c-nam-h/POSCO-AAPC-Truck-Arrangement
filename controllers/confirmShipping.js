@@ -1,9 +1,12 @@
 const Request = require("../models/Request");
 
-module.exports = async function(req, res) {
-    const selectedOrderId = req.params._id;
+module.exports = async function (req, res) {
+  const selectedOrderId = req.params._id;
 
-    await Request.findByIdAndUpdate(selectedOrderId, {status: "Shipped"});
+  await Request.findByIdAndUpdate(selectedOrderId, { status: "Shipped" });
 
-    res.redirect("/");
+  //   backURL = req.headers.referer || "/";
+
+  //   res.redirect(backURL);
+  res.redirect("/");
 };
