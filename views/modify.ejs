@@ -4,10 +4,11 @@
 <body>
   <div class="container">
     <% if (err) { %>
-      <div class="alert alert-warning alert-dismissible" role="alert">
-        <button class="close" data-dismiss="alert" aria-label="Close" type="button"><span aria-hidden="true">&times;</span></button>
-        <strong>Warning!</strong> <%= err %>
-      </div>
+    <div class="alert alert-warning alert-dismissible" role="alert">
+      <button class="close" data-dismiss="alert" aria-label="Close" type="button"><span
+          aria-hidden="true">&times;</span></button>
+      <strong>Warning!</strong> <%= err %>
+    </div>
     <% } %>
 
     <div class="title">
@@ -23,11 +24,11 @@
           <select id="selectShipFrom" class="form-control" name="shipFrom" required>
             <option value="">Select Where To Ship From</option>
             <% customers.forEach(function(customer) { %>
-              <% if (customer.customer === selectedRequest.shipFrom) { %>
-                <option value="<%= customer._id %>" selected><%= customer.customer %></option>
-              <% } else { %>
-                <option value="<%= customer._id %>"><%= customer.customer %></option>
-              <% } %>
+            <% if (customer.customer === selectedRequest.shipFrom) { %>
+            <option value="<%= customer._id %>" selected><%= customer.customer %></option>
+            <% } else { %>
+            <option value="<%= customer._id %>"><%= customer.customer %></option>
+            <% } %>
             <% }) %>
           </select>
         </div>
@@ -36,11 +37,15 @@
           <select id="selectShipFromAddress" class="form-control" name="shipFromAddress" required>
             <option value="">Select Ship From Address</option>
             <% destinations.forEach(function(destination) { %>
-              <% if (destination.destination === selectedRequest.shipFromDestination) { %>
-                <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" selected><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
-              <% } else { %>
-                <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
-              <% } %>
+            <% if (JSON.stringify(destination._id) === JSON.stringify(selectedRequest.shipFromDestinationID)) { %>
+            <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" selected>
+              <%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %>
+              <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+            <% } else { %>
+            <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;">
+              <%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %>
+              <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+            <% } %>
             <% }) %>
           </select>
         </div>
@@ -52,11 +57,11 @@
           <select id="selectShipTo" class="form-control" name="shipTo" required>
             <option value="">Select Where To Ship To</option>
             <% customers.forEach(function(customer) { %>
-              <% if (customer.customer === selectedRequest.shipTo) { %>
-                <option value="<%= customer._id %>" selected><%= customer.customer %></option>
-              <% } else { %>
-                <option value="<%= customer._id %>"><%= customer.customer %></option>
-              <% } %>
+            <% if (customer.customer === selectedRequest.shipTo) { %>
+            <option value="<%= customer._id %>" selected><%= customer.customer %></option>
+            <% } else { %>
+            <option value="<%= customer._id %>"><%= customer.customer %></option>
+            <% } %>
             <% }) %>
           </select>
         </div>
@@ -65,11 +70,15 @@
           <select id="selectShipToAddress" class="form-control" name="shipToAddress" required>
             <option value="">Select Ship To Address</option>
             <% destinations.forEach(function(destination) { %>
-              <% if (destination.destination === selectedRequest.shipToDestination) { %>
-                <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" selected><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
-              <% } else { %>
-                <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;"><%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %> <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
-              <% } %>
+            <% if (JSON.stringify(destination._id) === JSON.stringify(selectedRequest.shipToDestinationID)) { %>
+            <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" selected>
+              <%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %>
+              <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+            <% } else { %>
+            <option value="<%= destination._id %>" customer_id="<%= destination.customer_id %>" style="display: none;">
+              <%= destination.destination %>: <%= destination.streetAddress %>, <%=destination.city %>
+              <%= destination.state %>, <%= destination.zipcode %>, <%= destination.country %></option>
+            <% } %>
             <% }) %>
           </select>
         </div>
@@ -78,12 +87,15 @@
       <div class="row">
         <div class="col-md-2">
           <label for="inputKg">Weight(kg)*</label>
-          <input class="form-control" id="inputKg" type="text" name="weightKg" pattern="[0-9]{1,6}" value="<%= selectedRequest.weightKg %>" title="Only numbers are allowed up to 6 digits" required>
+          <input class="form-control" id="inputKg" type="text" name="weightKg" pattern="[0-9]{1,6}"
+            value="<%= selectedRequest.weightKg %>" title="Only numbers are allowed up to 6 digits" required>
         </div>
 
         <div class="col-md-3">
           <label for="inputBolNo">BOL No</label>
-          <input class="form-control" id="inputBolNo" type="text" name="bolNo" value="<%= selectedRequest.bolNo %>" pattern="[A-Z]{1}[0-9]{11}|[A-Z]{3}[0-9]{11}|[A-Z]{2}[0-9]{12}|Return" placeholder="Arrangement #" title="Ex) F12345678901, APC12345678901, ST123456789012 or Return">
+          <input class="form-control" id="inputBolNo" type="text" name="bolNo" value="<%= selectedRequest.bolNo %>"
+            pattern="[A-Z]{1}[0-9]{11}|[A-Z]{3}[0-9]{11}|[A-Z]{2}[0-9]{12}|Return" placeholder="Arrangement #"
+            title="Ex) F12345678901, APC12345678901, ST123456789012 or Return">
         </div>
 
         <div class="col-md-2">
@@ -91,11 +103,12 @@
           <% if (selectedRequest.truckType === "Flatbed") { %>
           <div>
             <div class="form-check radio-inline">
-              <input class="form-check-input" id="flatbed" type="radio" name="truckOptions" value="Flatbed" checked required>
+              <input class="form-check-input" id="flatbed" type="radio" name="truckOptions" value="Flatbed" checked
+                required>
               <label class="form-check-label" for="flatbed">Flatbed</label>
             </div>
             <div class="form-check radio-inline">
-              <input class="form-check-input" id="van" type="radio" name="truckOptions"  value="Van" required>
+              <input class="form-check-input" id="van" type="radio" name="truckOptions" value="Van" required>
               <label class="form-check-label" for="van">Van</label>
             </div>
           </div>
@@ -111,16 +124,16 @@
             </div>
           </div>
           <% } else { %>
-            <div>
-              <div class="form-check radio-inline">
-                <input class="form-check-input" id="flatbed" type="radio" name="truckOptions" value="Flatbed" required>
-                <label class="form-check-label" for="flatbed">Flatbed</label>
-              </div>
-              <div class="form-check radio-inline">
-                <input class="form-check-input" id="van" type="radio" name="truckOptions" value="Van" required>
-                <label class="form-check-label" for="van">Van</label>
-              </div>
+          <div>
+            <div class="form-check radio-inline">
+              <input class="form-check-input" id="flatbed" type="radio" name="truckOptions" value="Flatbed" required>
+              <label class="form-check-label" for="flatbed">Flatbed</label>
             </div>
+            <div class="form-check radio-inline">
+              <input class="form-check-input" id="van" type="radio" name="truckOptions" value="Van" required>
+              <label class="form-check-label" for="van">Van</label>
+            </div>
+          </div>
           <% } %>
         </div>
 
@@ -129,77 +142,93 @@
           <% if (selectedRequest.comboLoad === "Yes") { %>
           <div>
             <div class="form-check radio-inline">
-              <input class="form-check-input" id="comboLoadYes" onClick="changeComboDivDisplayAttribute()" type="radio" name="comboLoad" value="Yes" checked required>
+              <input class="form-check-input" id="comboLoadYes" onClick="changeComboDivDisplayAttribute()" type="radio"
+                name="comboLoad" value="Yes" checked required>
               <label class="form-check-label" for="comboLoadYes">Yes</label>
             </div>
             <div class="form-check radio-inline">
-              <input class="form-check-input" id="comboLoadNo" onClick="changeComboDivDisplayAttribute()" type="radio" name="comboLoad" value="No" required>
+              <input class="form-check-input" id="comboLoadNo" onClick="changeComboDivDisplayAttribute()" type="radio"
+                name="comboLoad" value="No" required>
               <label class="form-check-label" for="comboLoadNo">No</label>
             </div>
           </div>
           <% } else if (selectedRequest.comboLoad === "No") { %>
           <div>
             <div class="form-check radio-inline">
-              <input class="form-check-input" id="comboLoadYes" onClick="changeComboDivDisplayAttribute()" type="radio" name="comboLoad" value="Yes" required>
+              <input class="form-check-input" id="comboLoadYes" onClick="changeComboDivDisplayAttribute()" type="radio"
+                name="comboLoad" value="Yes" required>
               <label class="form-check-label" for="comboLoadYes">Yes</label>
             </div>
             <div class="form-check radio-inline">
-              <input class="form-check-input" id="comboLoadNo" onClick="changeComboDivDisplayAttribute()" type="radio" name="comboLoad" value="No" checked required>
+              <input class="form-check-input" id="comboLoadNo" onClick="changeComboDivDisplayAttribute()" type="radio"
+                name="comboLoad" value="No" checked required>
               <label class="form-check-label" for="comboLoadNo">No</label>
             </div>
           </div>
           <% } else { %>
-            <div>
-              <div class="form-check radio-inline">
-                <input class="form-check-input" id="comboLoadYes" onClick="changeComboDivDisplayAttribute()" type="radio" name="comboLoad" value="Yes" required>
-                <label class="form-check-label" for="comboLoadYes">Yes</label>
-              </div>
-              <div class="form-check radio-inline">
-                <input class="form-check-input" id="comboLoadNo" onClick="changeComboDivDisplayAttribute()" type="radio" name="comboLoad" value="No" required>
-                <label class="form-check-label" for="comboLoadNo">No</label>
-              </div>
+          <div>
+            <div class="form-check radio-inline">
+              <input class="form-check-input" id="comboLoadYes" onClick="changeComboDivDisplayAttribute()" type="radio"
+                name="comboLoad" value="Yes" required>
+              <label class="form-check-label" for="comboLoadYes">Yes</label>
             </div>
+            <div class="form-check radio-inline">
+              <input class="form-check-input" id="comboLoadNo" onClick="changeComboDivDisplayAttribute()" type="radio"
+                name="comboLoad" value="No" required>
+              <label class="form-check-label" for="comboLoadNo">No</label>
+            </div>
+          </div>
           <% } %>
         </div>
-  
+
         <% if (selectedRequest.comboLoad === "Yes") { %>
-          <div class="col-md-3" id="comboBolDiv">
-            <label for="inputComboBolNo">Combo BOL No (Fill Only If Combo Load)</label>
-            <input class="form-control" id="inputComboBolNo" type="text" name="comboBolNo" value="<%= selectedRequest.comboBolNo %>" pattern="[A-Z]{1}[0-9]{11}|[A-Z]{3}[0-9]{11}|[A-Z]{2}[0-9]{12}|Return" placeholder="Arrangement #">
-          </div>
-        <% } else { %> 
-          <div class="col-md-3" style="display: none;" id="comboBolDiv">
-            <label for="inputComboBolNo">Combo BOL No (Fill Only If Combo Load)</label>
-            <input class="form-control" id="inputComboBolNo" type="text" name="comboBolNo" value="<%= selectedRequest.comboBolNo %>" pattern="[A-Z]{1}[0-9]{11}|[A-Z]{3}[0-9]{11}|[A-Z]{2}[0-9]{12}|Return" placeholder="Arrangement #">
-          </div>
+        <div class="col-md-3" id="comboBolDiv">
+          <label for="inputComboBolNo">Combo BOL No (Fill Only If Combo Load)</label>
+          <input class="form-control" id="inputComboBolNo" type="text" name="comboBolNo"
+            value="<%= selectedRequest.comboBolNo %>"
+            pattern="[A-Z]{1}[0-9]{11}|[A-Z]{3}[0-9]{11}|[A-Z]{2}[0-9]{12}|Return" placeholder="Arrangement #">
+        </div>
+        <% } else { %>
+        <div class="col-md-3" style="display: none;" id="comboBolDiv">
+          <label for="inputComboBolNo">Combo BOL No (Fill Only If Combo Load)</label>
+          <input class="form-control" id="inputComboBolNo" type="text" name="comboBolNo"
+            value="<%= selectedRequest.comboBolNo %>"
+            pattern="[A-Z]{1}[0-9]{11}|[A-Z]{3}[0-9]{11}|[A-Z]{2}[0-9]{12}|Return" placeholder="Arrangement #">
+        </div>
         <% } %>
-        
+
       </div>
 
       <div class="row">
         <div class="col-md-6">
           <label for="inputShippingDate">Shipping Date*</label>
-          <input class="form-control" id="inputShippingDate datepicker" type="date" name="shippingDate" value="<%= selectedRequest.shippingDate %>" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
+          <input class="form-control" id="inputShippingDate datepicker" type="date" name="shippingDate"
+            value="<%= selectedRequest.shippingDate %>" placeholder="YYYY-MM-DD" title="YYYY-MM-DD"
+            pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
         </div>
 
         <div class="col-md-6">
           <label for="inputDeliveryDate">Delivery Date*</label>
-          <input class="form-control" id="inputDeliveryDate" type="date" name="deliveryDate" value="<%= selectedRequest.deliveryDate %>" placeholder="YYYY-MM-DD" title="YYYY-MM-DD" pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
+          <input class="form-control" id="inputDeliveryDate" type="date" name="deliveryDate"
+            value="<%= selectedRequest.deliveryDate %>" placeholder="YYYY-MM-DD" title="YYYY-MM-DD"
+            pattern="[1-2]{1}[0-9]{3}-[0-9]{2}-[0-9]{2}" min="1990-01-01" max="2999-12-31" required>
         </div>
       </div>
 
-      
+
 
       <div class="row">
         <div class="col-md-12">
           <label for="inputSpecialNote">Special Note</label>
-          <textarea class="form-control" id="inputSpecialNote" type="text" name="specialNote"><%= selectedRequest.specialNote %></textarea>
+          <textarea class="form-control" id="inputSpecialNote" type="text"
+            name="specialNote"><%= selectedRequest.specialNote %></textarea>
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-12">
-          <button onclick="return confirm('Are you sure you want to modify this request?')" class="btn btn-lg btn-primary btn-block" type="submit" name="button" value="submit">Submit</button>
+          <button onclick="return confirm('Are you sure you want to modify this request?')"
+            class="btn btn-lg btn-primary btn-block" type="submit" name="button" value="submit">Submit</button>
         </div>
       </div>
 
@@ -214,6 +243,3 @@
 </body>
 
 </html>
-
-
-
