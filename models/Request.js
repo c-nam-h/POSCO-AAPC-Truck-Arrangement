@@ -7,6 +7,10 @@ const now = moment().tz("America/Chicago").format("l");
 const requestSchema = new Schema({
   shipFrom: String,
   shipFromDestination: String,
+  shipFromDestinationID: {
+    type: Schema.Types.ObjectId,
+    ref: "Destination"
+  },
   shipFromStreetAddress: String,
   shipFromCity: String,
   shipFromState: String,
@@ -14,6 +18,10 @@ const requestSchema = new Schema({
   shipFromCountry: String,
   shipTo: String,
   shipToDestination: String,
+  shipToDestinationID: {
+    type: Schema.Types.ObjectId,
+    ref: "Destination"
+  },
   shipToStreetAddress: String,
   shipToCity: String,
   shipToState: String,
@@ -55,7 +63,7 @@ const requestSchema = new Schema({
     ref: "User"
   }
 });
-  
+
 const Request = new mongoose.model("Request", requestSchema);
 
 module.exports = Request;
