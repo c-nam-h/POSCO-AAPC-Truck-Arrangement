@@ -15,6 +15,7 @@ module.exports = async function (req, res) {
     _id: req.body.shipFromAddress,
   });
   const shipFromAddress = await {
+    destinationID: req.body.shipFromAddress,
     destination: destinationFrom.destination,
     streetAddress: destinationFrom.streetAddress,
     city: destinationFrom.city,
@@ -32,6 +33,7 @@ module.exports = async function (req, res) {
     _id: req.body.shipToAddress,
   });
   const shipToAddress = await {
+    destinationID: req.body.shipToAddress,
     destination: destinationTo.destination,
     streetAddress: destinationTo.streetAddress,
     city: destinationTo.city,
@@ -48,6 +50,7 @@ module.exports = async function (req, res) {
     {
       shipFrom: shipFrom["shipFromCustomer"],
       shipFromDestination: shipFromAddress["destination"],
+      shipFromDestinationID: shipFromAddress["destinationID"],
       shipFromStreetAddress: shipFromAddress["streetAddress"],
       shipFromCity: shipFromAddress["city"],
       shipFromState: shipFromAddress["state"],
@@ -55,6 +58,7 @@ module.exports = async function (req, res) {
       shipFromCountry: shipFromAddress["country"],
       shipTo: shipTo["shipToCustomer"],
       shipToDestination: shipToAddress["destination"],
+      shipToDestinationID: shipToAddress["destinationID"],
       shipToStreetAddress: shipToAddress["streetAddress"],
       shipToCity: shipToAddress["city"],
       shipToState: shipToAddress["state"],
