@@ -210,57 +210,69 @@ app.post(
   modifyRequestController
 );
 
+// NOTE: ENTIRE FREIGHT REPORT SECTION IS COMMENTED OUT UNTIL AN UPDATE IS MADE TO IMPROVE THE EFFICIENCY OF THE CODE
+
+
+
 // FREIGHT REPORT SECTION - WHERE ONLY ADMIN CAN SEE CARRIER AND FREIGHT INFORMATION FOR EACH REQUEST
-const freightReportController = require("./controllers/freightReport");
-app.get(
-  "/freight-report",
-  [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware],
-  freightReportController
-);
+// const freightReportController = require("./controllers/freightReport");
+// app.get(
+//   "/freight-report",
+//   [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware],
+//   freightReportController
+// );
 
-// search through given start and end shipping dates and show requests that only fall into those dates
-const filterRequestsInFreightReportController = require("./controllers/filterRequestsInFreightReport");
-app.post(
-  "/freight-report/filter-requests-by-shipping-dates",
-  [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware],
-  filterRequestsInFreightReportController
-);
+// // search through given start and end shipping dates and show requests that only fall into those dates
+// const filterRequestsInFreightReportController = require("./controllers/filterRequestsInFreightReport");
+// app.post(
+//   "/freight-report/filter-requests-by-shipping-dates",
+//   [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware],
+//   filterRequestsInFreightReportController
+// );
 
-const modifyShippingStatusInReportController = require("./controllers/modifyShippingStatusInReport");
-app.post(
-  "/modify-shipping-status",
-  [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware],
-  modifyShippingStatusInReportController
-);
+// const modifyShippingStatusInReportController = require("./controllers/modifyShippingStatusInReport");
+// app.post(
+//   "/modify-shipping-status",
+//   [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware],
+//   modifyShippingStatusInReportController
+// );
 
-// ASSIGN CARRIER AND FREIGHT SECTION - WHERE ONLY ADMIN CAN ASSIGN CARRIER AND FREIGHT TO REQUESTS
-const assignCarrierAndFreightController = require("./controllers/assignCarrierAndFreight");
-app.get(
-  "/assign-carrier-and-freight/:_id",
-  [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware],
-  assignCarrierAndFreightController
-);
+// // ASSIGN CARRIER AND FREIGHT SECTION - WHERE ONLY ADMIN CAN ASSIGN CARRIER AND FREIGHT TO REQUESTS
+// const assignCarrierAndFreightController = require("./controllers/assignCarrierAndFreight");
+// app.get(
+//   "/assign-carrier-and-freight/:_id",
+//   [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware],
+//   assignCarrierAndFreightController
+// );
 
-const assignCarrierAndFreightToRequestController = require("./controllers/assignCarrierAndFreightToRequest");
-app.post(
-  "/assign-carrier-and-freight/:_id",
-  [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware],
-  assignCarrierAndFreightToRequestController
-);
+// const assignCarrierAndFreightToRequestController = require("./controllers/assignCarrierAndFreightToRequest");
+// app.post(
+//   "/assign-carrier-and-freight/:_id",
+//   [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware],
+//   assignCarrierAndFreightToRequestController
+// );
 
-const cancelOnTimeDeliveryController = require("./controllers/cancelOnTimeDelivery");
-app.get(
-  "/cancelOnTimeDelivery/:_id",
-  [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware],
-  cancelOnTimeDeliveryController
-);
+// const cancelOnTimeDeliveryController = require("./controllers/cancelOnTimeDelivery");
+// app.get(
+//   "/cancelOnTimeDelivery/:_id",
+//   [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware],
+//   cancelOnTimeDeliveryController
+// );
 
-const confirmOnTimeDeliveryController = require("./controllers/confirmOnTimeDelivery");
-app.get(
-  "/confirmOnTimeDelivery/:_id",
-  [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware],
-  confirmOnTimeDeliveryController
-);
+// const confirmOnTimeDeliveryController = require("./controllers/confirmOnTimeDelivery");
+// app.get(
+//   "/confirmOnTimeDelivery/:_id",
+//   [redirectIfNotAuthenticatedMiddleware, validateAdminMiddleware],
+//   confirmOnTimeDeliveryController
+// );
+
+
+
+
+
+
+
+
 
 // SEARCH SECTION - WHERE USERS CAN SEARCH A REQUEST
 const searchBolNoController = require("./controllers/searchBolNo");
