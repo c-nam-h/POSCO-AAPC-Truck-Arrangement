@@ -22,11 +22,14 @@ module.exports = async function (req, res) {
   }
 
   const firstdateOfMonth = year + "-" + month + "-01";
+  console.log(firstdateOfMonth)
 
   // find all requests that are equal or greater than the first date of month for Admin
   const filteredRequests = await Request.find({
     shippingDate: { $gte: firstdateOfMonth },
   });
+
+  console.log(filteredRequests)
 
   res.render("freight-report", {
     requests: filteredRequests.sort(compare_shippingDate).reverse(),
