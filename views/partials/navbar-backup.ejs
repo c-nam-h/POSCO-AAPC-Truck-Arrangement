@@ -2,6 +2,7 @@
   <div class="container">
     <a class="navbar-brand" href="/">TRUCK ARRANGEMENT</a>
 
+    <% if (currentUserId) { %>
     <div style="margin-right: auto">
       <form class="form-inline my-2 my-lg-0" action="/search" method="post">
         <input class="form-control mr-sm-2" type="search" placeholder="Search BOL No" aria-label="Search" name="search"
@@ -14,10 +15,10 @@
 
     <div class="justify-content-end" id="navbarNavDropdown">
       <ul class="navbar-nav">
+        <% if (userRole === "admin") { %>
         <li class="nav-item">
           <a class="nav-link" href="/request">REQUEST</a>
         </li>
-
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
             aria-expanded="false">DATA SETTING</a>
@@ -26,7 +27,6 @@
             <a class="dropdown-item" href="/destination">DESTINATION</a>
           </div>
         </li>
-
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
             aria-expanded="false">PROFILE</a>
@@ -35,7 +35,6 @@
             <a class="dropdown-item" href="/change-password">CHANGE PASSWORD</a>
           </div>
         </li>
-
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
             aria-expanded="false">ADMIN</a>
@@ -45,12 +44,35 @@
             <a class="dropdown-item" href="/freight-report">REPORT</a>
           </div>
         </li>
-
         <li class="nav-item">
           <a class="nav-link" href="/logout">LOGOUT</a>
         </li>
+        <% } else if (userRole === "user") { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/request">REQUEST</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+            aria-expanded="false">DATA SETTING</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="/customer">CUSTOMER</a>
+            <a class="dropdown-item" href="/destination">DESTINATION</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+            aria-expanded="false">PROFILE</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="/my-load">MY LOAD</a>
+            <a class="dropdown-item" href="/change-password">CHANGE PASSWORD</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">LOGOUT</a>
+        </li>
+        <% } %>
       </ul>
     </div>
-
+    <% } %>
   </div>
 </nav>
